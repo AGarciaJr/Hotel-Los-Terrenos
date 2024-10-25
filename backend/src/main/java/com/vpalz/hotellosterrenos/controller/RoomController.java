@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+//import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,17 +32,18 @@ public class RoomController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> addNewRoom(
-            @RequestParam(value = "photo", required = false) MultipartFile photo,
+            //@RequestParam(value = "photo", required = false) MultipartFile photo,
             @RequestParam(value = "roomType", required = false) String roomType,
             @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
             @RequestParam(value = "roomDescription", required = false) String roomDescription
     ) {
+        /*
         if (photo == null || photo.isEmpty() || roomType == null || roomType.isBlank() || roomPrice == null || roomDescription.isBlank()) {
             Response response = new Response();
             response.setStatusCode(400);
             response.setMessage("Invalid data, Required Fields: Photo, Room Type, Room Price");
             return ResponseEntity.status(response.getStatusCode()).body(response);
-        }
+        }*/
 
         Response response = roomService.addNewRoom(roomType, roomPrice, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
