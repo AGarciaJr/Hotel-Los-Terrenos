@@ -7,8 +7,8 @@ export default class serviceAPI{
         const token = localStorage.getItem("token");
 
         return{
-            Authorization: `Bearer ${token}`
-            "Content-Type": "application/json"
+            Authorization: `Bearer ${token}`,
+            'Content-Type': "application/json"
         };
     }
 
@@ -32,35 +32,35 @@ export default class serviceAPI{
 
     static async getAllUsers(){
         const response = await axios.get(`${this.BASE_URL}/users/all`, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return response.data;
     }
 
     static async getUserProfile(){
         const response = await axios.get(`${this.BASE_URL}/users/get-logged-in-profile-info`, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return response.data;
     }
 
     static async getUser(userId){
         const response = await axios.get(`${this.BASE_URL}/users/get-by-id/${userId}`, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return response.data;
     }
 
     static async getUserReservations(userId){
         const response = await axios.get(`${this.BASE_URL}/users/get-reservations/${userId}`, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return response.data;
     }
 
     static async deleteUser(userId){
         const response = await axios.delete(`${this.BASE_URL}/users/delete/${userId}`, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return response.data;
     }
@@ -73,7 +73,7 @@ export default class serviceAPI{
         const response = await axios.post(`${this.BASE_URL}/rooms/add-room`, formData, {
             headers: {
                 ...this.getHeader(),
-                'Content-Type': 'multipart/form-data';
+                'Content-Type': 'multipart/form-data'
             }
         });
         return response.data;
@@ -115,7 +115,7 @@ export default class serviceAPI{
         const result = await axios.get(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
             headers: {
                 ...this.getHeader(),
-                'Content-Type': 'multipart/form-data';
+                'Content-Type': 'multipart/form-data'
             }
         });
         return result.data;
@@ -129,14 +129,14 @@ export default class serviceAPI{
         console.log("USER ID: " + userId);
 
         const response = await axios.get(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return response.data;
     }
 
     static async getAllReservations(){
         const result = await axios.get(`${this.BASE_URL}/reservations/all` ,{
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return result.data;
     }
@@ -148,7 +148,7 @@ export default class serviceAPI{
 
     static async cancelReservation(reservationId){
         const result = await axios.delete(`${this.BASE_URL}/reservations/cancel/${reservationId}`, {
-            headers: this.getHeader();
+            headers: this.getHeader()
         });
         return result.data;
     }
