@@ -5,9 +5,11 @@ import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.RoomDAO;
 import com.vpalz.hotellosterrenos.entity.Room;
 import com.vpalz.hotellosterrenos.exception.MyException;
+import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IRoomService;
 import com.vpalz.hotellosterrenos.utils.Utils;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,15 +18,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @Service
 public class RoomService implements IRoomService {
     @Autowired
     private RoomRepository roomRepository;
 
-    /*
+
     @Autowired
     private ReservationRepository reservationRepository;
-
+    /*
     @Autowired
     private AwsS3Service awsS3Service;
      */

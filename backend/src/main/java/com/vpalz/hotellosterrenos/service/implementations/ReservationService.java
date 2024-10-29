@@ -12,22 +12,22 @@ import com.vpalz.hotellosterrenos.repo.UserRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IReservationService;
 import com.vpalz.hotellosterrenos.service.interfaces.IRoomService;
 import com.vpalz.hotellosterrenos.utils.Utils;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Data
 @Service
 public class ReservationService implements IReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
 
-    /*
     @Autowired
     private IRoomService roomService;
-     */
 
     @Autowired
     private RoomRepository roomRepository;
@@ -128,7 +128,8 @@ public class ReservationService implements IReservationService {
         Response response = new Response();
 
         try{
-            Reservation reservations = reservationRepository.findById(reservationId).orElseThrow(() -> new MyException("Reservation Not Found"));
+            //Reservation reservations =
+            reservationRepository.findById(reservationId).orElseThrow(() -> new MyException("Reservation Not Found"));
             reservationRepository.deleteById(reservationId);
 
             response.setStatusCode(200);
