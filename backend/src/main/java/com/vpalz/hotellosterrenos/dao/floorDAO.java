@@ -1,4 +1,4 @@
-package com.vpalz.hotellosterrenos.DAO;
+package com.vpalz.hotellosterrenos.dao;
 
 import com.vpalz.hotellosterrenos.entity.Floor;
 
@@ -12,7 +12,7 @@ public class floorDAO {
         return floorData.get(floorNumber);
     }
 
-    //public void saveFloor(Floor floor) {
+    public void saveFloor(Floor floor) {
         floorData.put(floor.getFloorNumber(), floor);
     }
 

@@ -1,11 +1,11 @@
 package com.vpalz.hotellosterrenos.services;
 
-import com.vpalz.hotellosterrenos.DAO.FloorDAO;
+import com.vpalz.hotellosterrenos.dao.floorDAO;
 import com.vpalz.hotellosterrenos.entity.Floor;
 
 public class FloorService {
 
-    private FloorDAO floorDAO;
+    private floorDAO floorDAO;
 
     public Floor getFloorDetails(int floorNumber) {
         return floorDAO.getFloorByNumber(floorNumber);

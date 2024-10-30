@@ -86,13 +86,30 @@ export default class serviceAPI{
 
     //come back and check this one
     static async getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType){
-        const result = await axios.get(`${this.BASE_URL}/rooms/available-rooms-by-date-and-type/${checkInDate}/${checkOutDate}/${roomType}`);
-        return result.data;
+        const response = await axios.post(
+            `${this.BASE_URL}/rooms/available-rooms-by-date-and-type`,
+            null,
+            {
+                params: {
+                    checkInDate,
+                    checkOutDate,
+                    roomType
+                }
+            }
+        );
+        return response.data;
     }
 
     static async getRoomTypes(){
-        const response = await axios.get(`${this.BASE_URL}/rooms/types`);
-        return response.data;
+        try {
+            console.log("Requesting room types...");
+            const response = await axios.get(`${this.BASE_URL}/rooms/types`);
+            console.log("Room types response:", response);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching room types:", error);
+            throw error;
+        }
     }
 
     static async getAllRooms(){

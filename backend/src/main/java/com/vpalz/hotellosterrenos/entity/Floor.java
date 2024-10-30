@@ -10,4 +10,8 @@ public class Floor {
         this.theme = theme;
         this.numberOfRooms = numberOfRooms;
     }
+
+    public Integer getFloorNumber() {
+        return floorNumber;
+    }
 }

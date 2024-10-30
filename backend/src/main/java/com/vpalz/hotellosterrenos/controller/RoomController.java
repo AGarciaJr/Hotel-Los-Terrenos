@@ -1,5 +1,8 @@
 package com.vpalz.hotellosterrenos.controller;
 
+import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.service.implementations.UserService;
 import com.vpalz.hotellosterrenos.service.interfaces.IReservationService;
@@ -15,11 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Logger;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Data
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(RoomController.class);
     @Autowired
     private IRoomService roomService;
 
@@ -55,7 +61,7 @@ public class RoomController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/types")
+    @GetMapping("/types")
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
     }

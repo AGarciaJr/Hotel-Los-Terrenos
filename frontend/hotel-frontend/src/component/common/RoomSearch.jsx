@@ -16,7 +16,7 @@ const RoomSearch = ({handleSearchResult}) => {
         const fetchRoomTypes = async () => {
             try {
                 const types = await serviceAPI.getRoomTypes();
-                setRoomTypes(types)
+                setRoomTypes(types || [])
             }catch(err){
                 console.log('Error fetching room types:',err.message);
             }
