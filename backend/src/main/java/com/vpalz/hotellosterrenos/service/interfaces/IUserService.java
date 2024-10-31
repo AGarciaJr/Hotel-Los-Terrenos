@@ -18,4 +18,6 @@ public interface IUserService {
     Response getUserById(String userId);
 
     Response getUserInfo(String email);
+
+    Response updateProfile(String email, User userUpdate);
 }

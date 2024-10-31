@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(RoomController.class);
+    //private static final Logger logger = (Logger) LoggerFactory.getLogger(RoomController.class);
     @Autowired
     private IRoomService roomService;
 

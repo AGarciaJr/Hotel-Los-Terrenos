@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './component/common/Navbar';
 import FooterComponent from './component/common/Footer';
 import HomePage from './component/home/HomePage';
+import ProfilePage from "./component/profile/ProfilePage";
 
 function App() {
     // Create a ref for the homepage section
@@ -35,6 +36,7 @@ function App() {
                 <div className="content" ref={homeRef}>
                     <Routes>
                         <Route exact path='/home' element={<HomePage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
                     </Routes>
                 </div>
 

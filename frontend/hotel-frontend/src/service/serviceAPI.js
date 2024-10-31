@@ -195,4 +195,11 @@ export default class serviceAPI{
         const role = localStorage.getItem("role");
         return role === "USER";
     }
+
+    static async updateUserProfile(userData) {
+        const response = await axios.put(`${this.BASE_URL}/users/update-profile`, userData, {
+            headers: this.getHeader()
+        });
+        return response.data;
+    }
 };

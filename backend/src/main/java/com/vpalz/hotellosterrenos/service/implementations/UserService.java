@@ -11,12 +11,14 @@ import com.vpalz.hotellosterrenos.utils.JWTUtils;
 import com.vpalz.hotellosterrenos.utils.Utils;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Service
@@ -194,5 +196,39 @@ public class UserService implements IUserService {
             response.setMessage("Error Occurred Getting Deleting User" + e.getMessage());
         }
         return response;
+    }
+
+    @Override
+    public Response updateProfile(String email, User userUpdate) {
+        Response response = new Response();
+
+        try {
+            Optional<User> userOptional = userRepository.findByEmail(email);
+
+            if (userOptional.isEmpty()) {
+                response.setStatusCode(404);
+                response.setMessage("User not found");
+                return response;
+            }
+
+            User user = userOptional.get();
+            user.setName(userUpdate.getName());
+            user.setPhoneNumber(userUpdate.getPhoneNumber());
+
+            user = userRepository.save(user);
+
+            // Convert to UserDAO
+            UserDAO userDAO = Utils.mapUserEntityToUserDAO(user);
+
+            response.setStatusCode(200);
+            response.setMessage("Profile updated successfully");
+            response.setUser(userDAO);  // Using existing user field in Response
+
+            return response;
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error updating profile: " + e.getMessage());
+            return response;
+        }
     }
 }

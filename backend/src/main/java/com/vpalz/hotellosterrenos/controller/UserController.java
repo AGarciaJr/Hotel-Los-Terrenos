@@ -1,16 +1,14 @@
 package com.vpalz.hotellosterrenos.controller;
 
 import com.vpalz.hotellosterrenos.dao.Response;
+import com.vpalz.hotellosterrenos.entity.User;
 import com.vpalz.hotellosterrenos.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -50,6 +48,15 @@ public class UserController {
     @GetMapping("get-user-reservations/{userId}")
     public ResponseEntity<Response> getUserReservations(@PathVariable("userId") String userId) {
         Response response = userService.getUserReservationHistory(userId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<Response> updateProfile(@RequestBody User userUpdate) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        Response response = userService.updateProfile(email, userUpdate);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 }
