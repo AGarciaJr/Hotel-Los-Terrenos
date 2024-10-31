@@ -237,6 +237,7 @@ import React, { useState } from "react";
 const ProfilePage = () => {
     // Mock profile data
     const [profile, setProfile] = useState({
+        username: "jsmith",
         name: "John Smith",
         email: "john.smith@example.com",
         phoneNumber: "123-456-7890",
@@ -244,6 +245,13 @@ const ProfilePage = () => {
     });
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState(profile);
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+    });
+    const [passwordError, setPasswordError] = useState("");
 
     const styles = {
         container: {
@@ -297,6 +305,16 @@ const ProfilePage = () => {
             marginRight: '8px',
             fontSize: '16px'
         },
+        secondaryButton: {
+            backgroundColor: '#444444',
+            color: '#FFFFFF',
+            padding: '8px 16px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginRight: '8px',
+            fontSize: '16px'
+        },
         cancelButton: {
             backgroundColor: '#CCCCCC',
             color: '#000000',
@@ -308,12 +326,26 @@ const ProfilePage = () => {
         },
         section: {
             marginBottom: '24px'
+        },
+        divider: {
+            borderTop: '2px solid #f0f0f0',
+            margin: '24px 0'
+        },
+        errorText: {
+            color: '#FF0000',
+            marginBottom: '16px',
+            fontSize: '14px'
         }
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handlePasswordInputChange = (e) => {
+        const { name, value } = e.target;
+        setPasswordData(prev => ({ ...prev, [name]: value }));
     };
 
     const toggleEdit = () => {
@@ -323,9 +355,35 @@ const ProfilePage = () => {
         }
     };
 
+    const togglePasswordChange = () => {
+        setIsChangingPassword(!isChangingPassword);
+        setPasswordData({
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: ""
+        });
+        setPasswordError("");
+    };
+
     const handleSave = () => {
         setProfile(formData);
         setIsEditing(false);
+    };
+
+    const handlePasswordChange = () => {
+        // Validate password change
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            setPasswordError("New passwords do not match");
+            return;
+        }
+        if (passwordData.newPassword.length < 8) {
+            setPasswordError("Password must be at least 8 characters long");
+            return;
+        }
+        // Mock successful password change
+        setPasswordError("");
+        setIsChangingPassword(false);
+        alert("Password changed successfully!");
     };
 
     return (
@@ -337,6 +395,17 @@ const ProfilePage = () => {
 
             {isEditing ? (
                 <div>
+                    <div style={styles.section}>
+                        <label style={styles.label}>Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username || ""}
+                            onChange={handleInputChange}
+                            style={styles.input}
+                        />
+                    </div>
+
                     <div style={styles.section}>
                         <label style={styles.label}>Name</label>
                         <input
@@ -388,6 +457,11 @@ const ProfilePage = () => {
             ) : (
                 <div>
                     <div style={styles.section}>
+                        <p style={styles.label}>Username</p>
+                        <p style={styles.value}>{profile.username}</p>
+                    </div>
+
+                    <div style={styles.section}>
                         <p style={styles.label}>Name</p>
                         <p style={styles.value}>{profile.name}</p>
                     </div>
@@ -410,6 +484,77 @@ const ProfilePage = () => {
                     <button onClick={toggleEdit} style={styles.button}>
                         Edit Profile
                     </button>
+                </div>
+            )}
+
+            <div style={styles.divider}></div>
+
+            {!isChangingPassword ? (
+                <div style={styles.section}>
+                    <button
+                        onClick={togglePasswordChange}
+                        style={styles.secondaryButton}
+                    >
+                        Change Password
+                    </button>
+                </div>
+            ) : (
+                <div>
+                    <h3 style={{...styles.title, fontSize: '20px', marginBottom: '16px'}}>
+                        Change Password
+                    </h3>
+
+                    {passwordError && (
+                        <p style={styles.errorText}>{passwordError}</p>
+                    )}
+
+                    <div style={styles.section}>
+                        <label style={styles.label}>Current Password</label>
+                        <input
+                            type="password"
+                            name="currentPassword"
+                            value={passwordData.currentPassword}
+                            onChange={handlePasswordInputChange}
+                            style={styles.input}
+                        />
+                    </div>
+
+                    <div style={styles.section}>
+                        <label style={styles.label}>New Password</label>
+                        <input
+                            type="password"
+                            name="newPassword"
+                            value={passwordData.newPassword}
+                            onChange={handlePasswordInputChange}
+                            style={styles.input}
+                        />
+                    </div>
+
+                    <div style={styles.section}>
+                        <label style={styles.label}>Confirm New Password</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={passwordData.confirmPassword}
+                            onChange={handlePasswordInputChange}
+                            style={styles.input}
+                        />
+                    </div>
+
+                    <div style={styles.section}>
+                        <button
+                            onClick={handlePasswordChange}
+                            style={styles.button}
+                        >
+                            Update Password
+                        </button>
+                        <button
+                            onClick={togglePasswordChange}
+                            style={styles.cancelButton}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
