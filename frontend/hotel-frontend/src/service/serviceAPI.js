@@ -202,4 +202,31 @@ export default class serviceAPI{
         });
         return response.data;
     }
+
+    // Add to serviceAPI.js
+    static async changePassword(passwordData) {
+        const response = await axios.put(
+            `${this.BASE_URL}/users/change-password`,
+            passwordData,
+            { headers: this.getHeader() }
+        );
+        return response.data;
+    }
+
+    static async updateUserProfile(userData) {
+        const response = await axios.put(
+            `${this.BASE_URL}/users/update-profile`,
+            userData,
+            { headers: this.getHeader() }
+        );
+        return response.data;
+    }
+
+    static async getUserProfile() {
+        const response = await axios.get(
+            `${this.BASE_URL}/users/get-logged-in-profile-info`,
+            { headers: this.getHeader() }
+        );
+        return response.data;
+    }
 };

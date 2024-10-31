@@ -1,5 +1,6 @@
 package com.vpalz.hotellosterrenos.controller;
 
+import com.vpalz.hotellosterrenos.dao.PasswordChangeRequest;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.entity.User;
 import com.vpalz.hotellosterrenos.service.interfaces.IUserService;
@@ -45,18 +46,21 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("get-user-reservations/{userId}")
-    public ResponseEntity<Response> getUserReservations(@PathVariable("userId") String userId) {
-        Response response = userService.getUserReservationHistory(userId);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
-
     @PutMapping("/update-profile")
     public ResponseEntity<Response> updateProfile(@RequestBody User userUpdate) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
         Response response = userService.updateProfile(email, userUpdate);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Response> changePassword(@RequestBody PasswordChangeRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        Response response = userService.changePassword(email, request);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 }

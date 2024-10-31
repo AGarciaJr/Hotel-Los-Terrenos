@@ -1,6 +1,7 @@
 package com.vpalz.hotellosterrenos.service.implementations;
 
 import com.vpalz.hotellosterrenos.dao.LoginRequest;
+import com.vpalz.hotellosterrenos.dao.PasswordChangeRequest;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.UserDAO;
 import com.vpalz.hotellosterrenos.entity.User;
@@ -198,10 +199,10 @@ public class UserService implements IUserService {
         return response;
     }
 
+
     @Override
     public Response updateProfile(String email, User userUpdate) {
         Response response = new Response();
-
         try {
             Optional<User> userOptional = userRepository.findByEmail(email);
 
@@ -212,22 +213,62 @@ public class UserService implements IUserService {
             }
 
             User user = userOptional.get();
-            user.setName(userUpdate.getName());
-            user.setPhoneNumber(userUpdate.getPhoneNumber());
+            if (userUpdate.getName() != null) user.setName(userUpdate.getName());
+            if (userUpdate.getPhoneNumber() != null) user.setPhoneNumber(userUpdate.getPhoneNumber());
 
             user = userRepository.save(user);
 
-            // Convert to UserDAO
-            UserDAO userDAO = Utils.mapUserEntityToUserDAO(user);
+            UserDAO userDAO = new UserDAO();
+            userDAO.setId(user.getId());
+            userDAO.setName(user.getName());
+            userDAO.setEmail(user.getEmail());
+            userDAO.setPhoneNumber(user.getPhoneNumber());
+            userDAO.setRole(user.getRole());
 
             response.setStatusCode(200);
             response.setMessage("Profile updated successfully");
-            response.setUser(userDAO);  // Using existing user field in Response
+            response.setUser(userDAO);
 
             return response;
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error updating profile: " + e.getMessage());
+            return response;
+        }
+    }
+
+    @Override
+    public Response changePassword(String email, PasswordChangeRequest request) {
+        Response response = new Response();
+        try {
+            Optional<User> userOptional = userRepository.findByEmail(email);
+
+            if (userOptional.isEmpty()) {
+                response.setStatusCode(404);
+                response.setMessage("User not found");
+                return response;
+            }
+
+            User user = userOptional.get();
+
+            // Verify current password
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                response.setStatusCode(400);
+                response.setMessage("Current password is incorrect");
+                return response;
+            }
+
+            // Update password
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            userRepository.save(user);
+
+            response.setStatusCode(200);
+            response.setMessage("Password updated successfully");
+
+            return response;
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error changing password: " + e.getMessage());
             return response;
         }
     }

@@ -233,6 +233,11 @@ const ProfilePage = () => {
 export default ProfilePage;*/
 
 import React, { useState } from "react";
+/*
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import serviceAPI from "../../service/serviceAPI";
+*/
 
 const ProfilePage = () => {
     // Mock profile data
@@ -252,7 +257,13 @@ const ProfilePage = () => {
         confirmPassword: ""
     });
     const [passwordError, setPasswordError] = useState("");
-
+    const [saveMessage, setSaveMessage] = useState("");
+/*
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const navigate = useNavigate();
+*/
     const styles = {
         container: {
             maxWidth: '500px',
@@ -335,17 +346,53 @@ const ProfilePage = () => {
             color: '#FF0000',
             marginBottom: '16px',
             fontSize: '14px'
+        },
+        saveMessage: {
+            padding: '8px',
+            marginBottom: '16px',
+            borderRadius: '4px',
+            backgroundColor: '#e6ffe6',
+            color: '#006600',
+            textAlign: 'center'
         }
     };
+/*
+    useEffect(() => {
+        fetchProfile();
+    }, []);
+
+    const fetchProfile = async () => {
+        try {
+            setIsLoading(true);
+            const response = await serviceAPI.getUserProfile();
+            if (response.statusCode === 200 && response.user) {
+                setProfile(response.user);
+                setFormData(response.user);
+            } else {
+                setError(response.message || "Failed to load profile");
+            }
+        } catch (err) {
+            console.error("Error fetching profile:", err);
+            if (err.response?.status === 401) {
+                navigate('/login');
+            } else {
+                setError("Failed to load profile. Please try again later.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };*/
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        setSaveMessage("");
     };
 
     const handlePasswordInputChange = (e) => {
         const { name, value } = e.target;
         setPasswordData(prev => ({ ...prev, [name]: value }));
+        setPasswordError("");
     };
 
     const toggleEdit = () => {
@@ -353,6 +400,7 @@ const ProfilePage = () => {
         if (!isEditing) {
             setFormData(profile);
         }
+        setSaveMessage("");
     };
 
     const togglePasswordChange = () => {
@@ -366,9 +414,46 @@ const ProfilePage = () => {
     };
 
     const handleSave = () => {
+        if (!formData.name || !formData.phoneNumber) {
+            setSaveMessage("Please fill in all required fields");
+            return;
+        }
+
         setProfile(formData);
         setIsEditing(false);
+        setSaveMessage("Profile updated successfully!");
+
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+            setSaveMessage("");
+        }, 3000);
     };
+/*
+    const handleSave = async () => {
+        try {
+            setIsSaving(true);
+
+            const updateData = {
+                name: formData.name,
+                phoneNumber: formData.phoneNumber,
+                email: profile.email
+            };
+
+            const response = await serviceAPI.updateUserProfile(updateData);
+
+            if (response.statusCode === 200 && response.user) {
+                setProfile(response.user);
+                setIsEditing(false);
+            } else {
+                setError(response.message || "Failed to update profile");
+            }
+        } catch (err) {
+            console.error("Error updating profile:", err);
+            setError("Failed to update profile. Please try again.");
+        } finally {
+            setIsSaving(false);
+        }
+    };*/
 
     const handlePasswordChange = () => {
         // Validate password change
@@ -380,11 +465,59 @@ const ProfilePage = () => {
             setPasswordError("Password must be at least 8 characters long");
             return;
         }
+
         // Mock successful password change
         setPasswordError("");
         setIsChangingPassword(false);
-        alert("Password changed successfully!");
+        setSaveMessage("Password changed successfully!");
+
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+            setSaveMessage("");
+        }, 3000);
     };
+/*
+    const handlePasswordChange = async () => {
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            setPasswordError("New passwords do not match");
+            return;
+        }
+        if (passwordData.newPassword.length < 8) {
+            setPasswordError("Password must be at least 8 characters long");
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+
+            const updateData = {
+                password: passwordData.newPassword,
+                email: profile.email
+            };
+
+            const response = await serviceAPI.updateUserProfile(updateData);
+
+            if (response.statusCode === 200) {
+                setIsChangingPassword(false);
+                alert("Password changed successfully!");
+            } else {
+                setPasswordError(response.message || "Failed to change password");
+            }
+        } catch (err) {
+            console.error("Error changing password:", err);
+            setPasswordError("Failed to change password. Please try again.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div style={styles.container}>
+                <p style={{ textAlign: 'center' }}>Loading profile...</p>
+            </div>
+        );
+    }*/
 
     return (
         <div style={styles.container}>
@@ -392,6 +525,12 @@ const ProfilePage = () => {
                 <h1 style={styles.title}>Guest Profile</h1>
                 <h2 style={styles.subtitle}>Hotel Los Terrenos</h2>
             </div>
+
+            {saveMessage && (
+                <div style={styles.saveMessage}>
+                    {saveMessage}
+                </div>
+            )}
 
             {isEditing ? (
                 <div>
@@ -414,6 +553,7 @@ const ProfilePage = () => {
                             value={formData.name || ""}
                             onChange={handleInputChange}
                             style={styles.input}
+                            required
                         />
                     </div>
 
@@ -436,6 +576,7 @@ const ProfilePage = () => {
                             value={formData.phoneNumber || ""}
                             onChange={handleInputChange}
                             style={styles.input}
+                            required
                         />
                     </div>
 
