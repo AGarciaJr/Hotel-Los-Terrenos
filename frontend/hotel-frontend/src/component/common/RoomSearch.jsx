@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
-import serviceAPI from "../../service/serviceAPI";
+import serviceAPI from '../../service/serviceAPI';
 import DatePicker from "react-datepicker";
 
 const RoomSearch = ({handleSearchResult}) => {
