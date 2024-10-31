@@ -246,7 +246,7 @@ const ProfilePage = () => {
         name: "John Smith",
         email: "john.smith@example.com",
         phoneNumber: "123-456-7890",
-        role: "GUEST"
+        role: "CLERK"
     });
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState(profile);

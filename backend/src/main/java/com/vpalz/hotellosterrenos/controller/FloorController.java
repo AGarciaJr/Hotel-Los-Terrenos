@@ -5,11 +5,20 @@ import com.vpalz.hotellosterrenos.services.FloorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@RestController
+@RequestMapping("/api/floors")
+@PreAuthorize("hasRole('ADMIN')")
 public class FloorController {
 
-    private FloorService floorService;
+    private final FloorService floorService;
+
+    @Autowired
+    public FloorController(FloorService floorService) {
+        this.floorService = floorService;
+    }
 
     @GetMapping("/{floorNumber}")
     public ResponseEntity<Floor> getFloorDetails(@PathVariable int floorNumber) {
