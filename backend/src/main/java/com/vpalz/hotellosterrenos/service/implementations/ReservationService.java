@@ -40,7 +40,7 @@ public class ReservationService implements IReservationService {
         Response response = new Response();
 
         try {
-            if(reservationRequest.getCheckOutDate().isAfter(reservationRequest.getCheckInDate())) {
+            if(!reservationRequest.getCheckOutDate().isAfter(reservationRequest.getCheckInDate())) {
                 throw new IllegalArgumentException("Invalid check in/out dates.");
             }
 

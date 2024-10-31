@@ -37,42 +37,42 @@ public class RoomController {
             @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
             @RequestParam(value = "roomDescription", required = false) String roomDescription
     ) {
-        /*
-        if (photo == null || photo.isEmpty() || roomType == null || roomType.isBlank() || roomPrice == null || roomDescription.isBlank()) {
+
+        if (roomType == null || roomType.isBlank() || roomPrice == null || roomDescription.isBlank()) {
             Response response = new Response();
             response.setStatusCode(400);
             response.setMessage("Invalid data, Required Fields: Photo, Room Type, Room Price");
             return ResponseEntity.status(response.getStatusCode()).body(response);
-        }*/
+        }
 
         Response response = roomService.addNewRoom(roomType, roomPrice, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity<Response> getAllRooms() {
         Response response = roomService.getAllRooms();
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/types")
+    @GetMapping("/types")
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
     }
 
-    @PostMapping("/room-by-id/{roomId}")
+    @GetMapping("/room-by-id/{roomId}")
     public ResponseEntity<Response> getRoomById(@PathVariable Long roomId) {
         Response response = roomService.getRoomById(roomId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/all-available-rooms")
+    @GetMapping("/all-available-rooms")
     public ResponseEntity<Response> getAvailableRooms() {
         Response response = roomService.getAllAvailableRooms();
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/available-rooms-by-date-and-type")
+    @GetMapping("/available-rooms-by-date-and-type")
     public ResponseEntity<Response> getAvailableRoomsByDateAndType(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
@@ -88,7 +88,11 @@ public class RoomController {
         Response response = roomService.getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-
+    /*
+    Getting an authentication error 403 Forbidden
+    Which is weird because i am not getting that for
+    delete or for add.
+     */
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
@@ -96,6 +100,7 @@ public class RoomController {
                                                @RequestParam(value = "roomType", required = false) String roomType,
                                                @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
                                                @RequestParam(value = "roomDescription", required = false) String roomDescription
+
     ) {
         Response response = roomService.updateRoom(roomId, roomPrice, roomType, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);

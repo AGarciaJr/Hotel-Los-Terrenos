@@ -32,7 +32,7 @@ public class ReservationController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/get-by-confirmation-code{confirmationCode}")
+    @GetMapping("/get-by-confirmation-code/{confirmationCode}")
     public ResponseEntity<Response> getReservationByConfirmationCode(@PathVariable String confirmationCode){
         Response response = reservationService.findReservationByConfirmationCode(confirmationCode);
         return ResponseEntity.status(response.getStatusCode()).body(response);
