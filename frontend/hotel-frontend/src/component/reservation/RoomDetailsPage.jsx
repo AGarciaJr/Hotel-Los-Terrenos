@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import serviceAPI from '../../service/serviceAPI'; // Assuming your service is in a file called serviceAPI.js
 import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const RoomDetailsPage = () => {
     const navigate = useNavigate(); // Access the navigate function to navigate
@@ -103,7 +103,7 @@ const RoomDetailsPage = () => {
             console.log(checkOutDate)
 
             // Make reservation
-            const response = await serviceAPI.bookRoom(roomId, userId, reservation);
+            const response = await serviceAPI.reserveRoom(roomId, userId, reservation);
             if (response.statusCode === 200) {
                 setConfirmationCode(response.reservationConfirmationCode); // Set reservation confirmation code
                 setShowMessage(true); // Show message
@@ -168,7 +168,7 @@ const RoomDetailsPage = () => {
                 </div>
             )}
             <div className="reservation-info">
-                <button className="book-now-button" onClick={() => setShowDatePicker(true)}>Book Now</button>
+                <button className="reserve-now-button" onClick={() => setShowDatePicker(true)}>Book Now</button>
                 <button className="go-back-button" onClick={() => setShowDatePicker(false)}>Go Back</button>
                 {showDatePicker && (
                     <div className="date-picker-container">

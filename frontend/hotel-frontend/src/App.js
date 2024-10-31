@@ -8,8 +8,8 @@ import LoginPage from './component/authentication/LoginPage';
 import RegisterPage from './component/authentication/RegisterPage';
 import HomePage from './component/home/HomePage';
 import AllRoomsPage from './component/reservation/AllRoomsPage';
-import RoomDetailsBookingPage from './component/reservation/RoomDetailsPage';
-import FindBookingPage from './component/reservation/FindReservationPage';
+import RoomDetailsPage from './component/reservation/RoomDetailsPage';
+import FindReservationPage from './component/reservation/FindReservationPage';
 import AdminPage from './component/admin/AdminPage';
 import EditRoomPage from './component/admin/EditRoomPage';
 import AddRoomPage from './component/admin/AddRoomPage';
@@ -33,8 +33,8 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/home" element={<HomePage />} />
                         <Route path="/rooms" element={<AllRoomsPage />} />
-                        <Route path="/room-details/:roomId" element={<RoomDetailsBookingPage />} />
-                        <Route path="/find-booking" element={<FindBookingPage />} />
+                        <Route path="/room-details/:roomId" element={<RoomDetailsPage />} /> {/* Currently Not Working?*/}
+                        <Route path="/find-reservation" element={<FindReservationPage />} />
                         <Route path="/admin" element={<AdminPage />} />
                         <Route path="/admin/edit-room" element={<EditRoomPage />} />
                         <Route path="/admin/add-room" element={<AddRoomPage />} />

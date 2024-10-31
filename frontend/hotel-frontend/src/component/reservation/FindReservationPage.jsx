@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import serviceAPI from '../../service/serviceAPI';
 
-const FindreservationPage = () => {
+const FindReservationPage = () => {
     const [confirmationCode, setConfirmationCode] = useState(''); // State variable for confirmation code
-    const [reservationDetails, setreservationDetails] = useState(null); // State variable for reservation details
+    const [reservationDetails, setReservationDetails] = useState(null); // State variable for reservation details
     const [error, setError] = useState(null); // Track any errors
 
     const handleSearch = async () => {
@@ -14,8 +14,8 @@ const FindreservationPage = () => {
         }
         try {
             // Call API to get reservation details
-            const response = await serviceAPI.getreservationByConfirmationCode(confirmationCode);
-            setreservationDetails(response.reservation);
+            const response = await serviceAPI.getReservationByConfirmationCode(confirmationCode);
+            setReservationDetails(response.reservation);
             setError(null); // Clear error if successful
         } catch (error) {
             setError(error.response?.data?.message || error.message);
@@ -25,7 +25,7 @@ const FindreservationPage = () => {
 
     return (
         <div className="find-reservation-page">
-            <h2>Find reservation</h2>
+            <h2>Find Reservation</h2>
             <div className="search-container">
                 <input
                     required
@@ -49,7 +49,7 @@ const FindreservationPage = () => {
                     <br />
                     <hr />
                     <br />
-                    <h3>Booker Detials</h3>
+                    <h3>Clerk Details</h3>
                     <div>
                         <p> Name: {reservationDetails.user.name}</p>
                         <p> Email: {reservationDetails.user.email}</p>
@@ -70,4 +70,4 @@ const FindreservationPage = () => {
     );
 };
 
-export default FindreservationPage;
+export default FindReservationPage;
