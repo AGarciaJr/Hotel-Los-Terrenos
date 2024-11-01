@@ -7,6 +7,7 @@ import Navbar from './component/common/Navbar';
 import FooterComponent from './component/common/Footer';
 import HomePage from './component/home/HomePage';
 import ProfilePage from "./component/profile/ProfilePage";
+import RoomBooking from "./component/room booking/roombook";
 
 function App() {
     // Create a ref for the homepage section
@@ -37,6 +38,7 @@ function App() {
                     <Routes>
                         <Route exact path='/home' element={<HomePage />} />
                         <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/roombook" element={<RoomBooking />} />
                     </Routes>
                 </div>
 

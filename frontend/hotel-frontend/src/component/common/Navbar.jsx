@@ -26,9 +26,8 @@ function Navbar({ onHomeClick }) {
                 {/* Scroll to home section when clicking Home */}
                 <li><NavLink to="/home" onClick={onHomeClick} activeClass="active">Home</NavLink></li>
                 <li><NavLink to="/rooms" activeClass="active">Rooms</NavLink></li>
+                <li><NavLink to="/roombook" activeClass="active">Book a Room</NavLink></li>
                 <li><NavLink to="/find-booking" activeClass="active">Find My Bookings</NavLink></li>
-
-
 
                 { isUser && <li><NavLink to="/profile" activeClass="active">Profile</NavLink></li> }
                 { isAdmin && <li><NavLink to="/admin" activeClass="active">Admin</NavLink></li> }

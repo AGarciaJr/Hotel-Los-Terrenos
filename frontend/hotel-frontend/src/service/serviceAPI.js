@@ -196,12 +196,7 @@ export default class serviceAPI{
         return role === "USER";
     }
 
-    static async updateUserProfile(userData) {
-        const response = await axios.put(`${this.BASE_URL}/users/update-profile`, userData, {
-            headers: this.getHeader()
-        });
-        return response.data;
-    }
+
 
     // Add to serviceAPI.js
     static async changePassword(passwordData) {
@@ -228,5 +223,18 @@ export default class serviceAPI{
             { headers: this.getHeader() }
         );
         return response.data;
+    }
+
+    static async bookRoom(bookingData) {
+        try {
+            const response = await axios.post(
+                `${this.BASE_URL}/api/bookings/book`,
+                bookingData,
+                { headers: this.getHeader() }
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 };
