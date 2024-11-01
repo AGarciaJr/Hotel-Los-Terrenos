@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import serviceAPI from "../../service/serviceAPI";
 
 const RoomResult = ({roomSearchResults}) => {
     const navigate = useNavigate();
-    const isAdmin = serviceAPI.isAdmin();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            const adminStatus = await serviceAPI.isAdmin();
+            setIsAdmin(adminStatus);
+        };
+        checkAdminStatus();
+    }, []);
+
     return (
         <section className="room-results">
             {roomSearchResults && roomSearchResults.length > 0 && (
@@ -28,7 +37,7 @@ const RoomResult = ({roomSearchResults}) => {
                                 ) : (
                                     <button
                                         className="reserve-now-button"
-                                        onClick={() => navigate(`/room-details-reserve/${room.id}`)}
+                                        onClick={() => navigate(`/room-details/${room.id}`)}
                                     >
                                         Reserve Now
                                     </button>

@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import serviceAPI from '../../service/serviceAPI'; // Assuming your service is in a file called serviceAPI.js
+import serviceAPI from '../../service/serviceAPI';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const RoomDetailsPage = () => {
-    const navigate = useNavigate(); // Access the navigate function to navigate
-    const { roomId } = useParams(); // Get room ID from URL parameters
+    const navigate = useNavigate();
+    const { roomId } = useParams();
     const [roomDetails, setRoomDetails] = useState(null);
-    const [isLoading, setIsLoading] = useState(true); // Track loading state
-    const [error, setError] = useState(null); // Track any errors
-    const [checkInDate, setCheckInDate] = useState(null); // State variable for check-in date
-    const [checkOutDate, setCheckOutDate] = useState(null); // State variable for check-out date
-    const [numAdults, setNumAdults] = useState(1); // State variable for number of adults
-    const [numChildren, setNumChildren] = useState(0); // State variable for number of children
-    const [totalPrice, setTotalPrice] = useState(0); // State variable for total reservation price
-    const [totalGuests, setTotalGuests] = useState(1); // State variable for total number of guests
-    const [showDatePicker, setShowDatePicker] = useState(false); // State variable to control date picker visibility
-    const [userId, setUserId] = useState(''); // Set user id
-    const [showMessage, setShowMessage] = useState(false); // State variable to control message visibility
-    const [confirmationCode, setConfirmationCode] = useState(''); // State variable for reservation confirmation code
-    const [errorMessage, setErrorMessage] = useState(''); // State variable for error message
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
+    const [checkInDate, setCheckInDate] = useState(null);
+    const [checkOutDate, setCheckOutDate] = useState(null);
+    const [numAdults, setNumAdults] = useState(1);
+    const [numChildren, setNumChildren] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalGuests, setTotalGuests] = useState(1);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [userId, setUserId] = useState('');
+    const [showMessage, setShowMessage] = useState(false);
+    const [confirmationCode, setConfirmationCode] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setIsLoading(true); // Set loading state to true
+                setIsLoading(true);
                 const response = await serviceAPI.getRoomById(roomId);
                 setRoomDetails(response.room);
                 const userProfile = await serviceAPI.getUserProfile();
@@ -33,197 +34,90 @@ const RoomDetailsPage = () => {
             } catch (error) {
                 setError(error.response?.data?.message || error.message);
             } finally {
-                setIsLoading(false); // Set loading state to false after fetching or error
+                setIsLoading(false);
             }
         };
         fetchData();
-    }, [roomId]); // Re-run effect when roomId changes
+    }, [roomId]);
 
-
-    const handleConfirmreservation = async () => {
-        // Check if check-in and check-out dates are selected
-        if (!checkInDate || !checkOutDate) {
-            setErrorMessage('Please select check-in and check-out dates.');
-            setTimeout(() => setErrorMessage(''), 5000); // Clear error message after 5 seconds
-            return;
-        }
-
-        // Check if number of adults and children are valid
-        if (isNaN(numAdults) || numAdults < 1 || isNaN(numChildren) || numChildren < 0) {
-            setErrorMessage('Please enter valid numbers for adults and children.');
-            setTimeout(() => setErrorMessage(''), 5000); // Clear error message after 5 seconds
-            return;
-        }
-
-        // Calculate total number of days
-        const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-        const startDate = new Date(checkInDate);
-        const endDate = new Date(checkOutDate);
-        const totalDays = Math.round(Math.abs((endDate - startDate) / oneDay)) + 1;
-
-        // Calculate total number of guests
-        const totalGuests = numAdults + numChildren;
-
-        // Calculate total price
-        const roomPricePerNight = roomDetails.roomPrice;
-        const totalPrice = roomPricePerNight * totalDays;
-
-        setTotalPrice(totalPrice);
-        setTotalGuests(totalGuests);
+    const formatDate = (date) => {
+        return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
     };
 
-    const acceptreservation = async () => {
+    const validateReservation = () => {
+        if (!checkInDate || !checkOutDate) {
+            setErrorMessage('Please select check-in and check-out dates.');
+            return false;
+        }
+        if (isNaN(numAdults) || numAdults < 1 || isNaN(numChildren) || numChildren < 0) {
+            setErrorMessage('Please enter valid numbers for adults and children.');
+            return false;
+        }
+        return true;
+    };
+
+    const handleConfirmReservation = () => {
+        if (!validateReservation()) return;
+        const totalDays = Math.round(Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24))) + 1;
+        setTotalPrice(roomDetails.roomPrice * totalDays);
+        setTotalGuests(numAdults + numChildren);
+    };
+
+    const acceptReservation = async () => {
+        if (!validateReservation()) return;
+        setIsSubmitting(true);
         try {
-
-            // Ensure checkInDate and checkOutDate are Date objects
-            const startDate = new Date(checkInDate);
-            const endDate = new Date(checkOutDate);
-
-            // Log the original dates for debugging
-            console.log("Original Check-in Date:", startDate);
-            console.log("Original Check-out Date:", endDate);
-
-            // Convert dates to YYYY-MM-DD format, adjusting for time zone differences
-            const formattedCheckInDate = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-            const formattedCheckOutDate = new Date(endDate.getTime() - (endDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-
-
-            // Log the original dates for debugging
-            console.log("Formated Check-in Date:", formattedCheckInDate);
-            console.log("Formated Check-out Date:", formattedCheckOutDate);
-
-            // Create reservation object
             const reservation = {
-                checkInDate: formattedCheckInDate,
-                checkOutDate: formattedCheckOutDate,
+                checkInDate: formatDate(checkInDate),
+                checkOutDate: formatDate(checkOutDate),
                 numOfAdults: numAdults,
                 numOfChildren: numChildren
             };
-            console.log(reservation)
-            console.log(checkOutDate)
-
-            // Make reservation
             const response = await serviceAPI.reserveRoom(roomId, userId, reservation);
             if (response.statusCode === 200) {
-                setConfirmationCode(response.reservationConfirmationCode); // Set reservation confirmation code
-                setShowMessage(true); // Show message
-                // Hide message and navigate to homepage after 5 seconds
+                setConfirmationCode(response.reservationConfirmationCode);
+                setShowMessage(true);
                 setTimeout(() => {
                     setShowMessage(false);
-                    navigate('/rooms'); // Navigate to rooms
+                    navigate('/rooms');
                 }, 10000);
             }
         } catch (error) {
             setErrorMessage(error.response?.data?.message || error.message);
-            setTimeout(() => setErrorMessage(''), 5000); // Clear error message after 5 seconds
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    if (isLoading) {
-        return <p className='room-detail-loading'>Loading room details...</p>;
-    }
-
-    if (error) {
-        return <p className='room-detail-loading'>{error}</p>;
-    }
-
-    if (!roomDetails) {
-        return <p className='room-detail-loading'>Room not found.</p>;
-    }
+    if (isLoading) return <p className='room-detail-loading'>Loading room details...</p>;
+    if (error) return <p className='room-detail-loading'>{error}</p>;
+    if (!roomDetails) return <p className='room-detail-loading'>Room not found.</p>;
 
     const { roomType, roomPrice, roomPhotoUrl, description, reservations } = roomDetails;
 
     return (
         <div className="room-details-reservation">
-            {showMessage && (
-                <p className="reservation-success-message">
-                    reservation successful! Confirmation code: {confirmationCode}. An SMS and email of your reservation details have been sent to you.
-                </p>
-            )}
-            {errorMessage && (
-                <p className="error-message">
-                    {errorMessage}
-                </p>
-            )}
+            {showMessage && <p className="success-message">Reservation successful! Confirmation code: {confirmationCode}.</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <h2>Room Details</h2>
-            <br />
             <img src={roomPhotoUrl} alt={roomType} className="room-details-image" />
             <div className="room-details-info">
                 <h3>{roomType}</h3>
                 <p>Price: ${roomPrice} / night</p>
                 <p>{description}</p>
             </div>
-            {reservations && reservations.length > 0 && (
-                <div>
-                    <h3>Existing reservation Details</h3>
-                    <ul className="reservation-list">
-                        {reservations.map((reservation, index) => (
-                            <li key={reservation.id} className="reservation-item">
-                                <span className="reservation-number">reservation {index + 1} </span>
-                                <span className="reservation-text">Check-in: {reservation.checkInDate} </span>
-                                <span className="reservation-text">Out: {reservation.checkOutDate}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            {/* Reservation details and booking section */}
             <div className="reservation-info">
-                <button className="reserve-now-button" onClick={() => setShowDatePicker(true)}>Book Now</button>
-                <button className="go-back-button" onClick={() => setShowDatePicker(false)}>Go Back</button>
-                {showDatePicker && (
-                    <div className="date-picker-container">
-                        <DatePicker
-                            className="detail-search-field"
-                            selected={checkInDate}
-                            onChange={(date) => setCheckInDate(date)}
-                            selectsStart
-                            startDate={checkInDate}
-                            endDate={checkOutDate}
-                            placeholderText="Check-in Date"
-                            dateFormat="dd/MM/yyyy"
-                            // dateFormat="yyyy-MM-dd"
-                        />
-                        <DatePicker
-                            className="detail-search-field"
-                            selected={checkOutDate}
-                            onChange={(date) => setCheckOutDate(date)}
-                            selectsEnd
-                            startDate={checkInDate}
-                            endDate={checkOutDate}
-                            minDate={checkInDate}
-                            placeholderText="Check-out Date"
-                            // dateFormat="yyyy-MM-dd"
-                            dateFormat="dd/MM/yyyy"
-                        />
-
-                        <div className='guest-container'>
-                            <div className="guest-div">
-                                <label>Adults:</label>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    value={numAdults}
-                                    onChange={(e) => setNumAdults(parseInt(e.target.value))}
-                                />
-                            </div>
-                            <div className="guest-div">
-                                <label>Children:</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    value={numChildren}
-                                    onChange={(e) => setNumChildren(parseInt(e.target.value))}
-                                />
-                            </div>
-                            <button className="confirm-reservation" onClick={handleConfirmreservation}>Confirm reservation</button>
-                        </div>
-                    </div>
+                {!showDatePicker ? (
+                    <button className="reserve-now-button" onClick={() => setShowDatePicker(true)}>Book Now</button>
+                ) : (
+                    <button className="go-back-button" onClick={() => setShowDatePicker(false)}>Go Back</button>
                 )}
-                {totalPrice > 0 && (
-                    <div className="total-price">
-                        <p>Total Price: ${totalPrice}</p>
-                        <p>Total Guests: {totalGuests}</p>
-                        <button onClick={acceptreservation} className="accept-reservation">Accept reservation</button>
+                {showDatePicker && (
+                    <div>
+                        {/* Date pickers and guest inputs */}
+                        <button onClick={handleConfirmReservation}>Calculate Total</button>
+                        <button onClick={acceptReservation} disabled={isSubmitting}>Confirm Reservation</button>
                     </div>
                 )}
             </div>

@@ -94,14 +94,14 @@ public class Utils {
 
         if(!user.getReservations().isEmpty()){
             userDAO.setReservations(user.getReservations().stream()
-                    .map(reservation -> mapReservationEntityToReservationDAOPlusBookedRooms(reservation, false))
+                    .map(reservation -> mapReservationEntityToReservationDAOPlusReservedRooms(reservation, false))
                     .collect(Collectors.toList()));
         }
 
         return userDAO;
     }
 
-    private static ReservationDAO mapReservationEntityToReservationDAOPlusBookedRooms(Reservation reservation, boolean mapUser) {
+    public static ReservationDAO mapReservationEntityToReservationDAOPlusReservedRooms(Reservation reservation, boolean mapUser) {
         ReservationDAO reservationDAO = mapReservationEntityToReservationDAO(reservation);
 
         if(mapUser){

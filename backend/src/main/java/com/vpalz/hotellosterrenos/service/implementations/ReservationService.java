@@ -83,7 +83,7 @@ public class ReservationService implements IReservationService {
 
         try {
             Reservation reservation = reservationRepository.findByReservationConfirmationCode(confirmationCode).orElseThrow(() -> new MyException("Reservation Not Found."));
-            ReservationDAO reservationDAO = Utils.mapReservationEntityToReservationDAO(reservation);
+            ReservationDAO reservationDAO = Utils.mapReservationEntityToReservationDAOPlusReservedRooms(reservation, true);
 
             response.setStatusCode(200);
             response.setMessage("Successfully Saved Reservation");

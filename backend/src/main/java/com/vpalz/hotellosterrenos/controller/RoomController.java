@@ -81,18 +81,14 @@ public class RoomController {
         if (checkInDate == null || roomType == null || roomType.isBlank() || checkOutDate == null) {
             Response response = new Response();
             response.setStatusCode(400);
-            response.setMessage("Invalid data, Required Fields: Check In Date, Room Type, Check Out Date");
+            response.setMessage("Invalid data, Required Fields: Check In Date, Check Out Date, Room Type");
             return ResponseEntity.status(response.getStatusCode()).body(response);
         }
 
         Response response = roomService.getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-    /*
-    Getting an authentication error 403 Forbidden
-    Which is weird because i am not getting that for
-    delete or for add.
-     */
+
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
