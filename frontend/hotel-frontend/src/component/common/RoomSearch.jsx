@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from "react";
-import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'
-import serviceAPI from "../../service/serviceAPI";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import serviceAPI from "../../service/serviceAPI";
 
-const RoomSearch = ({handleSearchResult}) => {
+const RoomSearch = ({ handleSearchResult }) => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [roomType, setRoomType] = useState('');
@@ -12,52 +11,50 @@ const RoomSearch = ({handleSearchResult}) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-
         const fetchRoomTypes = async () => {
             try {
                 const types = await serviceAPI.getRoomTypes();
-                setRoomTypes(types)
-            }catch(err){
-                console.log('Error fetching room types:',err.message);
+                setRoomTypes(types);
+            } catch (err) {
+                console.log('Error fetching room types:', err.message);
             }
         };
         fetchRoomTypes();
     }, []);
 
-    const showError = (message, timeOut = 5000) =>{
+    const showError = (message, timeOut = 5000) => {
         setError(message);
-        setTimeout(()=>{
+        setTimeout(() => {
             setError('');
         }, timeOut);
     };
 
-    const handleIternalSearch = async () => {
-        if(!startDate || !endDate || !roomType){
-            showError("please select all fields");
-            return false;
+    const handleSearch = async () => {
+        if (!startDate || !endDate || !roomType) {
+            showError("Please select all fields");
+            return;
         }
-        try{
-            const formattedStartDate = startDate ? startDate.roISOString().split('T')[0] : null;
-            const formattedEndDate = endDate ? endDate.roISOString().split('T')[0] : null;
 
-            const response = await serviceAPI.getAllAvailableRoomsByDateAndType(formattedStartDate, formattedEndDate, roomType);
+        try {
+            const formattedStartDate = startDate.toISOString().split('T')[0];
+            const formattedEndDate = endDate.toISOString().split('T')[0];
 
-            if(response.setStatusCode === 200){
-                if(response.roomList.length === 0){
-                    showError("Room Not Currently Available for selected Room Type and Date Range");
-                    return;
-                }
+            console.log("Formatted Dates:", { formattedStartDate, formattedEndDate, roomType }); // Debugging log
+            const response = await serviceAPI.getAvailableRoomsByDateAndType(formattedStartDate, formattedEndDate, roomType);
 
-                handleSearchResult(response.roomList);
-                setError('');
+            if (response.roomList && response.roomList.length === 0) {
+                showError("Room Not Currently Available for selected Room Type and Date Range");
+                return;
             }
-
-        }catch(err){
-            showError(err.response.data.message);
+            handleSearchResult(response.roomList);
+            setError('');
+        } catch (err) {
+            console.error("Error during room search:", err); // Full error log
+            showError(err.response?.data?.message || "Error occurred during room search.");
         }
     };
 
-    return(
+    return (
         <section>
             <div className="search-container">
                 <div className="search-field">
@@ -65,7 +62,7 @@ const RoomSearch = ({handleSearchResult}) => {
                     <DatePicker
                         selected={startDate}
                         onChange={(date) => setStartDate(date)}
-                        dateFormat="dd/MM/yyyy"
+                        dateFormat={"yyyy/MM/dd"}
                         placeholderText="Select Check-in Date"
                     />
                 </div>
@@ -74,7 +71,7 @@ const RoomSearch = ({handleSearchResult}) => {
                     <DatePicker
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
-                        dateFormat="dd/MM/yyyy"
+                        dateFormat={"yyyy/MM/dd"}
                         placeholderText="Select Check-out Date"
                     />
                 </div>
@@ -85,14 +82,14 @@ const RoomSearch = ({handleSearchResult}) => {
                         <option disabled value="">
                             Select Room Type
                         </option>
-                        {roomTypes.map((roomType =>
-                                <option key={roomType} value={roomType}>
-                                    {roomType}
-                                </option>
+                        {roomTypes.map((type) => (
+                            <option key={type} value={type}>
+                                {type}
+                            </option>
                         ))}
                     </select>
                 </div>
-                <button className="home-search-button" onClick={handleIternalSearch}>
+                <button className="home-search-button" onClick={handleSearch}>
                     Search Rooms
                 </button>
             </div>

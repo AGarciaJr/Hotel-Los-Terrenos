@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import serviceAPI from "../../service/serviceAPI";
 
 const RoomResult = ({roomSearchResults}) => {
     const navigate = useNavigate();
-    const isAdmin = serviceAPI.isAdmin();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            const adminStatus = await serviceAPI.isAdmin();
+            setIsAdmin(adminStatus);
+        };
+        checkAdminStatus();
+    }, []);
+
     return (
         <section className="room-results">
             {roomSearchResults && roomSearchResults.length > 0 && (
@@ -18,7 +27,7 @@ const RoomResult = ({roomSearchResults}) => {
                                 <p>Description: {room.roomDescription}</p>
                             </div>
 
-                            <div className="book-now-div">
+                            <div className="reserve-now-div">
                                 {isAdmin ? (
                                     <button className="edit-room-button"
                                             onClick={() => navigate(`/admin/edit-room/${room.id}`)}
@@ -27,10 +36,10 @@ const RoomResult = ({roomSearchResults}) => {
                                     </button>
                                 ) : (
                                     <button
-                                        className="book-now-button"
-                                        onClick={() => navigate(`/room-details-book/${room.id}`)}
+                                        className="reserve-now-button"
+                                        onClick={() => navigate(`/room-details/${room.id}`)}
                                     >
-                                        Book Now
+                                        Reserve Now
                                     </button>
                                 )}
                             </div>

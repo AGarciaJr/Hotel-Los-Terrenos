@@ -1,5 +1,6 @@
 package com.vpalz.hotellosterrenos.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
@@ -38,9 +39,11 @@ public class Reservation {
      */
 
     @NotNull(message = "Check In Date is Required")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
     private LocalDate checkInDate;
 
     @NotNull(message = "Check Out Date is Required.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
     @Future(message = "Invalid Check Out Date.")
     private LocalDate checkOutDate;
 

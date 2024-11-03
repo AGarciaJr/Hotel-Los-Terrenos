@@ -3,12 +3,14 @@ import axios from "axios"
 export default class serviceAPI{
     static BASE_URL = "http://localhost:8080"
 
-    static getHeader(){
+    static getHeader() {
         const token = localStorage.getItem("token");
 
-        return{
-            Authorization: `Bearer ${token}`,
-            'Content-Type': "application/json"
+        return {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
         };
     }
 
@@ -85,8 +87,11 @@ export default class serviceAPI{
     }
 
     //come back and check this one
-    static async getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType){
-        const result = await axios.get(`${this.BASE_URL}/rooms/available-rooms-by-date-and-type/${checkInDate}/${checkOutDate}/${roomType}`);
+    static async getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType) {
+        const result = await axios.get(`${this.BASE_URL}/rooms/available-rooms-by-date-and-type`, {
+            params: { checkInDate, checkOutDate, roomType },
+            headers: this.getHeader()
+        });
         return result.data;
     }
 
@@ -112,7 +117,7 @@ export default class serviceAPI{
     }
 
     static async updateRoom(roomId, formData){
-        const result = await axios.get(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
+        const result = await axios.put(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
             headers: {
                 ...this.getHeader(),
                 'Content-Type': 'multipart/form-data'
@@ -125,14 +130,23 @@ export default class serviceAPI{
      * Reservtion
      */
 
-    static async reserveRoom(roomId, userId, reservation){
-        console.log("USER ID: " + userId);
+    static async reserveRoom(roomId, userId, reservation) {
+        try {
+            console.log("USER ID:", userId);
+            console.log("Request URL:", `${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`);
+            console.log("Headers:", this.getHeader());
+            console.log("Reservation data:", reservation);
 
-        const response = await axios.get(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, {
-            headers: this.getHeader()
-        });
-        return response.data;
+            const response = await axios.post(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, {
+                headers: this.getHeader()
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Reservation request failed:", error.response ? error.response.data : error.message);
+            throw error;
+        }
     }
+
 
     static async getAllReservations(){
         const result = await axios.get(`${this.BASE_URL}/reservations/all` ,{
