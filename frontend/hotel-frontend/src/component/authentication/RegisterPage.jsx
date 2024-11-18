@@ -28,6 +28,16 @@ function RegisterPage() {
         return true;
     };
 
+    const getRoleFromEmail = (email) => {
+        if (email.includes('_admin@')) {
+            return 'ADMIN';
+        } else if (email.includes('_clerk@')) {
+            return 'CLERK';
+        } else {
+            return 'USER'; // Default role
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) {
@@ -35,9 +45,13 @@ function RegisterPage() {
             setTimeout(() => setErrorMessage(''), 5000);
             return;
         }
+
+        // Extract role based on email
+        const role = getRoleFromEmail(formData.email);
+
         try {
-            // Call the register method from serviceAPI
-            const response = await serviceAPI.registerUser(formData);
+            // Call the register method from serviceAPI with the role
+            const response = await serviceAPI.registerUser({ ...formData, role });
 
             // Check if the response is successful
             if (response.statusCode === 200) {
@@ -54,8 +68,7 @@ function RegisterPage() {
                     navigate('/');
                 }, 3000);
             }
-        }
-        catch (error) {
+        } catch (error) {
             setErrorMessage(error.response?.data?.message || error.message);
             setTimeout(() => setErrorMessage(''), 5000);
         }

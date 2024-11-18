@@ -73,7 +73,7 @@ const AddRoomPage = () => {
 
                 setTimeout(() => {
                     setSuccess('');
-                    navigate('/admin/manage-rooms');
+                    navigate('/clerk/manage-rooms');
                 }, 3000);
             }
         } catch (error) {
