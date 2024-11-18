@@ -42,6 +42,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
+
         Response response = userService.getUserInfo(email);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
@@ -50,6 +51,7 @@ public class UserController {
     public ResponseEntity<Response> updateProfile(@RequestBody User userUpdate) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
+
 
         Response response = userService.updateProfile(email, userUpdate);
         return ResponseEntity.status(response.getStatusCode()).body(response);

@@ -11,6 +11,13 @@ export default class serviceAPI{
             'Content-Type': "application/json"
         };
     }
+    static isTokenValid() {
+        const token = localStorage.getItem("token");
+        if (!token) return false;
+
+        // You might want to add JWT token expiration checking here
+        return true;
+    }
 
     /**
      * Authentication
@@ -32,13 +39,6 @@ export default class serviceAPI{
 
     static async getAllUsers(){
         const response = await axios.get(`${this.BASE_URL}/users/all`, {
-            headers: this.getHeader()
-        });
-        return response.data;
-    }
-
-    static async getUserProfile(){
-        const response = await axios.get(`${this.BASE_URL}/users/get-logged-in-profile-info`, {
             headers: this.getHeader()
         });
         return response.data;
@@ -198,31 +198,68 @@ export default class serviceAPI{
 
 
 
-    // Add to serviceAPI.js
     static async changePassword(passwordData) {
-        const response = await axios.put(
-            `${this.BASE_URL}/users/change-password`,
-            passwordData,
-            { headers: this.getHeader() }
-        );
-        return response.data;
+        try {
+            const response = await axios.put(
+                `${this.BASE_URL}/users/change-password`,
+                passwordData,
+                {
+                    headers: this.getHeader(),
+                    withCredentials: true
+                }
+            );
+            return response.data;
+        } catch (error) {
+            if (error.response?.status === 401) {
+                console.error('Authentication error. Please login again.');
+                // Optionally redirect to login page
+            }
+            throw error;
+        }
     }
 
     static async updateUserProfile(userData) {
-        const response = await axios.put(
-            `${this.BASE_URL}/users/update-profile`,
-            userData,
-            { headers: this.getHeader() }
-        );
-        return response.data;
+        try {
+            // Log the token for debugging
+            console.log('Using token:', localStorage.getItem("token"));
+
+            const response = await axios.put(
+                `${this.BASE_URL}/users/update-profile`,
+                userData,
+                {
+                    headers: this.getHeader(),
+                    withCredentials: true
+                }
+            );
+            return response.data;
+        } catch (error) {
+            if (error.response?.status === 401) {
+                // Token might be expired or invalid
+                console.error('Authentication error. Please login again.');
+                // Optionally redirect to login page
+                // window.location.href = '/login';
+            }
+            throw error;
+        }
     }
 
     static async getUserProfile() {
-        const response = await axios.get(
-            `${this.BASE_URL}/users/get-logged-in-profile-info`,
-            { headers: this.getHeader() }
-        );
-        return response.data;
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/users/get-logged-in-profile-info`,
+                {
+                    headers: this.getHeader(),
+                    withCredentials: true
+                }
+            );
+            return response.data;
+        } catch (error) {
+            if (error.response?.status === 401) {
+                console.error('Authentication error. Please login again.');
+                // Optionally redirect to login page
+            }
+            throw error;
+        }
     }
 
     static async bookRoom(bookingData) {
