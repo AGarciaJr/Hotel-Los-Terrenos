@@ -272,4 +272,34 @@ public class UserService implements IUserService {
             return response;
         }
     }
+
+    public Response updatePassword(String userId, String newPassword) {
+        Response response = new Response();
+        try {
+            // Retrieve the user by userId
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+
+            // Encrypt the new password
+            String encodedPassword = passwordEncoder.encode(newPassword);
+
+            // Update the user's password
+            user.setPassword(encodedPassword);
+
+            // Save the updated user
+            userRepository.save(user);
+
+            // Set success message
+            response.setStatusCode(200);
+            response.setMessage("Password updated successfully.");
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while updating password: " + e.getMessage());
+        }
+        return response;
+    }
+
 }

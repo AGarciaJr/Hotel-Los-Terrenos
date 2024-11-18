@@ -3,12 +3,14 @@ import axios from "axios"
 export default class serviceAPI{
     static BASE_URL = "http://localhost:8080"
 
-    static getHeader(){
+    static getHeader() {
         const token = localStorage.getItem("token");
-
-        return{
-            Authorization: `Bearer ${token}`,
-            'Content-Type': "application/json"
+        console.log("Authorization token: ", token);
+        return {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         };
     }
     static isTokenValid() {
@@ -40,6 +42,17 @@ export default class serviceAPI{
     static async getAllUsers(){
         const response = await axios.get(`${this.BASE_URL}/users/all`, {
             headers: this.getHeader()
+        });
+        return response.data;
+    }
+
+    static async getUserProfile() {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${this.BASE_URL}/users/get-logged-in-profile-info`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': "application/json"
+            }
         });
         return response.data;
     }
@@ -142,14 +155,23 @@ export default class serviceAPI{
      * Reservtion
      */
 
-    static async reserveRoom(roomId, userId, reservation){
-        console.log("USER ID: " + userId);
+    static async reserveRoom(roomId, userId, reservation) {
+        try {
+            console.log("USER ID:", userId);
+            console.log("Request URL:", `${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`);
+            console.log("Headers:", this.getHeader());
+            console.log("Reservation data:", reservation);
 
-        const response = await axios.get(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, {
-            headers: this.getHeader()
-        });
-        return response.data;
+            const response = await axios.post(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, {
+                headers: this.getHeader()
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Reservation request failed:", error.response ? error.response.data : error.message);
+            throw error;
+        }
     }
+
 
     static async getAllReservations(){
         const result = await axios.get(`${this.BASE_URL}/reservations/all` ,{
@@ -189,7 +211,35 @@ export default class serviceAPI{
         return role === "ADMIN";
     }
 
-    /** Add isClerk */
+    static async updateUserPassword(userId, newPassword) {
+        try {
+            const response = await axios.put(
+                `${this.BASE_URL}/users/update-password/${userId}`,
+                { password: newPassword },
+                {
+                    headers: this.getHeader()
+                }
+            );
+
+            // Check response structure (if it contains status or message)
+            if (response.data.status === 200) {
+                return response.data; // Or return the message as needed
+            } else {
+                throw new Error(response.data.message || 'Failed to update password');
+            }
+        } catch (error) {
+            console.error('Error updating password:', error.message);
+            throw error;
+        }
+    }
+
+
+
+
+    static async isClerk(){
+        const role = localStorage.getItem("role");
+        return role === "CLERK";
+    }
 
     static async isUser(){
         const role = localStorage.getItem("role");

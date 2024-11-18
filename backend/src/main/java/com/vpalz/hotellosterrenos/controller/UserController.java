@@ -25,6 +25,14 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @PutMapping("/update-password/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> updatePassword(@PathVariable("userId") String userId, @RequestParam("password") String newPassword) {
+        Response response = userService.updatePassword(userId, newPassword);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+
     @GetMapping("/get-by-id/{userId}")
     public ResponseEntity<Response> getById(@PathVariable("userId") String userId) {
         Response response = userService.getUserById(userId);
