@@ -1,9 +1,29 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import serviceAPI from '../../service/serviceAPI';
 import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
     const navigate = useNavigate();
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isClerk, setIsClerk] = useState(false);
+    const [isUser, setIsUser] = useState(false);
+
+    useEffect(() => {
+        async function checkAuth() {
+            const auth = await serviceAPI.isAuthenticated();
+            const admin = await serviceAPI.isAdmin();
+            const clerk = await serviceAPI.isClerk();
+            const user = await serviceAPI.isUser();
+
+            setIsAuthenticated(auth);
+            setIsAdmin(admin);
+            setIsClerk(clerk);
+            setIsUser(user);
+        }
+        checkAuth();
+    }, []);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -78,7 +98,8 @@ function RegisterPage() {
         <div className="auth-container">
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             {successMessage && <p className="success-message">{successMessage}</p>}
-            <h2>Sign Up</h2>
+            { !isAuthenticated && <h2>Sign Up</h2>}
+            { isAdmin && <h2>Create a Clerk Account</h2>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Name:</label>

@@ -11,13 +11,14 @@ const ClerkPage = () => {
         const fetchClerkName = async () => {
             try {
                 const response = await serviceAPI.getUserProfile();
+                console.log('User profile response:', response);
                 if (response && response.user) {
-                    setClerkName(response.user.name); // Assuming response.user.name is correct
+                    setClerkName(response.user.name);
                 }
             } catch (error) {
                 console.error('Error fetching clerk details:', error.message);
             } finally {
-                setLoading(false); // Stop loading once the request is complete
+                setLoading(false);
             }
         };
 
@@ -27,14 +28,17 @@ const ClerkPage = () => {
     return (
         <div className="clerk-page">
             <h1 className="welcome-message">
-                {loading ? 'Loading...' : `Welcome, ${clerkName}`} {/* Conditional rendering */}
+                {loading ? 'Loading...' : `Welcome, ${clerkName}`}
             </h1>
             <div className="clerk-actions">
-                <button className="clerk-button" onClick={() => navigate('/clerk/manage-rooms')}>
-                    Manage Rooms
+                {/** Add Buttons*/}
+                <button className="clerk-button" onClick={() => navigate('/clerk/add-room')}>
+                    Add Room
                 </button>
-                <button className="clerk-button" onClick={() => navigate('/clerk/manage-reservations')}>
-                    Manage Reservations
+
+                {/** Edit Button*/}
+                <button className="clerk-button" onClick={() => navigate('/clerk/edit-room')}>
+                    Edit Room
                 </button>
             </div>
         </div>
