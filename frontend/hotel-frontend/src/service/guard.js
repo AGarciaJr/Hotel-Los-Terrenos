@@ -1,22 +1,22 @@
 import React from "react";
-import {Navigate, userLocation} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 import serviceAPI from "./serviceAPI";
 
-export const ProtectedRoute = ({element : Component}) => {
+export const ProtectedRoute = ({element}) => {
     const location = useLocation();
 
-    return serviceAPI.isAuthenticted() ? (
-        Component
+    return serviceAPI.isAuthenticated() ? (
+        element
     ) : (
         <Navigate to="/login" replace state={{from : location}}/>
     );
 };
 
-export const AdminRoute = ({element : Component}) => {
+export const AdminRoute = ({element}) => {
     const location = useLocation();
 
     return serviceAPI.isAdmin() ? (
-        Component
+        element
     ) : (
         <Navigate to="/login" replace state={{from : location}}/>
     );

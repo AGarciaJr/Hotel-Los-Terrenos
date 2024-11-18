@@ -30,8 +30,8 @@ public class UserController {
         Response response = userService.getUserById(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-
-    @GetMapping("/delete/{userId}")
+    //Having trouble testing this on postman, "403 Try Different Authentication"
+    @DeleteMapping("/delete/{userId}")
     public ResponseEntity<Response> deleteUser(@PathVariable("userId") String userId) {
         Response response = userService.deleteUser(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);

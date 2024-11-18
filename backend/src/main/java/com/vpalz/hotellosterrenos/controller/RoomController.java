@@ -43,19 +43,19 @@ public class RoomController {
             @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
             @RequestParam(value = "roomDescription", required = false) String roomDescription
     ) {
-        /*
-        if (photo == null || photo.isEmpty() || roomType == null || roomType.isBlank() || roomPrice == null || roomDescription.isBlank()) {
+
+        if (roomType == null || roomType.isBlank() || roomPrice == null || roomDescription.isBlank()) {
             Response response = new Response();
             response.setStatusCode(400);
             response.setMessage("Invalid data, Required Fields: Photo, Room Type, Room Price");
             return ResponseEntity.status(response.getStatusCode()).body(response);
-        }*/
+        }
 
         Response response = roomService.addNewRoom(roomType, roomPrice, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity<Response> getAllRooms() {
         Response response = roomService.getAllRooms();
         return ResponseEntity.status(response.getStatusCode()).body(response);
@@ -66,19 +66,19 @@ public class RoomController {
         return roomService.getAllRoomTypes();
     }
 
-    @PostMapping("/room-by-id/{roomId}")
+    @GetMapping("/room-by-id/{roomId}")
     public ResponseEntity<Response> getRoomById(@PathVariable Long roomId) {
         Response response = roomService.getRoomById(roomId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/all-available-rooms")
+    @GetMapping("/all-available-rooms")
     public ResponseEntity<Response> getAvailableRooms() {
         Response response = roomService.getAllAvailableRooms();
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PostMapping("/available-rooms-by-date-and-type")
+    @GetMapping("/available-rooms-by-date-and-type")
     public ResponseEntity<Response> getAvailableRoomsByDateAndType(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
@@ -87,7 +87,7 @@ public class RoomController {
         if (checkInDate == null || roomType == null || roomType.isBlank() || checkOutDate == null) {
             Response response = new Response();
             response.setStatusCode(400);
-            response.setMessage("Invalid data, Required Fields: Check In Date, Room Type, Check Out Date");
+            response.setMessage("Invalid data, Required Fields: Check In Date, Check Out Date, Room Type");
             return ResponseEntity.status(response.getStatusCode()).body(response);
         }
 
@@ -102,6 +102,7 @@ public class RoomController {
                                                @RequestParam(value = "roomType", required = false) String roomType,
                                                @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
                                                @RequestParam(value = "roomDescription", required = false) String roomDescription
+
     ) {
         Response response = roomService.updateRoom(roomId, roomPrice, roomType, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
