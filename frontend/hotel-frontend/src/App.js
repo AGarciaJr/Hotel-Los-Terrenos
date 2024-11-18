@@ -16,8 +16,6 @@ import AddRoomPage from './component/clerk/AddRoomPage';
 import AdminPage from './component/admin/AdminPage';
 import CreateClerkPage from './component/admin/CreateClerkPage';
 import UpdatePasswordPage from './component/admin/UpdatePasswordPage';
-import EditRoomPage from './component/admin/EditRoomPage';
-import AddRoomPage from './component/admin/AddRoomPage';
 import ProfilePage from "./component/profile/ProfilePage";
 import RoomBooking from "./component/room booking/roombook";
 

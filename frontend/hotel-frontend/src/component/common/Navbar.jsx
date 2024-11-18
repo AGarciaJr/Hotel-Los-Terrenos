@@ -41,10 +41,11 @@ function Navbar({ onHomeClick }) {
                 <li><NavLink to="/rooms" activeClass="active">Rooms</NavLink></li>
                 <li><NavLink to="/roombook" activeClass="active">Book a Room</NavLink></li>
                 <li><NavLink to="/find-booking" activeClass="active">Find My Bookings</NavLink></li>
+                <li><NavLink to="/profile" activeClass="active">Profile</NavLink></li>
 
-                { isUser && <li><NavLink to="/profile" activeClass="active">Profile</NavLink></li> }
-                { isClerk && <li><NavLink to="/clerk" activeClass="active">Clerk</NavLink></li> }
-                { isAdmin && <li><NavLink to="/admin" activeClass="active">Admin</NavLink></li> }
+                {isUser && <li><NavLink to="/profile" activeClass="active">Profile</NavLink></li>}
+                {isClerk && <li><NavLink to="/clerk" activeClass="active">Clerk</NavLink></li>}
+                {isAdmin && <li><NavLink to="/admin" activeClass="active">Admin</NavLink></li>}
 
                 {!isAuthenticated && <li><NavLink to="/login" activeClass="active">Login</NavLink></li>}
                 {!isAuthenticated && <li><NavLink to="/register" activeClass="active">Register</NavLink></li>}
