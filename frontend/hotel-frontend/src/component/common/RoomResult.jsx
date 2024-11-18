@@ -4,14 +4,14 @@ import serviceAPI from "../../service/serviceAPI";
 
 const RoomResult = ({roomSearchResults}) => {
     const navigate = useNavigate();
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isClerk, setIsClerk] = useState(false);
 
     useEffect(() => {
-        const checkAdminStatus = async () => {
-            const adminStatus = await serviceAPI.isAdmin();
-            setIsAdmin(adminStatus);
+        const checkClerkStatus = async () => {
+            const clerkStatus = await serviceAPI.isClerk();
+            setIsClerk(clerkStatus);
         };
-        checkAdminStatus();
+        checkClerkStatus();
     }, []);
 
     return (
@@ -28,16 +28,16 @@ const RoomResult = ({roomSearchResults}) => {
                             </div>
 
                             <div className="reserve-now-div">
-                                {isAdmin ? (
+                                {isClerk ? (
                                     <button className="edit-room-button"
-                                            onClick={() => navigate(`/admin/edit-room/${room.id}`)}
+                                            onClick={() => navigate(`/clerk/edit-room/${room.id}`)}
                                     >
                                         Edit Room
                                     </button>
                                 ) : (
                                     <button
                                         className="reserve-now-button"
-                                        onClick={() => navigate(`/room-details/${room.id}`)}
+                                        onClick={() => navigate(`rooms/room-by-id/${room.id}`)}
                                     >
                                         Reserve Now
                                     </button>

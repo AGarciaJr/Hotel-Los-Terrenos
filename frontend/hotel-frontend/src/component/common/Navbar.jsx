@@ -12,10 +12,12 @@ function Navbar({ onHomeClick }) {
         async function checkAuth() {
             const auth = await serviceAPI.isAuthenticated();
             const admin = await serviceAPI.isAdmin();
+            const clerk = await serviceAPI.isClerk();
             const user = await serviceAPI.isUser();
 
             setIsAuthenticated(auth);
             setIsAdmin(admin);
+            setIsClerk(clerk);
             setIsUser(user);
         }
         checkAuth();
@@ -38,11 +40,14 @@ function Navbar({ onHomeClick }) {
             </div>
             <ul className="navbar-ul">
                 <li><NavLink to="/home" onClick={onHomeClick} activeClass="active">Home</NavLink></li>
-                <li><NavLink to="/rooms" activeClass="active">Rooms</NavLink></li>
-                <li><NavLink to="/find-reservation" activeClass="active">Find My Reservations</NavLink></li>
 
+                { isUser && <li><NavLink to="/rooms" activeClass="active">Rooms</NavLink></li> }
+                { isUser && <li><NavLink to="/find-reservation" activeClass="active">Find My Reservations</NavLink></li> }
                 { isUser && <li><NavLink to="/profile" activeClass="active">Profile</NavLink></li> }
+
                 { isClerk && <li><NavLink to="/clerk" activeClass="active">Clerk</NavLink></li> }
+                { isClerk && <li><NavLink to="/clerk/rooms" activeClass="actice">All Rooms</NavLink></li>}
+
                 { isAdmin && <li><NavLink to="/admin" activeClass="active">Admin</NavLink></li> }
 
                 {!isAuthenticated && <li><NavLink to="/login" activeClass="active">Login</NavLink></li>}

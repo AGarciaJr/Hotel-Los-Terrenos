@@ -1,42 +1,48 @@
-import axios from "axios"
+import axios from "axios";
 
-export default class serviceAPI{
-    static BASE_URL = "http://localhost:8080"
+export default class serviceAPI {
+    static BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:8080";
+
+    static async handleRequest(promise) {
+        try {
+            const response = await promise;
+            return response.data;
+        } catch (error) {
+            if(error.response) {
+                console.error('API request failed with status:', error.response.status);
+                console.error('Error details:', error.response.data);
+            } else {
+                console.error('API request failed with status:', error.message);
+            }
+            throw error;
+        }
+    }
 
     static getHeader() {
         const token = localStorage.getItem("token");
-        console.log("Authorization token: ", token);
-        return {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        };
+        return token ? {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        } : {};
     }
+
 
     /**
      * Authentication
      */
-
-    static async registerUser(registration){
-        const response = await axios.post(`${this.BASE_URL}/auth/register`, registration);
-        return response.data;
+    static async registerUser(registration) {
+        return this.handleRequest(axios.post(`${this.BASE_URL}/auth/register`, registration));
     }
 
-    static async loginUser(loginDetails){
-        const response = await axios.post(`${this.BASE_URL}/auth/login`, loginDetails);
-        return response.data;
+    static async loginUser(loginDetails) {
+        return this.handleRequest(axios.post(`${this.BASE_URL}/auth/login`, loginDetails));
     }
 
     /**
      * User
      */
-
-    static async getAllUsers(){
-        const response = await axios.get(`${this.BASE_URL}/users/all`, {
-            headers: this.getHeader()
-        });
-        return response.data;
+    static async getAllUsers() {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/users/all`, this.getHeader()));
     }
 
     static async getUserProfile() {
@@ -50,138 +56,94 @@ export default class serviceAPI{
         return response.data;
     }
 
-
-    static async getUser(userId){
-        const response = await axios.get(`${this.BASE_URL}/users/get-by-id/${userId}`, {
-            headers: this.getHeader()
-        });
-        return response.data;
+    static async getUser(userId) {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/users/get-by-id/${userId}`, this.getHeader()));
     }
 
-    static async getUserReservations(userId){
-        const response = await axios.get(`${this.BASE_URL}/users/get-reservations/${userId}`, {
-            headers: this.getHeader()
-        });
-        return response.data;
+    static async getUserReservations(userId) {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/users/get-reservations/${userId}`, this.getHeader()));
     }
 
-    static async deleteUser(userId){
-        const response = await axios.delete(`${this.BASE_URL}/users/delete/${userId}`, {
-            headers: this.getHeader()
-        });
-        return response.data;
+    static async deleteUser(userId) {
+        return this.handleRequest(axios.delete(`${this.BASE_URL}/users/delete/${userId}`, this.getHeader()));
     }
 
     /**
      * Room
      */
-
-    static async addRoom(formData){
-        const response = await axios.post(`${this.BASE_URL}/rooms/add-room`, formData, {
+    static async addRoom(formData) {
+        return this.handleRequest(axios.post(`${this.BASE_URL}/rooms/add`, formData, {
             headers: {
                 ...this.getHeader(),
                 'Content-Type': 'multipart/form-data'
             }
-        });
-        return response.data;
+        }));
     }
 
     static async getAllAvailableRooms() {
-        const response = await axios.get(`${this.BASE_URL}/rooms/all-available-rooms`)
-        return response.data;
+        return this.handleRequest(axios.get(`${this.BASE_URL}/rooms/all-available-rooms`));
     }
 
-    //come back and check this one
     static async getAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType) {
-        const result = await axios.get(`${this.BASE_URL}/rooms/available-rooms-by-date-and-type`, {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/rooms/available-rooms-by-date-and-type`, {
             params: { checkInDate, checkOutDate, roomType },
-            headers: this.getHeader()
-        });
-        return result.data;
+            ...this.getHeader()
+        }));
     }
 
-    static async getRoomTypes(){
-        const response = await axios.get(`${this.BASE_URL}/rooms/types`);
-        return response.data;
+    static async getRoomTypes() {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/rooms/types`));
     }
 
-    static async getAllRooms(){
-        const response = await axios.get(`${this.BASE_URL}/rooms/all`);
-        return response.data;
+    static async getAllRooms() {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/rooms/all`));
     }
 
-    static async getRoomById(roomId){
-        const result = await axios.get(`${this.BASE_URL}/rooms/room-by-id/${roomId}`);
-        return result.data;
+    static async getRoomById(roomId) {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/rooms/room-by-id/${roomId}`));
     }
 
-    //Come back to this: might need to change .delete to .get
-    static async deleteRoom(roomId){
-        const response = await axios.delete(`${this.BASE_URL}/rooms/delete/${roomId}`);
-        return response.data;
+    static async deleteRoom(roomId) {
+        return this.handleRequest(axios.delete(`${this.BASE_URL}/rooms/delete/${roomId}`));
     }
 
-    static async updateRoom(roomId, formData){
-        const result = await axios.put(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
+    static async updateRoom(roomId, formData) {
+        return this.handleRequest(axios.put(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
             headers: {
                 ...this.getHeader(),
                 'Content-Type': 'multipart/form-data'
             }
-        });
-        return result.data;
+        }));
     }
 
     /**
-     * Reservtion
+     * Reservation
      */
-
     static async reserveRoom(roomId, userId, reservation) {
-        try {
-            console.log("USER ID:", userId);
-            console.log("Request URL:", `${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`);
-            console.log("Headers:", this.getHeader());
-            console.log("Reservation data:", reservation);
-
-            const response = await axios.post(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, {
-                headers: this.getHeader()
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Reservation request failed:", error.response ? error.response.data : error.message);
-            throw error;
-        }
+        return this.handleRequest(axios.post(`${this.BASE_URL}/reservations/reserve-room/${roomId}/${userId}`, reservation, this.getHeader()));
     }
 
-
-    static async getAllReservations(){
-        const result = await axios.get(`${this.BASE_URL}/reservations/all` ,{
-            headers: this.getHeader()
-        });
-        return result.data;
+    static async getAllReservations() {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/all`, this.getHeader()));
     }
 
-    static async getReservationByConfirmationCode(reservationCode){
-        const result = await axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`);
-        return result.data;
+    static async getReservationByConfirmationCode(reservationCode) {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`));
     }
 
-    static async cancelReservation(reservationId){
-        const result = await axios.delete(`${this.BASE_URL}/reservations/cancel/${reservationId}`, {
-            headers: this.getHeader()
-        });
-        return result.data;
+    static async cancelReservation(reservationId) {
+        return this.handleRequest(axios.delete(`${this.BASE_URL}/reservations/cancel/${reservationId}`, this.getHeader()));
     }
 
     /**
      * Authentication Checking
      */
-
-    static async logout(){
+    static async logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
     }
 
-    static async isAuthenticated(){
+    static async isAuthenticated() {
         const token = localStorage.getItem("token");
         return !!token;
     }
@@ -189,43 +151,21 @@ export default class serviceAPI{
     /**
      * Admin
      */
-
-    static async isAdmin(){
+    static async isAdmin() {
         const role = localStorage.getItem("role");
         return role === "ADMIN";
     }
 
     static async updateUserPassword(userId, newPassword) {
-        try {
-            const response = await axios.put(
-                `${this.BASE_URL}/users/update-password/${userId}`,
-                { password: newPassword },
-                {
-                    headers: this.getHeader()
-                }
-            );
-
-            // Check response structure (if it contains status or message)
-            if (response.data.status === 200) {
-                return response.data; // Or return the message as needed
-            } else {
-                throw new Error(response.data.message || 'Failed to update password');
-            }
-        } catch (error) {
-            console.error('Error updating password:', error.message);
-            throw error;
-        }
+        return this.handleRequest(axios.put(`${this.BASE_URL}/users/update-password/${userId}`, { password: newPassword }, this.getHeader()));
     }
 
-
-
-
-    static async isClerk(){
+    static async isClerk() {
         const role = localStorage.getItem("role");
         return role === "CLERK";
     }
 
-    static async isUser(){
+    static async isUser() {
         const role = localStorage.getItem("role");
         return role === "USER";
     }
