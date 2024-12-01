@@ -106,7 +106,7 @@ const RoomDetailsPage = () => {
                 <p>Price: ${roomPrice} / night</p>
                 <p>{description}</p>
             </div>
-            {/* Reservation details and booking section */}
+            {/* Reservation details and reservation section */}
             <div className="reservation-info">
                 {!showDatePicker ? (
                     <button className="reserve-now-button" onClick={() => setShowDatePicker(true)}>Reserve Now</button>

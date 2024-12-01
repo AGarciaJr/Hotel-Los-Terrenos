@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Navbar from './component/common/Navbar';
 import FooterComponent from './component/common/Footer';
+import RoomSearch from './component/common/RoomSearch';
+import RoomResults from './component/common/RoomResult';
 import LoginPage from './component/authentication/LoginPage';
 import RegisterPage from './component/authentication/RegisterPage';
 import HomePage from './component/home/HomePage';

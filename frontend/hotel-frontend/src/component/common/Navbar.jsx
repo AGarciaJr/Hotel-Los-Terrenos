@@ -42,6 +42,7 @@ function Navbar({ onHomeClick }) {
                 <li><NavLink to="/home" onClick={onHomeClick} activeClass="active">Home</NavLink></li>
 
                 { isUser && <li><NavLink to="/rooms" activeClass="active">Rooms</NavLink></li> }
+                { isUser && <li><NavLink to="/vacations" activeClass="active">Vacations</NavLink></li> }
                 { isUser && <li><NavLink to="/find-reservation" activeClass="active">Find My Reservations</NavLink></li> }
                 { isUser && <li><NavLink to="/profile" activeClass="active">Profile</NavLink></li> }
 
