@@ -7,14 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Room
- *
- * Author: Alejandro Garcia Jr.
- * Date Created: 10/23/2024
- *
- * Description:
- */
+
 
 @Data
 @Entity
