@@ -55,6 +55,11 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    /**
+     *
+     * @param userUpdate
+     * @return
+     */
     @PutMapping("/update-profile")
     public ResponseEntity<Response> updateProfile(@RequestBody User userUpdate) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +70,11 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     @PutMapping("/change-password")
     public ResponseEntity<Response> changePassword(@RequestBody PasswordChangeRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

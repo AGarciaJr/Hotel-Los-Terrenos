@@ -21,8 +21,20 @@ public interface IUserService {
 
     Response getUserInfo(String email);
 
+    /**
+     *
+     * @param email
+     * @param userUpdate
+     * @return
+     */
     Response updateProfile(String email, User userUpdate);
 
+    /**
+     *
+     * @param email
+     * @param request
+     * @return
+     */
     Response changePassword(String email, PasswordChangeRequest request);
 
 

@@ -6,6 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CreditCard, Lock } from 'lucide-react';
 
+/**
+ * 
+ * @param roomDetails
+ * @param totalPrice
+ * @returns {Element}
+ * @constructor
+ */
 const PaymentPage = ({ roomDetails, totalPrice }) => {
     const [paymentMethod, setPaymentMethod] = useState('credit');
     const [cardNumber, setCardNumber] = useState('');

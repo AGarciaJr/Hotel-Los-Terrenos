@@ -238,7 +238,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import serviceAPI from "../../service/serviceAPI";
 
-
+/**
+ *
+ * @returns {Element}
+ * @constructor
+ */
 const ProfilePage = () => {
     // Mock profile data
     const [profile, setProfile] = useState({

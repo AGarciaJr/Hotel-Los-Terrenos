@@ -200,6 +200,12 @@ public class UserService implements IUserService {
     }
 
 
+    /**
+     *
+     * @param email
+     * @param userUpdate
+     * @return
+     */
     @Override
     public Response updateProfile(String email, User userUpdate) {
         Response response = new Response();
@@ -237,6 +243,12 @@ public class UserService implements IUserService {
         }
     }
 
+    /**
+     *
+     * @param email
+     * @param request
+     * @return
+     */
     @Override
     public Response changePassword(String email, PasswordChangeRequest request) {
         Response response = new Response();
