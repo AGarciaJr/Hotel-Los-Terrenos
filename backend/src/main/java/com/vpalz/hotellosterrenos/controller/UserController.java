@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping("/update-password/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority()")
     public ResponseEntity<Response> updatePassword(@PathVariable("userId") String userId, @RequestParam("password") String newPassword) {
         Response response = userService.updatePassword(userId, newPassword);
         return ResponseEntity.status(response.getStatusCode()).body(response);
