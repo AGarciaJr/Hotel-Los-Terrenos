@@ -76,6 +76,12 @@ export default class serviceAPI {
     /**
      * Rooms
      */
+    static async getAllRooms() {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/rooms/all`, this.getHeader())
+        );
+    }
+
     static async getAllAvailableRooms() {
         console.log("Fetching all available rooms...");
         try {
@@ -90,6 +96,23 @@ export default class serviceAPI {
 
     static async getRoomById(roomId) {
         return this.handleRequest(axios.get(`${this.BASE_URL}/rooms/room-by-id/${roomId}`));
+    }
+
+    static async updateRoom(roomId, room) {
+        const formData = new FormData();
+
+        if (room.roomType) formData.append("roomType", room.roomType);
+        if (room.roomPrice) formData.append("roomPrice", room.roomPrice);
+        if (room.roomDescription) formData.append("roomDescription", room.roomDescription);
+
+        return this.handleRequest(
+            axios.put(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
     }
 
     /**
@@ -112,5 +135,9 @@ export default class serviceAPI {
 
     static async getReservationByConfirmationCode(reservationCode) {
         return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`));
+    }
+
+    static async cancelReservation(reservationId) {
+        return this.handleRequest(axios.delete(`${this.BASE_URL}/reservations/cancel-reservation/${reservationId}`, this.getHeader()));
     }
 }
