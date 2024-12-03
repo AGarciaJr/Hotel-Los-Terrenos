@@ -6,6 +6,7 @@ import ReservationPage from "./pages/ReservationPage";
 import FindReservationPage from "./pages/FindReservationPage";
 import LoginPage from "./pages/authentication/LoginPage";
 import RegisterPage from "./pages/authentication/RegisterPage";
+import ProfilePage from "./pages/common/ProfilePage";
 import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
 
@@ -17,8 +18,11 @@ const App = () => {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+
                 <Route path="room-details/:roomId" element={<ReservationPage />} />
                 <Route path="find-reservation" element={<FindReservationPage />} />
+
+                <Route path="/profile" element={<ProfilePage />}/>
 
                 <Route path="/clerk" element={<ClerkPage />} />
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
