@@ -1,59 +1,81 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import RoomCard from "../components/RoomCard";
 import AuthModal from "../components/AuthModal";
 import serviceAPI from "../services/serviceAPI";
+import "./LandingPage.css";
 
 const LandingPage = () => {
     const [rooms, setRooms] = useState([]);
     const [error, setError] = useState('');
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+
+    const getRoomTypeValue = (roomType) => {
+        switch (roomType) {
+            case 'Single': return 1;
+            case 'Double': return 2;
+            case 'Suite': return 3;
+            default: return 4;
+        }
+    };
 
     useEffect(() => {
         const fetchRooms = async () => {
             try {
                 const response = await serviceAPI.getAllAvailableRooms();
-                console.log("API Response:", response);
                 if (response.roomList && Array.isArray(response.roomList)) {
-                    setRooms(response.roomList);
+                    // Sort rooms based on roomType
+                    const sortedRooms = response.roomList.sort((a, b) => {
+                        return getRoomTypeValue(a.roomType) - getRoomTypeValue(b.roomType);
+                    });
+                    setRooms(sortedRooms);
                 } else {
                     throw new Error("Invalid response structure");
                 }
             } catch (err) {
-                console.error("Failed to fetch rooms:", err.message);
                 setError(err.message || "Failed to load rooms.");
-                setRooms([]); // Fallback to empty array
+                setRooms([]);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchRooms();
     }, []);
 
     const handleReserveNow = (roomId) => {
-        const isAuthenticated = localStorage.getItem("token"); // Check authentication
+        if (!roomId) {
+            setError("Invalid room selection.");
+            return;
+        }
+        const isAuthenticated = localStorage.getItem("token");
         if (!isAuthenticated) {
-            setShowAuthModal(true); // Show login/register modal if not logged in
+            setShowAuthModal(true);
         } else {
-            navigate(`/room-details/${roomId}`); // Navigate to room details page
+            navigate(`/room-details/${roomId}`);
         }
     };
 
     return (
         <div>
-            <Navbar />
             <div className="landing-page">
                 <h1>Welcome to Hotel Los Terrenos</h1>
-                {error && <p className="error-message">{error}</p>}
-                <div className="rooms-container">
-                    {rooms.map((room) => (
-                        <RoomCard
-                            key={room.id}
-                            room={room}
-                            onReserveNow={handleReserveNow}
-                        />
-                    ))}
-                </div>
+                {isLoading ? (
+                    <p>Loading rooms...</p>
+                ) : error ? (
+                    <p className="error-message">{error}</p>
+                ) : (
+                    <div className="rooms-container">
+                        {rooms.map((room) => (
+                            <RoomCard
+                                key={room.id}
+                                room={room}
+                                onReserveNow={handleReserveNow}
+                            />
+                        ))}
+                    </div>
+                )}
                 {showAuthModal && (
                     <AuthModal onClose={() => setShowAuthModal(false)} />
                 )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import serviceAPI from '../services/serviceAPI';
+import './ReservationPage.css';
 
 const ReservationPage = () => {
     const navigate = useNavigate();
@@ -58,7 +59,7 @@ const ReservationPage = () => {
             const response = await serviceAPI.reserveRoom(roomId, userId, reservation);
             if (response.statusCode === 200) {
                 setConfirmationCode(response.reservationConfirmationCode);
-                setTimeout(() => navigate(`/rooms`), 5000); // Redirect after 5 seconds
+                setTimeout(() => navigate(`/`), 5000); // Redirect after 5 seconds
             } else {
                 setErrorMessage('Reservation failed. Please try again.');
             }

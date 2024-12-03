@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import serviceAPI from '../../services/serviceAPI';
 import { useNavigate } from 'react-router-dom';
+import './RegisterPage.css';
 
 function RegisterPage() {
     const navigate = useNavigate();

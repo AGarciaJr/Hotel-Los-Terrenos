@@ -110,4 +110,7 @@ export default class serviceAPI {
         }
     }
 
+    static async getReservationByConfirmationCode(reservationCode) {
+        return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`));
+    }
 }

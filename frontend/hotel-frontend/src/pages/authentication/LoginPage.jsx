@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import serviceAPI from "../../services/serviceAPI"
+import "./LoginPage.css";
 
 function LoginPage() {
     const [email, setEmail] = useState('');

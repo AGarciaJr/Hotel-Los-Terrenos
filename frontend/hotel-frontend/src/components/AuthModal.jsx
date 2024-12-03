@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./AuthModal.css";
 
 const AuthModal = ({ onClose }) => {
     const navigate = useNavigate();

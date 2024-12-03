@@ -1,4 +1,5 @@
 import React from "react";
+import "./RoomCard.css";
 
 const RoomCard = ({ room, onReserveNow }) => {
     return (
