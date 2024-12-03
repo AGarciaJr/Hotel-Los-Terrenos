@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 import AuthModal from "../components/AuthModal";
 import serviceAPI from "../services/serviceAPI";
+import { sortRoomsByType } from "../utils/roomUtils";
 import "./LandingPage.css";
 
 const LandingPage = () => {
@@ -12,24 +13,12 @@ const LandingPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const getRoomTypeValue = (roomType) => {
-        switch (roomType) {
-            case 'Single': return 1;
-            case 'Double': return 2;
-            case 'Suite': return 3;
-            default: return 4;
-        }
-    };
-
     useEffect(() => {
         const fetchRooms = async () => {
             try {
                 const response = await serviceAPI.getAllAvailableRooms();
                 if (response.roomList && Array.isArray(response.roomList)) {
-                    // Sort rooms based on roomType
-                    const sortedRooms = response.roomList.sort((a, b) => {
-                        return getRoomTypeValue(a.roomType) - getRoomTypeValue(b.roomType);
-                    });
+                    const sortedRooms = sortRoomsByType(response.roomList);
                     setRooms(sortedRooms);
                 } else {
                     throw new Error("Invalid response structure");
