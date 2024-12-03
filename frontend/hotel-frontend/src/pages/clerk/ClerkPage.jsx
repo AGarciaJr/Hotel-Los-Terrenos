@@ -8,7 +8,8 @@ import "./ClerkPage.css";
 const ClerkPage = () => {
     const [clerkName, setClerkName] = useState("");
     const [loading, setLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false); // For Edit Room Modal
+    const [showAddModal, setShowAddModal] = useState(false); // For Add Room Modal
     const [rooms, setRooms] = useState([]);
     const navigate = useNavigate();
 
@@ -40,7 +41,7 @@ const ClerkPage = () => {
     }, []);
 
     const handleRoomSelection = (roomId) => {
-        setShowModal(false); // Hide modal
+        setShowEditModal(false); // Hide modal
         navigate(`/clerk/edit-room/${roomId}`); // Navigate to Edit Room Page
     };
 
@@ -50,20 +51,27 @@ const ClerkPage = () => {
                 {loading ? "Loading..." : `Welcome, ${clerkName}`}
             </h1>
             <div className="clerk-actions">
-                <button className="clerk-button" onClick={() => setShowModal(true)}>
+                <button className="clerk-button" onClick={() => setShowEditModal(true)}>
                     Edit Rooms
                 </button>
-                 <button className="clerk-button" onCl>
-                     Add Rooms
-                 </button>
+                <button className="clerk-button" onClick={() => setShowAddModal(true)}>
+                    Add Rooms
+                </button>
             </div>
 
-            {/* Room Selection Modal */}
-            {showModal && (
+            {/* Edit Room Modal */}
+            {showEditModal && (
                 <RoomSelectModal
                     rooms={rooms}
-                    onClose={() => setShowModal(false)}
+                    onClose={() => setShowEditModal(false)}
                     onSelectRoom={handleRoomSelection}
+                />
+            )}
+
+            {/* Add Room Modal */}
+            {showAddModal && (
+                <AddRoomModal
+                    onClose={() => setShowAddModal(false)}
                 />
             )}
         </div>
