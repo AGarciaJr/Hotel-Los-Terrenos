@@ -6,6 +6,7 @@ import "./Navbar.css";
 const Navbar = () => {
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
     const handleLogout = () => {
         serviceAPI.logout();
@@ -15,15 +16,19 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <button onClick={() => navigate("/")}>Home</button>
-            <button onClick={() => navigate("/find-reservation")}>Find Reservations</button> {/* New Button */}
-
             {!isLoggedIn ? (
                 <>
                     <button onClick={() => navigate("/login")}>Login</button>
                     <button onClick={() => navigate("/register")}>Register</button>
                 </>
             ) : (
-                <button onClick={handleLogout}>Logout</button>
+                <>
+                    {role === "CLERK" && (
+                        <button onClick={() => navigate("/clerk")}>Clerk Dashboard</button>
+                    )}
+
+                    <button onClick={handleLogout}>Logout</button>
+                </>
             )}
         </nav>
     );
