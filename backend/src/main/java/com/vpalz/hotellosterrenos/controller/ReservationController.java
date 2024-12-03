@@ -39,7 +39,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/cancel/{reservationId}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Response> cancelReservation(@PathVariable Long reservationId){
         Response response = reservationService.cancelReservation(reservationId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
