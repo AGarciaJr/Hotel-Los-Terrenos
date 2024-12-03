@@ -65,7 +65,6 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-
         Response response = userService.updateProfile(email, userUpdate);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
