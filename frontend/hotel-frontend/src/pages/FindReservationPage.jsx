@@ -39,17 +39,17 @@ const FindReservationPage = () => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {reservationDetails && (
                 <div className="reservation-details">
-                    <h3>reservation Details</h3>
-                    <p>Confirmation Code: {reservationDetails.reservationConfirmationCode}</p>
+                    <h3>Reservation Details</h3>
+                    <p>Confirmation Code: {confirmationCode}</p>
                     <p>Check-in Date: {reservationDetails.checkInDate}</p>
                     <p>Check-out Date: {reservationDetails.checkOutDate}</p>
-                    <p>Num Of Adults: {reservationDetails.numOfAdults}</p>
-                    <p>Num Of Children: {reservationDetails.numOfChildren}</p>
+                    <p>Num Of Adults: {reservationDetails.numberOfAdults}</p>
+                    <p>Num Of Children: {reservationDetails.numberOfChildren}</p>
 
                     <br />
                     <hr />
                     <br />
-                    <h3>Clerk Details</h3>
+                    <h3>Reserver Details</h3>
                     <div>
                         <p> Name: {reservationDetails.user.name}</p>
                         <p> Email: {reservationDetails.user.email}</p>
