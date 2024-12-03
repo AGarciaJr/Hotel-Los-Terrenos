@@ -102,7 +102,7 @@ export default class serviceAPI {
         const formData = new FormData();
 
         if (room.roomType) formData.append("roomType", room.roomType);
-        if (room.roomPrice) formData.append("roomPrice", room.roomPrice);
+        if (room.roomPrice)formData.append("roomPrice", room.roomPrice);
         if (room.roomDescription) formData.append("roomDescription", room.roomDescription);
 
         return this.handleRequest(
@@ -114,6 +114,25 @@ export default class serviceAPI {
             })
         );
     }
+
+    static async addRoom(roomDetails) {
+        const formData = new FormData();
+
+        formData.append("roomType", roomDetails.roomType);
+        formData.append("roomPrice", roomDetails.roomPrice);
+        formData.append("roomDescription", roomDetails.roomDescription);
+
+
+        return this.handleRequest(
+            axios.post(`${this.BASE_URL}/rooms/add`, formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+    }
+
 
     /**
      * Reservations
@@ -131,6 +150,12 @@ export default class serviceAPI {
             console.error('Reservation request failed:', error.response ? error.response.data : error.message);
             throw error;
         }
+    }
+
+    static async getUserReservations(userId) {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/users/get-user-reservations/${userId}`, this.getHeader())
+        );
     }
 
     static async getReservationByConfirmationCode(reservationCode) {
