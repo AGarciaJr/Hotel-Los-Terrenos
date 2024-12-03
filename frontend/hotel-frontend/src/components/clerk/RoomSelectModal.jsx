@@ -8,8 +8,8 @@ const RoomSelectionModal = ({ rooms, onClose, onSelectRoom }) => {
 
     if (!rooms || rooms.length === 0) {
         return (
-            <div className="modal-backdrop">
-                <div className="modal">
+            <div className="select-modal-backdrop">
+                <div className="select-modal">
                     <h2>No rooms available to edit.</h2>
                     <button onClick={onClose}>Close</button>
                 </div>
@@ -18,13 +18,13 @@ const RoomSelectionModal = ({ rooms, onClose, onSelectRoom }) => {
     }
 
     return (
-        <div className="modal-backdrop">
-            <div className="modal">
+        <div className="select-modal-backdrop">
+            <div className="select-modal">
                 <h2>Select a Room to Edit</h2>
-                <button className="close-button" onClick={onClose}>
+                <button className="select-close-button" onClick={onClose}>
                     ×
                 </button>
-                <div className="rooms-container">
+                <div className="select-rooms-container">
                     {rooms.map((room) => (
                         <RoomCard
                             key={room.id}

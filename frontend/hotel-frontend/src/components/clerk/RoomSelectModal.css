@@ -1,4 +1,4 @@
-.modal-backdrop {
+.select-modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 1000;
 }
 
-.modal {
+.select-modal {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -21,7 +21,7 @@
     position: relative;
 }
 
-.close-button {
+.select-close-button {
     position: absolute;
     top: 10px;
     right: 75px;
@@ -31,7 +31,7 @@
     cursor: pointer;
 }
 
-.rooms-container {
+.select-rooms-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
