@@ -18,6 +18,7 @@ const Navbar = () => {
             <button onClick={() => navigate("/")}>Home</button>
             {!isLoggedIn ? (
                 <>
+                    <button onClick={() => navigate("/find-reservation")}>Find Reservation</button>
                     <button onClick={() => navigate("/login")}>Login</button>
                     <button onClick={() => navigate("/register")}>Register</button>
                 </>
@@ -26,6 +27,8 @@ const Navbar = () => {
                     {role === "CLERK" && (
                         <button onClick={() => navigate("/clerk")}>Clerk Dashboard</button>
                     )}
+
+                    <button onClick={() => navigate("/profile")}>Profile</button>
 
                     <button onClick={handleLogout}>Logout</button>
                 </>
