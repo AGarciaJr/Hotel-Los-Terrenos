@@ -37,7 +37,7 @@ public class Reservation {
      * <p>Must be provided by the user.</p>
      */
     @NotNull(message = "Check In Date is Required")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")  // Changed to yyyy-MM-dd format
     private LocalDate checkInDate;
 
     /**
@@ -46,7 +46,7 @@ public class Reservation {
      * <p>Must be a future date and provided by the user.</p>
      */
     @NotNull(message = "Check Out Date is Required.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")  // Changed to yyyy-MM-dd format
     @Future(message = "Invalid Check Out Date.")
     private LocalDate checkOutDate;
 

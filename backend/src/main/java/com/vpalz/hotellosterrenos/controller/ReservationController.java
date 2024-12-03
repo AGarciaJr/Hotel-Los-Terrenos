@@ -15,7 +15,7 @@ public class ReservationController {
     private IReservationService reservationService;
 
     @PostMapping("/reserve-room/{roomId}/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('GUEST')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Response> saveReservations(@PathVariable Long roomId,
                                                      @PathVariable Long userId,
                                                      @RequestBody Reservation reservationRequest)
