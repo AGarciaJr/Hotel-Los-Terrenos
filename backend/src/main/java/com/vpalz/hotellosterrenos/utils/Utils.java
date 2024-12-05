@@ -137,6 +137,7 @@ public class Utils {
                     reservationDAO.setCheckInDate(reservation.getCheckInDate());
                     reservationDAO.setCheckOutDate(reservation.getCheckOutDate());
                     reservationDAO.setStatus(reservation.getStatus());
+                    reservationDAO.setReservationConfirmationCode(reservation.getReservationConfirmationCode());
                     return reservationDAO;
                 })
                 .collect(Collectors.toList());
