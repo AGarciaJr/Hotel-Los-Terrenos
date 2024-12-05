@@ -6,14 +6,37 @@
     background-color: #f9f9f9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Aligns children, including the button, to the center */
 }
 
 .reservation-card h3 {
     margin-bottom: 10px;
     color: #007bff;
+    text-align: center; /* Ensures the heading is centered */
 }
 
 .reservation-card p {
     margin: 5px 0;
     color: #333;
+    text-align: left;
+}
+
+.checkout-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    align-self: center;
+}
+
+.checkout-button:hover {
+    background-color: #0056b3;
 }
