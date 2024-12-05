@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import serviceAPI from '../../services/serviceAPI';
+import "./EditRoomPage.css"
 
 
 const EditRoomPage = () => {
@@ -56,10 +57,10 @@ const EditRoomPage = () => {
     return (
         <div className="edit-room-container">
             <h2>Edit Room</h2>
-            {error && <p className="error-message">{error}</p>}
-            {success && <p className="success-message">{success}</p>}
+            {error && <p className="edit-error-message">{error}</p>}
+            {success && <p className="edit-success-message">{success}</p>}
             <div className="edit-room-form">
-                <div className="form-group">
+                <div className="edit-form-group">
                     <label>Room Type</label>
                     <input
                         type="text"
@@ -68,7 +69,7 @@ const EditRoomPage = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-group">
+                <div className="edit-form-group">
                     <label>Room Price</label>
                     <input
                         type="number"
@@ -77,7 +78,7 @@ const EditRoomPage = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-group">
+                <div className="edit-form-group">
                     <label>Room Description</label>
                     <textarea
                         name="roomDescription"
@@ -85,7 +86,7 @@ const EditRoomPage = () => {
                         onChange={handleChange}
                     ></textarea>
                 </div>
-                <button className="update-button" onClick={handleUpdate}>Update Room</button>
+                <button className="edit-update-button" onClick={handleUpdate}>Update Room</button>
             </div>
         </div>
     );
