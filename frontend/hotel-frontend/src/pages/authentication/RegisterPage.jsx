@@ -8,14 +8,17 @@ function RegisterPage() {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isClerk, setIsClerk] = useState(false);
 
     useEffect(() => {
         async function checkAuth() {
             const auth = await serviceAPI.isAuthenticated();
             const admin = await serviceAPI.isAdmin();
+            const clerk = await serviceAPI.isClerk();
 
             setIsAuthenticated(auth);
             setIsAdmin(admin);
+            setIsClerk(clerk);
         }
         checkAuth();
     }, []);
@@ -61,16 +64,14 @@ function RegisterPage() {
             return;
         }
 
-        // Extract role based on email
+        
         const role = getRoleFromEmail(formData.email);
 
         try {
-            // Call the register method from serviceAPI with the role
             const response = await serviceAPI.registerUser({ ...formData, role });
-
-            // Check if the response is successful
+            
             if (response.statusCode === 200) {
-                // Clear the form fields after successful registration
+                
                 setFormData({
                     name: '',
                     email: '',
@@ -94,6 +95,7 @@ function RegisterPage() {
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             {successMessage && <p className="success-message">{successMessage}</p>}
             { !isAuthenticated && <h2>Sign Up</h2>}
+            { isClerk && <h2>Create a Guest Account</h2>}
             { isAdmin && <h2>Create a Clerk Account</h2>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
