@@ -19,9 +19,10 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
-                <Route path="room-details/:roomId" element={<ReservationPage />} />
-                <Route path="find-reservation" element={<FindReservationPage />} />
+                <Route path="/room-details/:roomId" element={<ReservationPage />} />
+                <Route path="/find-reservation" element={<FindReservationPage />} />
 
+                <Route path="/profile/:userId" element={<ProfilePage />}/>
                 <Route path="/profile" element={<ProfilePage />}/>
 
                 <Route path="/clerk" element={<ClerkPage />} />
