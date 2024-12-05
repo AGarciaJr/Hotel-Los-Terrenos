@@ -1,8 +1,10 @@
 package com.vpalz.hotellosterrenos.utils;
 
+import com.vpalz.hotellosterrenos.dao.FloorDAO;
 import com.vpalz.hotellosterrenos.dao.ReservationDAO;
 import com.vpalz.hotellosterrenos.dao.RoomDAO;
 import com.vpalz.hotellosterrenos.dao.UserDAO;
+import com.vpalz.hotellosterrenos.entity.Floor;
 import com.vpalz.hotellosterrenos.entity.Reservation;
 import com.vpalz.hotellosterrenos.entity.Room;
 import com.vpalz.hotellosterrenos.entity.User;
@@ -60,7 +62,8 @@ public class Utils {
         reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
         reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
         reservationDAO.setTotalNumberOfGuests(reservation.getTotalNumberOfGuests());
-        reservationDAO.setReservationConfirmationCode(reservationDAO.getReservationConfirmationCode());
+        reservationDAO.setReservationConfirmationCode(reservation.getReservationConfirmationCode());
+        reservationDAO.setStatus(reservation.getStatus().toString());
 
         return reservationDAO;
     }
@@ -113,12 +116,34 @@ public class Utils {
             roomDAO.setId(reservation.getRoom().getId());
             roomDAO.setRoomType(reservation.getRoom().getRoomType());
             roomDAO.setRoomPrice(reservation.getRoom().getRoomPrice());
-            //roomDAO.setRoomPhotoUrl(reservation.getRoom().getRoomPhotoUrl());
             roomDAO.setRoomDescription(reservation.getRoom().getRoomDescription());
 
             reservationDAO.setRoom(roomDAO);
         }
         return reservationDAO;
+    }
+
+    public static UserDAO mapUserEntityToUserDAOPlusUserReservations(User user, List<ReservationDAO> activeReservations) {
+        UserDAO userDAO = new UserDAO();
+        userDAO.setId(user.getId());
+        userDAO.setName(user.getName());
+        userDAO.setEmail(user.getEmail());
+        userDAO.setPhoneNumber(user.getPhoneNumber());
+
+        List<ReservationDAO> reservationDAOs = activeReservations.stream()
+                .map(reservation -> {
+                    ReservationDAO reservationDAO = new ReservationDAO();
+                    reservationDAO.setId(reservation.getId());
+                    reservationDAO.setCheckInDate(reservation.getCheckInDate());
+                    reservationDAO.setCheckOutDate(reservation.getCheckOutDate());
+                    reservationDAO.setStatus(reservation.getStatus());
+                    return reservationDAO;
+                })
+                .collect(Collectors.toList());
+
+        userDAO.setReservations(reservationDAOs);
+
+        return userDAO;
     }
 
     public static List<UserDAO> mapUserListEntityToUserDAOList(List<User> users){
@@ -131,5 +156,20 @@ public class Utils {
 
     public static List<ReservationDAO> mapReservationListEntityToReservationDAOList(List<Reservation> reservations){
         return reservations.stream().map(Utils::mapReservationEntityToReservationDAO).collect(Collectors.toList());
+    }
+
+    public static FloorDAO mapFloorEntityToFloorDAO(Floor floor) {
+        FloorDAO floorDAO = new FloorDAO();
+        floorDAO.setId(floor.getId());
+        floorDAO.setName(floor.getName());
+        floorDAO.setTheme(floor.getTheme());
+        floorDAO.setRooms(mapRoomListEntityToRoomDAOList(floor.getRooms()));
+        return floorDAO;
+    }
+
+    public static List<FloorDAO> mapFloorListEntityToFloorDAOList(List<Floor> floors) {
+        return floors.stream()
+                .map(Utils::mapFloorEntityToFloorDAO)
+                .collect(Collectors.toList());
     }
 }

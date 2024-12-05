@@ -1,0 +1,44 @@
+.guests-modal-content {
+    width: 80%;
+    max-width: 900px;
+    max-height: 80%;
+    overflow-y: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between; /* Distributes space evenly */
+}
+
+.guests-modal-content h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #007bff;
+}
+
+.close-button {
+    margin-top: auto; /* Pushes the button to the bottom */
+    align-self: center; /* Centers the button horizontally */
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background-color: #c82333;
+}
+
+.guests-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}

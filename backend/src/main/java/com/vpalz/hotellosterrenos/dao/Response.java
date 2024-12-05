@@ -19,8 +19,10 @@ public class Response {
     private UserDAO user;
     private RoomDAO room;
     private ReservationDAO reservation;
+    private FloorDAO floor;
 
     private List<UserDAO> userList;
     private List<RoomDAO> roomList;
     private List<ReservationDAO> reservationList;
+    private List<FloorDAO> floorList;
 }

@@ -1,0 +1,104 @@
+.guests-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.guests-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.close-button {
+    background: #ccc;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+
+.close-button:hover {
+    background: #aaa;
+}
+
+.guests-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Guest Card Styles */
+.guest-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 250px;
+    height: auto;
+}
+
+.guest-card h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.guest-card p {
+    margin: 5px 0;
+    color: #555;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.guest-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.guest-actions button {
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.view-reservations-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.view-reservations-button:hover {
+    background-color: #0056b3;
+}

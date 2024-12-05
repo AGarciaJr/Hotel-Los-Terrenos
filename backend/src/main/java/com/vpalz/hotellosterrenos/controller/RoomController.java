@@ -1,6 +1,7 @@
 package com.vpalz.hotellosterrenos.controller;
 
 import com.vpalz.hotellosterrenos.dao.Response;
+import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.service.implementations.UserService;
 import com.vpalz.hotellosterrenos.service.interfaces.IReservationService;
 import com.vpalz.hotellosterrenos.service.interfaces.IRoomService;
@@ -10,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -90,9 +90,8 @@ public class RoomController {
     }
 
     @PutMapping("/update/{roomId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
-                                               //@RequestParam(value = "photo", required = false) MultipartFile photo,
                                                @RequestParam(value = "roomType", required = false) String roomType,
                                                @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
                                                @RequestParam(value = "roomDescription", required = false) String roomDescription
@@ -103,7 +102,7 @@ public class RoomController {
     }
 
     @DeleteMapping("/delete/{roomId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> deleteRoom(@PathVariable Long roomId) {
         Response response = roomService.deleteRoom(roomId);
         return ResponseEntity.status(response.getStatusCode()).body(response);

@@ -5,6 +5,7 @@ import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.entity.Reservation;
 import com.vpalz.hotellosterrenos.entity.Room;
 import com.vpalz.hotellosterrenos.entity.User;
+import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
@@ -128,7 +129,6 @@ public class ReservationService implements IReservationService {
         Response response = new Response();
 
         try{
-            //Reservation reservations =
             reservationRepository.findById(reservationId).orElseThrow(() -> new MyException("Reservation Not Found"));
             reservationRepository.deleteById(reservationId);
 
@@ -145,10 +145,38 @@ public class ReservationService implements IReservationService {
         return response;
     }
 
+    @Override
+    public Response checkoutReservation(Long reservationId) {
+        Response response = new Response();
+
+        try {
+            // Find the reservation
+            Reservation reservation = reservationRepository.findById(reservationId)
+                    .orElseThrow(() -> new MyException("Reservation Not Found"));
+
+            // Update the reservation status
+            reservation.setStatus(ReservationStatus.CHECKED_OUT);
+            reservationRepository.save(reservation);
+
+            response.setStatusCode(200);
+            response.setMessage("Guest successfully checked out.");
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error checking out guest: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+
     private boolean roomIsAvailable(Reservation reservationRequest, List<Reservation> reservations) {
         return reservations.stream()
                 .noneMatch(existingReservation ->
-                        reservationRequest.getCheckInDate().equals(existingReservation.getCheckInDate())
+                        (existingReservation.getStatus().equals(ReservationStatus.BOOKED)) &&
+                        (reservationRequest.getCheckInDate().equals(existingReservation.getCheckInDate())
                                 || reservationRequest.getCheckOutDate().isBefore(existingReservation.getCheckOutDate())
                                 || (reservationRequest.getCheckInDate().isAfter(existingReservation.getCheckInDate())
                                 && reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckOutDate()))
@@ -164,6 +192,9 @@ public class ReservationService implements IReservationService {
 
                                 || (reservationRequest.getCheckInDate().equals(existingReservation.getCheckOutDate())
                                 && reservationRequest.getCheckOutDate().equals(reservationRequest.getCheckInDate()))
+
+                                || (reservationRequest.getStatus().equals(existingReservation.getStatus()))
+                        )
                 );
     }
 }

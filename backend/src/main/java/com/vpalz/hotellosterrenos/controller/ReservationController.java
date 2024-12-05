@@ -15,7 +15,7 @@ public class ReservationController {
     private IReservationService reservationService;
 
     @PostMapping("/reserve-room/{roomId}/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('GUEST')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Response> saveReservations(@PathVariable Long roomId,
                                                      @PathVariable Long userId,
                                                      @RequestBody Reservation reservationRequest)
@@ -26,7 +26,7 @@ public class ReservationController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> getReservations(){
         Response response = reservationService.getAllReservations();
         return ResponseEntity.status(response.getStatusCode()).body(response);
@@ -39,9 +39,17 @@ public class ReservationController {
     }
 
     @DeleteMapping("/cancel/{reservationId}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Response> cancelReservation(@PathVariable Long reservationId){
         Response response = reservationService.cancelReservation(reservationId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @PostMapping("/checkout/{reservationId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Response> checkoutReservation(@PathVariable Long reservationId) {
+        Response response = reservationService.checkoutReservation(reservationId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
 }

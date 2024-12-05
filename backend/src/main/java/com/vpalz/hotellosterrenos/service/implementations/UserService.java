@@ -1,10 +1,14 @@
 package com.vpalz.hotellosterrenos.service.implementations;
 
 import com.vpalz.hotellosterrenos.dao.LoginRequest;
+import com.vpalz.hotellosterrenos.dao.ReservationDAO;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.UserDAO;
+import com.vpalz.hotellosterrenos.entity.Reservation;
 import com.vpalz.hotellosterrenos.entity.User;
+import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.exception.MyException;
+import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.UserRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IUserService;
 import com.vpalz.hotellosterrenos.utils.JWTUtils;
@@ -17,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Service
@@ -32,6 +37,8 @@ public class UserService implements IUserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Override
     public Response register(User user) {
@@ -112,23 +119,33 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
-            UserDAO userDAOs = Utils.mapUserEntityToUserDAOPlusUserReservationsAndRoom(user);
+            User user = userRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new MyException("User Not Found"));
+
+            List<Reservation> reservations = reservationRepository.findActiveReservationsByUserId(user.getId());
+
+            List<ReservationDAO> activeReservations = reservations.stream()
+                    .map(Utils::mapReservationEntityToReservationDAO)
+                    .collect(Collectors.toList());
+
+            UserDAO userDAO = Utils.mapUserEntityToUserDAOPlusUserReservations(user, activeReservations);
+
             response.setStatusCode(200);
             response.setMessage("Successfully got user reservation history.");
-            response.setUser(userDAOs);
+            response.setUser(userDAO);
 
-        } catch (MyException e){
+        } catch (MyException e) {
             response.setStatusCode(400);
             response.setMessage(e.getMessage());
-
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             response.setStatusCode(500);
-            response.setMessage("Error Occurred While Getting User Reservation History" + e.getMessage());
+            response.setMessage("Error occurred while getting user reservation history: " + e.getMessage());
         }
+
         return response;
     }
+
+
 
     @Override
     public Response deleteUser(String userId) {

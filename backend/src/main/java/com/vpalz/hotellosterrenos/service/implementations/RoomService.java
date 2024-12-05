@@ -4,6 +4,7 @@ package com.vpalz.hotellosterrenos.service.implementations;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.RoomDAO;
 import com.vpalz.hotellosterrenos.entity.Room;
+import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
@@ -174,7 +175,8 @@ public class RoomService implements IRoomService {
         Response response = new Response();
 
         try{
-            List<Room> availableRooms = roomRepository.findAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType);
+            List<Room> availableRooms = roomRepository.findAvailableRoomsByDateAndType(checkInDate, checkOutDate, roomType,
+                    List.of(ReservationStatus.BOOKED));
             List<RoomDAO> roomDAOs = Utils.mapRoomListEntityToRoomDAOList(availableRooms);
 
             response.setStatusCode(200);
@@ -195,7 +197,7 @@ public class RoomService implements IRoomService {
         Response response = new Response();
 
         try{
-            List<Room> availableRooms = roomRepository.getAllAvailableRooms();
+            List<Room> availableRooms = roomRepository.getAllAvailableRooms(ReservationStatus.BOOKED);
             List<RoomDAO> roomDAOs = Utils.mapRoomListEntityToRoomDAOList(availableRooms);
 
             response.setStatusCode(200);
