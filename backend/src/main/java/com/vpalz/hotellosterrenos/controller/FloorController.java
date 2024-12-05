@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Data
 @RestController
 @RequestMapping("/floors")
@@ -20,16 +22,18 @@ public class FloorController {
     @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> addNewFloor(
             @RequestParam(value = "floorName") String floorName,
-            @RequestParam(value = "theme") String theme
-    ) {
-        if (floorName == null || floorName.isBlank() || theme == null || theme.isBlank()) {
+            @RequestParam(value = "floorTheme") String floorTheme,
+            @RequestParam(value = "floorNumber") Integer floorNumber,
+            @RequestParam(value = "roomTypes") List<String> roomTypes
+            ) {
+        if (floorName == null || floorName.isBlank() || floorTheme == null || floorTheme.isBlank()) {
             Response response = new Response();
             response.setStatusCode(400);
-            response.setMessage("Invalid data. Required fields: Floor Name, Theme");
+            response.setMessage("Invalid data. Required fields: Floor Name, Floor Theme");
             return ResponseEntity.status(response.getStatusCode()).body(response);
         }
 
-        Response response = floorService.addNewFloor(floorName, theme);
+        Response response = floorService.addNewFloor(floorName, floorTheme, floorNumber, roomTypes);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

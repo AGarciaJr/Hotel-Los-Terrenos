@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RoomSelectModal from "../../components/clerk/RoomSelectModal";
 import AddRoomModal from "../../components/clerk/AddRoomModal";
 import GuestModal from "../../components/clerk/GuestModal";
+import AddFloorModal from "../../components/clerk/AddFloorModal";
 import serviceAPI from "../../services/serviceAPI";
 import "./ClerkPage.css";
 
@@ -12,8 +13,10 @@ const ClerkPage = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showGuestModal, setShowGuestModal] = useState(false);
+    const [showAddFloorModal, setShowAddFloorModal] = useState(false);
     const [rooms, setRooms] = useState([]);
-    const [guests, setGuests] = useState([]); // Update to guests
+    const [guests, setGuests] = useState([]);
+    const [floors, setFloors] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,10 +51,19 @@ const ClerkPage = () => {
             }
         };
 
+        const fetchFloors = async () => {
+            try {
+                const response = await serviceAPI.getAllFloors();
+                setFloors(response.floorList || []);
+            } catch (error) {
+                console.error("Error fetching floors:", error.message);
+            }
+        };
 
         fetchClerkName();
         fetchRooms();
         fetchGuests();
+        fetchFloors();
     }, []);
 
     return (
@@ -60,6 +72,9 @@ const ClerkPage = () => {
                 {loading ? "Loading..." : `Welcome, ${clerkName}`}
             </h1>
             <div className="clerk-actions">
+                <button className="clerk-button" onClick={() => setShowAddFloorModal(true)}>
+                    Add Floor
+                </button>
                 <button className="clerk-button" onClick={() => setShowEditModal(true)}>
                     Edit Rooms
                 </button>
@@ -96,6 +111,12 @@ const ClerkPage = () => {
                         setShowGuestModal(false);
                         navigate(`/profile/${guestId}`);
                     }}
+                />
+            )}
+
+            {showAddFloorModal && (
+                <AddFloorModal
+                    onClose={() => setShowAddFloorModal(false)}
                 />
             )}
         </div>

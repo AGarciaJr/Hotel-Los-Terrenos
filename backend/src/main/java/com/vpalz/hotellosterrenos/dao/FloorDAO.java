@@ -11,5 +11,6 @@ public class FloorDAO {
     private Long id;
     private String name;
     private String theme;
+    private Integer number;
     private List<RoomDAO> rooms;
 }

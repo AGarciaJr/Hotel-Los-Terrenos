@@ -3,7 +3,9 @@ package com.vpalz.hotellosterrenos.service.implementations;
 import com.vpalz.hotellosterrenos.dao.FloorDAO;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.entity.Floor;
+import com.vpalz.hotellosterrenos.entity.Room;
 import com.vpalz.hotellosterrenos.repo.FloorRepository;
+import com.vpalz.hotellosterrenos.repo.RoomRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IFloorService;
 import com.vpalz.hotellosterrenos.utils.Utils;
 import lombok.Data;
@@ -18,6 +20,8 @@ public class FloorService implements IFloorService {
 
     @Autowired
     private FloorRepository floorRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Override
     public Response getAllFloors() {
@@ -101,14 +105,19 @@ public class FloorService implements IFloorService {
     }
 
     @Override
-    public Response addNewFloor(String floorName, String theme) {
+    public Response addNewFloor(String floorName, String floorTheme, Integer floorNumber, List<String> roomTypes) {
         Response response = new Response();
 
         try {
             Floor floor = new Floor();
 
             floor.setName(floorName);
-            floor.setTheme(theme);
+            floor.setTheme(floorTheme);
+            floor.setNumber(floorNumber);
+
+            List<Room> roomsForFloor = roomRepository.findRoomsByType(roomTypes);
+
+            floor.setRooms(roomsForFloor);
 
             Floor savedFloor = floorRepository.save(floor);
 

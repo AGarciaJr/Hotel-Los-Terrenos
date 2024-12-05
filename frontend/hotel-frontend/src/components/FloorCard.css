@@ -1,0 +1,32 @@
+.floor-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.floor-card h3 {
+    color: #007bff;
+}
+
+.floor-card p {
+    margin: 5px 0;
+    color: #333;
+}
+
+.floor-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.floor-card button:hover {
+    background-color: #0056b3;
+}

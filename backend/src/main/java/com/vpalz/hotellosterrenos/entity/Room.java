@@ -55,7 +55,7 @@ public class Room {
     private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "floor_id", referencedColumnName = "id")
     private Floor floor;
 
     /**

@@ -146,6 +146,28 @@ export default class serviceAPI {
         );
     }
 
+    /**
+     * Floors
+     */
+
+    static async addNewFloor(floorData) {
+        const formData = new FormData();
+
+        formData.append("floorName", floorData.name);
+        formData.append("floorTheme", floorData.theme);
+        formData.append("floorNumber", floorData.number);
+        formData.append("roomTypes", floorData.types.split(",").map(type => type.trim()));
+
+        return this.handleRequest(
+            axios.post(`${this.BASE_URL}/floors/add`, formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+    }
+
 
     /**
      * Reservations

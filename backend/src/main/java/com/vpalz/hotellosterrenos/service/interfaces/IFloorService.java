@@ -3,6 +3,8 @@ package com.vpalz.hotellosterrenos.service.interfaces;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.entity.Floor;
 
+import java.util.List;
+
 public interface IFloorService {
 
     /**
@@ -36,5 +38,5 @@ public interface IFloorService {
      */
     Response updateFloor(Long id, String floorName, String floorTheme);
 
-    Response addNewFloor(String floorName, String theme);
+    Response addNewFloor(String floorName, String theme, Integer floorNumber, List<String> roomTypes);
 }
