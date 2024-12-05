@@ -73,6 +73,19 @@ export default class serviceAPI {
         return role === "USER";
     }
 
+    static async getUserById(userId){
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/users/get-by-id/${userId}`, this.getHeader())
+        );
+    }
+
+    static async getAllGuests() {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/users/all`, this.getHeader())
+        );
+    }
+
+
     /**
      * Rooms
      */
@@ -154,7 +167,7 @@ export default class serviceAPI {
 
     static async getUserReservations(userId) {
         return this.handleRequest(
-            axios.get(`${this.BASE_URL}/users/get-user-reservations/${userId}`, this.getHeader())
+            axios.get(`${this.BASE_URL}/users/get-user-reservations/${userId}?status=BOOKED`, this.getHeader())
         );
     }
 
@@ -162,7 +175,23 @@ export default class serviceAPI {
         return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`));
     }
 
-    static async cancelReservation(reservationId) {
-        return this.handleRequest(axios.delete(`${this.BASE_URL}/reservations/cancel-reservation/${reservationId}`, this.getHeader()));
+    static async checkOutReservation(reservationId) {
+        return this.handleRequest(
+            axios.post(`${this.BASE_URL}/reservations/checkout/${reservationId}`, null, this.getHeader())
+        );
     }
+
+    static async cancelReservation(reservationId) {
+        return this.handleRequest(
+            axios.delete(`${this.BASE_URL}/reservations/cancel/${reservationId}`, this.getHeader())
+        );
+    }
+
+
+    static async getAllReservations() {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/reservations/all`, this.getHeader())
+        );
+    }
+
 }
