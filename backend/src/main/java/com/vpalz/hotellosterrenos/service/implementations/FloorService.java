@@ -121,6 +121,15 @@ public class FloorService implements IFloorService {
 
             Floor savedFloor = floorRepository.save(floor);
 
+            for(String roomType : roomTypes){
+                List<Room> roomsToUpdate = roomRepository.findRoomByType(roomType);
+
+                for(Room room : roomsToUpdate){
+                    room.setFloor(savedFloor);
+                    roomRepository.save(room);
+                }
+            }
+
             FloorDAO floorDAO = Utils.mapFloorEntityToFloorDAO(savedFloor);
 
             response.setStatusCode(200);

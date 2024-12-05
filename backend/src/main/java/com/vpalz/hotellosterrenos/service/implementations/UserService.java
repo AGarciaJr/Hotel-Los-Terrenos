@@ -122,7 +122,11 @@ public class UserService implements IUserService {
             User user = userRepository.findById(Long.valueOf(userId))
                     .orElseThrow(() -> new MyException("User Not Found"));
 
-            List<ReservationDAO> activeReservations = reservationRepository.findActiveReservationsByUserId(Long.valueOf(userId));
+            List<Reservation> reservations = reservationRepository.findActiveReservationsByUserId(user.getId());
+
+            List<ReservationDAO> activeReservations = reservations.stream()
+                    .map(Utils::mapReservationEntityToReservationDAO)
+                    .collect(Collectors.toList());
 
             UserDAO userDAO = Utils.mapUserEntityToUserDAOPlusUserReservations(user, activeReservations);
 
