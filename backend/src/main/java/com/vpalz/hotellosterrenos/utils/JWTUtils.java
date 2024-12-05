@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class JWTUtils {
 
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 24 * 7; //for 7 days
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; //for 7 days
 
     private final SecretKey Key;
 
