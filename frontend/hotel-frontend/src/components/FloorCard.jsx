@@ -1,12 +1,10 @@
 import React from "react";
 import "./FloorCard.css";
 
-const FloorCard = ({ floor, onEdit }) => {
+const FloorCard = ({ floor, onClick }) => {
     return (
-        <div className="floor-card">
-            <h3>{floor.name}</h3>
-            <p>Theme: {floor.theme}</p>
-            <button onClick={() => onEdit(floor.id)}>Edit Floor</button>
+        <div className="floor-card" onClick={() => onClick(floor.id)}>
+            <h3>{floor.theme}</h3>
         </div>
     );
 };

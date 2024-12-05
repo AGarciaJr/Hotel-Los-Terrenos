@@ -59,4 +59,10 @@ public class FloorController {
         Response response = floorService.updateFloor(floorId, floorName, theme);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @GetMapping("/get-floor-rooms/{floorId}")
+    public ResponseEntity<Response> getFloorRooms(@PathVariable Long floorId) {
+        Response response = floorService.getAllRoomsForFloor(floorId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 }

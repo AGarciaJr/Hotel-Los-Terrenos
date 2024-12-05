@@ -39,4 +39,6 @@ public interface IFloorService {
     Response updateFloor(Long id, String floorName, String floorTheme);
 
     Response addNewFloor(String floorName, String theme, Integer floorNumber, List<String> roomTypes);
+
+    Response getAllRoomsForFloor(Long floorId);
 }

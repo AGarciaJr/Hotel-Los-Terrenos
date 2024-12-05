@@ -10,6 +10,7 @@ import ProfilePage from "./pages/common/ProfilePage";
 import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
 import AdminPage from "./pages/admin/AdminPage";
+import RoomsPage from "./pages/rooms/RoomsPage";
 
 const App = () => {
     return (
@@ -31,6 +32,8 @@ const App = () => {
                 <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
 
                 <Route path="/admin" element={<AdminPage />} />/
+
+                <Route path="/rooms/:floorId" element={<RoomsPage />} />
             </Routes>
         </Router>
     );
