@@ -25,12 +25,12 @@ const RoomSelectionModal = ({ rooms, onClose, onSelectRoom }) => {
                     ×
                 </button>
                 <div className="select-rooms-container">
-                    {rooms.map((room) => (
+                    {sortedRooms.map((room) => (
                         <RoomCard
                             key={room.id}
                             room={room}
-                            onReserveNow={onSelectRoom} // Pass the room selection handler
-                            buttonLabel="Edit Room" // Customize the button label
+                            onButtonClick={onSelectRoom}
+                            buttonLabel="Edit Room"
                         />
                     ))}
                 </div>
