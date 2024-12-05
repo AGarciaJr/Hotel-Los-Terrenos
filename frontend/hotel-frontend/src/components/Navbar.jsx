@@ -28,6 +28,10 @@ const Navbar = () => {
                         <button onClick={() => navigate("/clerk")}>Clerk Dashboard</button>
                     )}
 
+                    {role === "ADMIN" && (
+                        <button onClick={() => navigate("/admin")}>Reset User Details</button>
+                    )}
+
                     <button onClick={() => navigate("/profile")}>Profile</button>
 
                     <button onClick={handleLogout}>Logout</button>
