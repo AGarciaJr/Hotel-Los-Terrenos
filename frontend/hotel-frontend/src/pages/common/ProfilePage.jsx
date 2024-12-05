@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import serviceAPI from "../../services/serviceAPI";
 import ReservationCard from "../../components/ReservationCard"
 import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css"
 
 const ProfilePage = () => {
+    const { userId } = useParams();
     const [userDetails, setUserDetails] = useState({
         name: "",
         email: "",
@@ -13,27 +15,32 @@ const ProfilePage = () => {
     const [reservations, setReservations] = useState([]);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
     const navigate = useNavigate();
 
     // Fetch user profile and reservations
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await serviceAPI.getUserProfile();
+                const response = userId
+                ? await serviceAPI.getUserById(userId)
+                : await serviceAPI.getUserProfile();
                 setUserDetails({
                     name: response.user.name,
                     email: response.user.email,
                     phoneNumber: response.user.phoneNumber,
                 });
 
-                const reservationsResponse = await serviceAPI.getUserReservations(response.user.id);
+                const reservationsResponse = userId
+                ? await serviceAPI.getUserReservations(userId)
+                : await serviceAPI.getUserReservations(response.user.id);
                 setReservations(reservationsResponse.user.reservations || []);
             } catch (error) {
                 setError("Failed to load user details.");
             }
         };
         fetchUserProfile();
-    }, []);
+    }, [userId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,9 +59,20 @@ const ProfilePage = () => {
         }
     };
 
+    const handleCheckOut = async (reservationId) => {
+        try {
+            const response = await serviceAPI.checkOutReservation(reservationId);
+            alert(response.message || "Checked out successfully.");
+            setReservations((prev) => prev.filter((res) => res.id !== reservationId));
+        }catch (error) {
+            alert(error.message || "Failed to check out.");
+        }
+    };
+
     return (
+
         <div className="profile-page">
-            <h2>Your Profile</h2>
+            <h2>{userId ? "Guest Profile" : "Your Profile"}</h2>
             {error && <p className="profile-error-message">{error}</p>}
             {success && <p className="profile-success-message">{success}</p>}
             <div className="profile-form">
@@ -87,13 +105,17 @@ const ProfilePage = () => {
                 </div>
                 <button onClick={handleSaveChanges}>Save Changes</button>
             </div>
-            <h3>Your Reservations</h3>
+            <h3>{userId ? "Guest Reservations" : "Your Reservations"}</h3>
             <div className="profile-reservations-list">
                 {!reservations || reservations.length === 0 ? (
                     <p>No reservations found.</p>
                 ) : (
                     reservations.map((reservation) => (
-                        <ReservationCard key={reservation.id} reservation={reservation} />
+                        <ReservationCard
+                            key={reservation.id}
+                            reservation={reservation}
+                            onCheckOut={handleCheckOut}
+                        />
                     ))
                 )}
 
