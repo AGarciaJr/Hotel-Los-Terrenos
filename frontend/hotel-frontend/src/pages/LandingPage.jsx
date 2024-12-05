@@ -60,7 +60,7 @@ const LandingPage = () => {
                             <RoomCard
                                 key={room.id}
                                 room={room}
-                                onReserveNow={handleReserveNow}
+                                onButtonClick={handleReserveNow}
                             />
                         ))}
                     </div>
