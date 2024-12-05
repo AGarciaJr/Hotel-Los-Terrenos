@@ -11,4 +11,6 @@ public interface IReservationService {
     Response getAllReservations();
 
     Response cancelReservation(Long reservationId);
+
+    Response checkoutReservation(Long reservationId);
 }

@@ -1,6 +1,7 @@
 package com.vpalz.hotellosterrenos.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
@@ -89,6 +90,12 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
+
+    /**
+     * The status of the reservation Active/Checked Out/etc
+     */
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status = ReservationStatus.BOOKED;
 
     /**
      * Calculates and updates the total number of guests.

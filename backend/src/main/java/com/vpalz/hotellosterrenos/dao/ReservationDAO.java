@@ -19,6 +19,8 @@ public class ReservationDAO {
 
     private String reservationConfirmationCode;
 
+    private String status;
+
     private UserDAO user;
     private RoomDAO room;
 }
