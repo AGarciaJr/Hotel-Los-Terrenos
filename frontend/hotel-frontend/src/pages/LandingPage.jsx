@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RoomCard from "../components/RoomCard";
 import FloorCard from "../components/FloorCard";
-import AuthModal from "../components/AuthModal";
 import serviceAPI from "../services/serviceAPI";
 import { sortRoomsByType } from "../utils/roomUtils";
 import "./LandingPage.css";
@@ -11,7 +10,6 @@ const LandingPage = () => {
     const [rooms, setRooms] = useState([]);
     const [floors, setFloors] = useState([])
     const [error, setError] = useState('');
-    const [showAuthModal, setShowAuthModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -53,19 +51,6 @@ const LandingPage = () => {
         fetchFloors();
     }, []);
 
-    const handleReserveNow = (roomId) => {
-        if (!roomId) {
-            setError("Invalid room selection.");
-            return;
-        }
-        const isAuthenticated = localStorage.getItem("token");
-        if (!isAuthenticated) {
-            setShowAuthModal(true);
-        } else {
-            navigate(`/reserve-room/${roomId}`);
-        }
-    };
-
     const handleFloorClick = (floorId) => {
         navigate(`/rooms/${floorId}`);
     }
@@ -90,10 +75,6 @@ const LandingPage = () => {
                             />
                         ))}
                     </div>
-
-                )}
-                {showAuthModal && (
-                    <AuthModal onClose={() => setShowAuthModal(false)} />
                 )}
             </div>
         </div>
