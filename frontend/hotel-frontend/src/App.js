@@ -19,7 +19,7 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
-                <Route path="/room-details/:roomId" element={<ReservationPage />} />
+                <Route path="/reserve-room/:roomId" element={<ReservationPage />} />
                 <Route path="/find-reservation" element={<FindReservationPage />} />
 
                 <Route path="/profile/:userId" element={<ProfilePage />}/>
@@ -27,6 +27,7 @@ const App = () => {
 
                 <Route path="/clerk" element={<ClerkPage />} />
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
+                <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
             </Routes>
         </Router>
     );
