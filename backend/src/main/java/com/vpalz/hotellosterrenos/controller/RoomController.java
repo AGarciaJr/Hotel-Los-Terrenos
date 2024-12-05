@@ -1,7 +1,6 @@
 package com.vpalz.hotellosterrenos.controller;
 
 import com.vpalz.hotellosterrenos.dao.Response;
-import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.service.implementations.UserService;
 import com.vpalz.hotellosterrenos.service.interfaces.IReservationService;
 import com.vpalz.hotellosterrenos.service.interfaces.IRoomService;
