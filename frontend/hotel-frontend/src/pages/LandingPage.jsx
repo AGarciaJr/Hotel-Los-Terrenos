@@ -42,7 +42,7 @@ const LandingPage = () => {
         if (!isAuthenticated) {
             setShowAuthModal(true);
         } else {
-            navigate(`/room-details/${roomId}`);
+            navigate(`/reserve-room/${roomId}`);
         }
     };
 
