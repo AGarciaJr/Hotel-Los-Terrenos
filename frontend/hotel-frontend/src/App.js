@@ -9,6 +9,7 @@ import RegisterPage from "./pages/authentication/RegisterPage";
 import ProfilePage from "./pages/common/ProfilePage";
 import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
+import ResetUserPage from "./pages/Admin/ResetUserPage";
 
 const App = () => {
     return (
@@ -27,6 +28,8 @@ const App = () => {
 
                 <Route path="/clerk" element={<ClerkPage />} />
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
+
+                <Route path={"/reset"} element={<ResetUserPage />} />
             </Routes>
         </Router>
     );
