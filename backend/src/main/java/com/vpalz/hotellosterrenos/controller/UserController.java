@@ -17,7 +17,7 @@ public class UserController {
     private IUserService userService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> getAllUsers() {
         Response response = userService.getAllUsers();
         return ResponseEntity.status(response.getStatusCode()).body(response);
@@ -36,7 +36,7 @@ public class UserController {
         Response response = userService.getUserById(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
-    //Having trouble testing this on postman, "403 Try Different Authentication"
+
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<Response> deleteUser(@PathVariable("userId") String userId) {
         Response response = userService.deleteUser(userId);
