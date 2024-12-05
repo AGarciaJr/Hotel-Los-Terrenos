@@ -54,6 +54,10 @@ public class Room {
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private Floor floor;
+
     /**
      * Converts the room details into a string representation.
      *

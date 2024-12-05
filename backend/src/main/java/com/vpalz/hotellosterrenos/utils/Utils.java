@@ -1,8 +1,10 @@
 package com.vpalz.hotellosterrenos.utils;
 
+import com.vpalz.hotellosterrenos.dao.FloorDAO;
 import com.vpalz.hotellosterrenos.dao.ReservationDAO;
 import com.vpalz.hotellosterrenos.dao.RoomDAO;
 import com.vpalz.hotellosterrenos.dao.UserDAO;
+import com.vpalz.hotellosterrenos.entity.Floor;
 import com.vpalz.hotellosterrenos.entity.Reservation;
 import com.vpalz.hotellosterrenos.entity.Room;
 import com.vpalz.hotellosterrenos.entity.User;
@@ -154,5 +156,20 @@ public class Utils {
 
     public static List<ReservationDAO> mapReservationListEntityToReservationDAOList(List<Reservation> reservations){
         return reservations.stream().map(Utils::mapReservationEntityToReservationDAO).collect(Collectors.toList());
+    }
+
+    public static FloorDAO mapFloorEntityToFloorDAO(Floor floor) {
+        FloorDAO floorDAO = new FloorDAO();
+        floorDAO.setId(floor.getId());
+        floorDAO.setName(floor.getName());
+        floorDAO.setTheme(floor.getTheme());
+        floorDAO.setRooms(mapRoomListEntityToRoomDAOList(floor.getRooms()));
+        return floorDAO;
+    }
+
+    public static List<FloorDAO> mapFloorListEntityToFloorDAOList(List<Floor> floors) {
+        return floors.stream()
+                .map(Utils::mapFloorEntityToFloorDAO)
+                .collect(Collectors.toList());
     }
 }
