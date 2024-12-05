@@ -2,8 +2,10 @@ package com.vpalz.hotellosterrenos.service.implementations;
 
 import com.vpalz.hotellosterrenos.dao.FloorDAO;
 import com.vpalz.hotellosterrenos.dao.Response;
+import com.vpalz.hotellosterrenos.dao.RoomDAO;
 import com.vpalz.hotellosterrenos.entity.Floor;
 import com.vpalz.hotellosterrenos.entity.Room;
+import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.FloorRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IFloorService;
@@ -138,6 +140,30 @@ public class FloorService implements IFloorService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error adding new floor: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Response getAllRoomsForFloor(Long id) {
+        Response response = new Response();
+
+        try {
+            Floor floor = floorRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Floor not found."));
+
+            List<Room> roomsForFloor = floor.getRooms();
+            List<RoomDAO> roomDAOs = Utils.mapRoomListEntityToRoomDAOList(roomsForFloor);
+
+            response.setStatusCode(200);
+            response.setMessage("Successfully retrieved all rooms for floor.");
+            response.setRoomList(roomDAOs);
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error retrieving all rooms for floor: " + e.getMessage());
         }
 
         return response;

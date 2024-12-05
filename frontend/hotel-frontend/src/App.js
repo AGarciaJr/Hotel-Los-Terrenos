@@ -10,6 +10,8 @@ import ProfilePage from "./pages/common/ProfilePage";
 import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
 import ResetUserPage from "./pages/Admin/ResetUserPage";
+import AdminPage from "./pages/admin/AdminPage";
+import RoomsPage from "./pages/rooms/RoomsPage";
 
 const App = () => {
     return (
@@ -20,7 +22,7 @@ const App = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
-                <Route path="/room-details/:roomId" element={<ReservationPage />} />
+                <Route path="/reserve-room/:roomId" element={<ReservationPage />} />
                 <Route path="/find-reservation" element={<FindReservationPage />} />
 
                 <Route path="/profile/:userId" element={<ProfilePage />}/>
@@ -30,6 +32,11 @@ const App = () => {
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
 
                 <Route path={"/reset"} element={<ResetUserPage />} />
+                <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
+
+                <Route path="/admin" element={<AdminPage />} />/
+
+                <Route path="/rooms/:floorId" element={<RoomsPage />} />
             </Routes>
         </Router>
     );

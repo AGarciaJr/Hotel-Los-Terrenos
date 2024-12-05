@@ -5,16 +5,16 @@ import './ReservationPage.css';
 
 const ReservationPage = () => {
     const navigate = useNavigate();
-    const { roomId } = useParams(); // Get the roomId from URL
+    const { roomId } = useParams();
     const [roomDetails, setRoomDetails] = useState(null);
-    const [numAdults, setNumAdults] = useState(1); // Default as 1, ensuring it's a number
+    const [numAdults, setNumAdults] = useState(1);
     const [numChildren, setNumChildren] = useState(0);
     const [checkInDate, setCheckInDate] = useState('');
     const [checkOutDate, setCheckOutDate] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [confirmationCode, setConfirmationCode] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [userId, setUserId] = useState(null); // Assuming we need the userId for the reservation
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const fetchRoomDetails = async () => {
@@ -22,7 +22,6 @@ const ReservationPage = () => {
                 const response = await serviceAPI.getRoomById(roomId);
                 setRoomDetails(response.room);
 
-                // Get user details to retrieve userId
                 const userProfile = await serviceAPI.getUserProfile();
                 setUserId(userProfile.user.id);
             } catch (error) {
@@ -33,7 +32,7 @@ const ReservationPage = () => {
     }, [roomId]);
 
     const handleConfirmReservation = async () => {
-        if (numAdults < 1 || numChildren < 0) {
+        if (numAdults < 1 || numAdults > 4 || numChildren < 0) {
             setErrorMessage('Please enter valid numbers for adults and children.');
             return;
         }
@@ -52,7 +51,6 @@ const ReservationPage = () => {
             numberOfChildren: numChildren,
         };
 
-        // Debugging: Check the reservation object
         console.log("Reservation Data: ", reservation);
 
         try {

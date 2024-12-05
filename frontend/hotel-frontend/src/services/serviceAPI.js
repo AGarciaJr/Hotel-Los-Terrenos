@@ -98,7 +98,7 @@ export default class serviceAPI {
     static async getAllAvailableRooms() {
         console.log("Fetching all available rooms...");
         try {
-            const response = await axios.get(`${this.BASE_URL}/rooms/all-available-rooms`);
+            const response = await axios.get(`${this.BASE_URL}/rooms/all-available-rooms`, this.getHeader());
             console.log("Rooms fetched successfully:", response.data);
             return response.data;
         } catch (error) {
@@ -165,6 +165,18 @@ export default class serviceAPI {
                     "Content-Type": "multipart/form-data",
                 },
             })
+        );
+    }
+
+    static async getAllFloors() {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/floors/all`, this.getHeader())
+        );
+    }
+
+    static async getRoomsByFloor(floorId) {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/floors/get-floor-rooms/${floorId}`, this.getHeader())
         );
     }
 
