@@ -9,6 +9,7 @@ import RegisterPage from "./pages/authentication/RegisterPage";
 import ProfilePage from "./pages/common/ProfilePage";
 import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
+import AdminPage from "./pages/admin/AdminPage";
 
 const App = () => {
     return (
@@ -28,6 +29,8 @@ const App = () => {
                 <Route path="/clerk" element={<ClerkPage />} />
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
                 <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
+
+                <Route path="/admin" element={<AdminPage />} />/
             </Routes>
         </Router>
     );
