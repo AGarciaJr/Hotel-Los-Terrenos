@@ -1,8 +1,8 @@
 import React from "react";
-import GuestCard from "../../components/GuestCard"; // Import the new GuestCard component
+import GuestCard from "../../components/GuestCard";
 import "./GuestModal.css";
 
-const GuestsModal = ({ guests, onClose, onViewReservations, onViewInformation }) => {
+const GuestsModal = ({ guests, onClose, onViewReservations, onMakeReservation}) => {
     return (
         <div className="guests-modal">
             <div className="guests-modal-content">
@@ -15,7 +15,7 @@ const GuestsModal = ({ guests, onClose, onViewReservations, onViewInformation })
                                 key={guest.id}
                                 guest={guest}
                                 onViewReservations={() => onViewReservations(guest.id)}
-                                onViewInformation={() => onViewInformation}
+                                onMakeReservation={() => onMakeReservation(guest.id)}
                             />
                         ))
                     ) : (
