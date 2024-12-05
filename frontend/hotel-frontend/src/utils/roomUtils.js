@@ -2,8 +2,9 @@ export const getRoomTypeValue = (roomType) => {
     switch (roomType) {
         case 'Single': return 1;
         case 'Double': return 2;
-        case 'Suite': return 3;
-        default: return 4;
+        case 'Triple': return 3;
+        case 'Suite': return 4;
+        default: return 5;
     }
 };
 
