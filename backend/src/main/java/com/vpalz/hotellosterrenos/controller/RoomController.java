@@ -20,10 +20,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @Data
 @RestController
 @RequestMapping("/rooms")
+@CrossOrigin("*")
 public class RoomController {
     //private static final Logger logger = (Logger) LoggerFactory.getLogger(RoomController.class);
     @Autowired

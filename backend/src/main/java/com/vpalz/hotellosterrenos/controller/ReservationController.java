@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reservations")
+@CrossOrigin("*")
 public class ReservationController {
     @Autowired
     private IReservationService reservationService;

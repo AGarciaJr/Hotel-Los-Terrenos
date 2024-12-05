@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/floors")
 @PreAuthorize("hasRole('ADMIN')")
+@CrossOrigin("*")
 public class FloorController {
 
     private final FloorService floorService;
