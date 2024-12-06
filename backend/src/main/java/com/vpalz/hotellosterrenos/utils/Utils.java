@@ -40,6 +40,19 @@ public class Utils {
         return userDAO;
     }
 
+    public static User maptoUser(UserDAO userDto) {
+       User user = new User();
+
+       user.setId(userDto.getId());
+       user.setName(userDto.getName());
+       user.setEmail(userDto.getEmail());
+       user.setPhoneNumber(userDto.getPhoneNumber());
+       user.setRole(userDto.getRole());
+       
+        return user;
+
+    }
+
     public static RoomDAO mapRoomEntityToRoomDAO(Room room){
         RoomDAO roomDAO = new RoomDAO();
 

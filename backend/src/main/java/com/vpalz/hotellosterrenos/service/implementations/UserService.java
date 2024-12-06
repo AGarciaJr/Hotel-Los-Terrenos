@@ -242,4 +242,9 @@ public class UserService implements IUserService {
         return response;
     }
 
+    @Override
+    public Response updateUserInfo(User user) {
+        return null;
+    }
+
 }
