@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -99,15 +97,14 @@ public class RoomController {
     @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> updateRoom(
             @PathVariable Long roomId,
-            @RequestParam int roomNumber,
-            @RequestParam String roomType,
-            @RequestParam BigDecimal roomPrice,
-            @RequestParam QualityLevel qualityLevel,
-            @RequestParam BedType bedType,
-            @RequestParam boolean smokingStatus,
-            @RequestParam String roomDescription
+            @RequestParam(value = "roomType" , required = false) String roomType,
+            @RequestParam(value = "roomPrice" , required = false) BigDecimal roomPrice,
+            @RequestParam(value = "qualityLevel" , required = false) QualityLevel qualityLevel,
+            @RequestParam(value = "bedType" , required = false) BedType bedType,
+            @RequestParam(value = "smokingStatus" , required = false) boolean smokingStatus,
+            @RequestParam(value = "roomDescription" , required = false) String roomDescription
     ) {
-        Response response = roomService.updateRoom(roomId, roomNumber, roomType, roomPrice, qualityLevel, bedType, smokingStatus, roomDescription);
+        Response response = roomService.updateRoom(roomId, roomType, roomPrice, qualityLevel, bedType, smokingStatus, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

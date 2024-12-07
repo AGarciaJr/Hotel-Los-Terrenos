@@ -99,4 +99,8 @@ public class Room {
                 ", floor=" + (floor != null ? floor.getId() : "No Floor") +
                 '}';
     }
+
+    public boolean getSmokingStatus() {
+        return smokingStatus;
+    }
 }

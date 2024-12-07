@@ -127,7 +127,6 @@ public class RoomService implements IRoomService {
     @Override
     public Response updateRoom(
             Long roomId,
-            int roomNumber,
             String roomType,
             BigDecimal roomPrice,
             QualityLevel qualityLevel,
@@ -140,13 +139,24 @@ public class RoomService implements IRoomService {
         try {
             Room room = roomRepository.findById(roomId).orElseThrow(() -> new MyException("Room not found"));
 
-            room.setRoomNumber(roomNumber);
-            room.setRoomType(roomType);
-            room.setRoomPrice(roomPrice);
-            room.setQualityLevel(qualityLevel);
-            room.setBedType(bedType);
-            room.setSmokingStatus(smokingStatus);
-            room.setRoomDescription(roomDescription);
+            if (roomType != null) {
+                room.setRoomType(roomType);
+            }
+            if (roomPrice != null) {
+                room.setRoomPrice(roomPrice);
+            }
+            if (qualityLevel != null) {
+                room.setQualityLevel(qualityLevel);
+            }
+            if (bedType != null) {
+                room.setBedType(bedType);
+            }
+            if (smokingStatus != room.getSmokingStatus()) {
+                room.setSmokingStatus(smokingStatus);
+            }
+            if (roomDescription != null) {
+                room.setRoomDescription(roomDescription);
+            }
 
             Room updatedRoom = roomRepository.save(room);
             RoomDAO roomDAO = Utils.mapRoomEntityToRoomDAO(updatedRoom);

@@ -31,7 +31,6 @@ public interface IRoomService {
 
     Response updateRoom(
                         Long roomId,
-                        int roomNumber,
                         String roomType,
                         BigDecimal roomPrice,
                         QualityLevel qualityLevel,
