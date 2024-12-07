@@ -95,3 +95,46 @@ button:hover {
     font-size: 1rem;
     color: #666;
 }
+
+.profile-error-message {
+    color: #721c24;
+    background-color: #f8d7da;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #f5c6cb;
+}
+
+.profile-success-message {
+    color: #155724;
+    background-color: #d4edda;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #c3e6cb;
+}
+
+.email-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+    display: block;
+    font-size: 0.8rem;
+}
+
+.error-input {
+    border: 1px solid #dc3545;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    display: block;
+}
+
+.profile-form-group {
+    margin-bottom: 1rem;
+}
