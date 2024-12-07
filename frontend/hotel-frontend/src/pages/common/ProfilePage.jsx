@@ -18,17 +18,30 @@ const ProfilePage = () => {
 
     const navigate = useNavigate();
 
-    // Fetch user profile and reservations
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
                 const response = userId
-                ? await serviceAPI.getUserById(userId)
-                : await serviceAPI.getUserProfile();
+                    ? await serviceAPI.getUserById(userId)
+                    : await serviceAPI.getUserProfile();
+
+                console.log("Raw profile response:", response);
+
+                const userData = response.user || response;
+                console.log("User data extracted:", userData);
+
                 setUserDetails({
-                    name: response.user.name,
-                    email: response.user.email,
-                    phoneNumber: response.user.phoneNumber,
+                    id: userData.id,
+                    name: userData.name,
+                    email: userData.email,
+                    phoneNumber: userData.phoneNumber,
+                });
+
+                console.log("Set userDetails to:", {
+                    id: userData.id,
+                    name: userData.name,
+                    email: userData.email,
+                    phoneNumber: userData.phoneNumber,
                 });
 
                 const reservationsResponse = userId
@@ -36,7 +49,8 @@ const ProfilePage = () => {
                 : await serviceAPI.getUserReservations(response.user.id);
                 setReservations(reservationsResponse.user.reservations || []);
             } catch (error) {
-                setError("Failed to load user details.");
+                console.error("Full error details:", error);
+                setError(error.response?.data?.message || "Failed to load user details.");
             }
         };
         fetchUserProfile();
@@ -52,10 +66,22 @@ const ProfilePage = () => {
 
     const handleSaveChanges = async () => {
         try {
-            const updatedUser = await serviceAPI.updateUserDetails(userDetails);
+            console.log("Current userDetails:", userDetails);
+            
+            const targetUserId = userDetails.id;
+            console.log("targetUserId:", targetUserId);
+
+            if (!targetUserId) {
+                setError("No user ID available");
+                return;
+            }
+
+            const response = await serviceAPI.updateUserDetails(targetUserId, userDetails);
+            console.log("Update response:", response);
             setSuccess("User details updated successfully.");
         } catch (error) {
-            setError("Failed to update user details.");
+            console.error("Full error object:", error);
+            setError(error.response?.data?.message || "Failed to update user details.");
         }
     };
 

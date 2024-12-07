@@ -6,7 +6,6 @@ import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.UserDAO;
 import com.vpalz.hotellosterrenos.entity.Reservation;
 import com.vpalz.hotellosterrenos.entity.User;
-import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.UserRepository;
@@ -243,8 +242,41 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Response updateUserInfo(User user) {
-        return null;
+    public Response updateUserInfo(String userId, UserDAO updatedUser) {
+        Response response = new Response();
+
+        try {
+
+            User user = userRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new MyException("User Not Found"));
+
+
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            user.setPhoneNumber(updatedUser.getPhoneNumber());
+
+
+            User updatedUserObj = userRepository.save(user);
+
+
+            UserDAO userDAO = Utils.mapUserEntityToUserDAO(updatedUserObj);
+
+
+            response.setStatusCode(200);
+            response.setMessage("User information updated successfully.");
+            response.setUser(userDAO);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while updating user information: " + e.getMessage());
+        }
+
+        return response;
     }
+
 
 }

@@ -2,6 +2,7 @@ package com.vpalz.hotellosterrenos.service.interfaces;
 
 import com.vpalz.hotellosterrenos.dao.LoginRequest;
 import com.vpalz.hotellosterrenos.dao.Response;
+import com.vpalz.hotellosterrenos.dao.UserDAO;
 import com.vpalz.hotellosterrenos.entity.User;
 
 public interface IUserService {
@@ -21,5 +22,5 @@ public interface IUserService {
 
     Response updatePassword(String userId, String newPassword);
 
-    Response updateUserInfo(User user);
+    Response updateUserInfo(String userId, UserDAO userDao);
 }

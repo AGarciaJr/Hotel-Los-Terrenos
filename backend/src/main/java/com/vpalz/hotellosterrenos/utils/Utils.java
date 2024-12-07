@@ -40,7 +40,7 @@ public class Utils {
         return userDAO;
     }
 
-    public static User maptoUser(UserDAO userDto) {
+    public static User mapUserDAOToUser(UserDAO userDto) {
        User user = new User();
 
        user.setId(userDto.getId());
@@ -48,7 +48,7 @@ public class Utils {
        user.setEmail(userDto.getEmail());
        user.setPhoneNumber(userDto.getPhoneNumber());
        user.setRole(userDto.getRole());
-       
+
         return user;
 
     }
