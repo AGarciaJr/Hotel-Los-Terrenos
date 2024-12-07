@@ -114,9 +114,13 @@ export default class serviceAPI {
     static async updateRoom(roomId, room) {
         const formData = new FormData();
 
+
         if (room.roomType) formData.append("roomType", room.roomType);
-        if (room.roomPrice)formData.append("roomPrice", room.roomPrice);
+        if (room.roomPrice) formData.append("roomPrice", room.roomPrice);
         if (room.roomDescription) formData.append("roomDescription", room.roomDescription);
+        if (room.qualityLevel) formData.append("qualityLevel", room.qualityLevel);
+        if (room.bedType) formData.append("bedType", room.bedType);
+        if (room.smokingStatus !== undefined) formData.append("smokingStatus", room.smokingStatus);
 
         return this.handleRequest(
             axios.put(`${this.BASE_URL}/rooms/update/${roomId}`, formData, {
@@ -128,12 +132,18 @@ export default class serviceAPI {
         );
     }
 
+
     static async addRoom(roomDetails) {
         const formData = new FormData();
 
+        formData.append("roomNumber", roomDetails.roomNumber);
         formData.append("roomType", roomDetails.roomType);
         formData.append("roomPrice", roomDetails.roomPrice);
+        formData.append("qualityLevel", roomDetails.qualityLevel);
+        formData.append("bedType", roomDetails.bedType);
+        formData.append("smokingStatus", roomDetails.smokingStatus);
         formData.append("roomDescription", roomDetails.roomDescription);
+
 
 
         return this.handleRequest(
@@ -141,10 +151,11 @@ export default class serviceAPI {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                     "Content-Type": "multipart/form-data",
-                },
+                }
             })
-        );
+        )
     }
+
 
     /**
      * Floors

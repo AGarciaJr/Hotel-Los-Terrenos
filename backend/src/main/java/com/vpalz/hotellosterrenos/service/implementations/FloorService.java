@@ -10,6 +10,7 @@ import com.vpalz.hotellosterrenos.repo.FloorRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IFloorService;
 import com.vpalz.hotellosterrenos.utils.Utils;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,6 +107,7 @@ public class FloorService implements IFloorService {
         return response;
     }
 
+    @Transactional
     @Override
     public Response addNewFloor(String floorName, String floorTheme, Integer floorNumber, List<String> roomTypes) {
         Response response = new Response();

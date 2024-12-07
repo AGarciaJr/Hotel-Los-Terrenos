@@ -13,5 +13,9 @@ public class RoomDAO {
     private String roomType;
     private BigDecimal roomPrice;
     private String roomDescription;
+    private String qualityLevel;
+    private String bedType;
+    private Boolean smokingStatus;
+    private Integer roomNumber;
     private List<ReservationDAO> reservations;
 }
