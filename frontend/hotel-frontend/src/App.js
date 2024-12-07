@@ -10,7 +10,7 @@ import ProfilePage from "./pages/common/ProfilePage";
 import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
 import ResetUserPage from "./pages/Admin/ResetUserPage";
-import AdminPage from "./pages/admin/AdminPage";
+import AdminPage from "./pages/Admin/AdminPage";
 import RoomsPage from "./pages/rooms/RoomsPage";
 
 const App = () => {

@@ -37,8 +37,8 @@ const AdminPage = () => {
                 <button className="admin-button" onClick={() => navigate('/register')}>
                     Create Clerk Account
                 </button>
-                <button className="admin-button" onClick={() => navigate('/admin/update-password')}>
-                    Update User Password
+                <button className="admin-button" onClick={() => navigate('/admin/reset-password')}>
+                    Reset User Password
                 </button>
             </div>
         </div>

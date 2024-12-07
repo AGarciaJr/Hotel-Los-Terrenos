@@ -227,5 +227,4 @@ export default class serviceAPI {
             axios.get(`${this.BASE_URL}/reservations/all`, this.getHeader())
         );
     }
-
 }
