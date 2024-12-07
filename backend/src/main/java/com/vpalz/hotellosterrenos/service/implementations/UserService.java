@@ -212,6 +212,12 @@ public class UserService implements IUserService {
         return response;
     }
 
+    /**
+     *
+     * @param userId
+     * @param newPassword
+     * @return
+     */
     public Response updatePassword(String userId, String newPassword) {
         Response response = new Response();
         try {
@@ -249,25 +255,21 @@ public class UserService implements IUserService {
             User user = userRepository.findById(Long.valueOf(userId))
                     .orElseThrow(() -> new MyException("User Not Found"));
 
-            // Check if the email suffix would change role
             String currentEmail = user.getEmail();
             String newEmail = updatedUser.getEmail();
 
-            // Check for admin suffix
             if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
                 response.setStatusCode(400);
                 response.setMessage("Cannot remove _admin@ from email to maintain admin role");
                 return response;
             }
 
-            // Check for clerk suffix
             if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
                 response.setStatusCode(400);
                 response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
                 return response;
             }
 
-            // If we get here, the email change is valid or there was no change
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
             user.setPhoneNumber(updatedUser.getPhoneNumber());
