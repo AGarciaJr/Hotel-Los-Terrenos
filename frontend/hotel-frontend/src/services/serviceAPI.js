@@ -15,7 +15,10 @@ export default class serviceAPI {
 
     static getHeader() {
         const token = localStorage.getItem("token");
-        if (!token) return {};
+        if (!token) {
+            console.warn("No token found in localStorage");
+            return {};
+        }
         return {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -50,7 +53,17 @@ export default class serviceAPI {
     }
 
     static async getUserProfile() {
-        return this.handleRequest(axios.get(`${this.BASE_URL}/users/get-logged-in-profile-info`, this.getHeader()));
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/users/get-logged-in-profile-info`,
+                this.getHeader()
+            );
+            console.log("Full API Response:", response.data);  // Log the full response
+            return response.data;
+        } catch (error) {
+            console.error("getUserProfile error:", error);
+            throw error;
+        }
     }
 
     static async isAuthenticated() {
@@ -85,7 +98,20 @@ export default class serviceAPI {
         );
     }
 
+    static async updateUserDetails(userId, userDetails) {
+        if (!userId) throw new Error("User ID is required for updating user details.");
 
+        console.log("Updating user with ID:", userId);
+        console.log("Update data:", userDetails);
+
+        return this.handleRequest(
+            axios.put(
+                `${this.BASE_URL}/users/update-user-info/${userId}`,
+                userDetails,
+                this.getHeader()
+            )
+        );
+    }
     /**
      * Rooms
      */
@@ -238,4 +264,6 @@ export default class serviceAPI {
             axios.get(`${this.BASE_URL}/reservations/all`, this.getHeader())
         );
     }
+
+
 }
