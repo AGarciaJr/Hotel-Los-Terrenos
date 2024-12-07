@@ -1,6 +1,8 @@
 package com.vpalz.hotellosterrenos.controller;
 
 import com.vpalz.hotellosterrenos.dao.Response;
+import com.vpalz.hotellosterrenos.enums.BedType;
+import com.vpalz.hotellosterrenos.enums.QualityLevel;
 import com.vpalz.hotellosterrenos.service.implementations.UserService;
 import com.vpalz.hotellosterrenos.service.interfaces.IReservationService;
 import com.vpalz.hotellosterrenos.service.interfaces.IRoomService;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -31,22 +35,25 @@ public class RoomController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('CLERK')")
     public ResponseEntity<Response> addNewRoom(
-            //@RequestParam(value = "photo", required = false) MultipartFile photo,
-            @RequestParam(value = "roomType", required = false) String roomType,
-            @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
-            @RequestParam(value = "roomDescription", required = false) String roomDescription
+            @RequestParam("roomNumber") int roomNumber,
+            @RequestParam("roomType") String roomType,
+            @RequestParam("roomPrice") BigDecimal roomPrice,
+            @RequestParam("qualityLevel") QualityLevel qualityLevel,
+            @RequestParam("bedType") BedType bedType,
+            @RequestParam("smokingStatus") boolean smokingStatus,
+            @RequestParam("roomDescription") String roomDescription
     ) {
-
-        if (roomType == null || roomType.isBlank() || roomPrice == null || roomDescription.isBlank()) {
+        if (roomPrice == null || qualityLevel == null || bedType == null || roomNumber <= 0) {
             Response response = new Response();
             response.setStatusCode(400);
-            response.setMessage("Invalid data, Required Fields: Photo, Room Type, Room Price");
+            response.setMessage("Invalid data. Required fields: Room Number, Room Price, Quality Level, Bed Type, Smoking Status.");
             return ResponseEntity.status(response.getStatusCode()).body(response);
         }
 
-        Response response = roomService.addNewRoom(roomType, roomPrice, roomDescription);
+        Response response = roomService.addNewRoom(roomNumber, roomType, roomPrice, qualityLevel, bedType, smokingStatus, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<Response> getAllRooms() {
@@ -77,10 +84,10 @@ public class RoomController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
             @RequestParam(required = false) String roomType
     ) {
-        if (checkInDate == null || roomType == null || roomType.isBlank() || checkOutDate == null) {
+        if (checkInDate == null || checkOutDate == null || roomType == null || roomType.isBlank()) {
             Response response = new Response();
             response.setStatusCode(400);
-            response.setMessage("Invalid data, Required Fields: Check In Date, Check Out Date, Room Type");
+            response.setMessage("Invalid data. Required fields: Check In Date, Check Out Date, Room Type.");
             return ResponseEntity.status(response.getStatusCode()).body(response);
         }
 
@@ -90,13 +97,17 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasAuthority('CLERK')")
-    public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
-                                               @RequestParam(value = "roomType", required = false) String roomType,
-                                               @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
-                                               @RequestParam(value = "roomDescription", required = false) String roomDescription
-
+    public ResponseEntity<Response> updateRoom(
+            @PathVariable Long roomId,
+            @RequestParam int roomNumber,
+            @RequestParam String roomType,
+            @RequestParam BigDecimal roomPrice,
+            @RequestParam QualityLevel qualityLevel,
+            @RequestParam BedType bedType,
+            @RequestParam boolean smokingStatus,
+            @RequestParam String roomDescription
     ) {
-        Response response = roomService.updateRoom(roomId, roomPrice, roomType, roomDescription);
+        Response response = roomService.updateRoom(roomId, roomNumber, roomType, roomPrice, qualityLevel, bedType, smokingStatus, roomDescription);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

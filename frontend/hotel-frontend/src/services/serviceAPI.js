@@ -131,9 +131,14 @@ export default class serviceAPI {
     static async addRoom(roomDetails) {
         const formData = new FormData();
 
+        formData.append("roomNumber", roomDetails.roomNumber);
         formData.append("roomType", roomDetails.roomType);
         formData.append("roomPrice", roomDetails.roomPrice);
+        formData.append("qualityLevel", roomDetails.qualityLevel);
+        formData.append("bedType", roomDetails.bedType);
+        formData.append("smokingStatus", roomDetails.smokingStatus);
         formData.append("roomDescription", roomDetails.roomDescription);
+
 
 
         return this.handleRequest(
@@ -141,10 +146,11 @@ export default class serviceAPI {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                     "Content-Type": "multipart/form-data",
-                },
+                }
             })
-        );
+        )
     }
+
 
     /**
      * Floors

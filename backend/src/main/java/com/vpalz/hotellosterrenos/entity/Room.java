@@ -1,5 +1,7 @@
 package com.vpalz.hotellosterrenos.entity;
 
+import com.vpalz.hotellosterrenos.enums.BedType;
+import com.vpalz.hotellosterrenos.enums.QualityLevel;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -42,6 +44,16 @@ public class Room {
      */
     private BigDecimal roomPrice;
 
+    private boolean smokingStatus;
+
+    private Integer roomNumber;
+
+    @Enumerated(EnumType.STRING)
+    private QualityLevel qualityLevel;
+
+    @Enumerated(EnumType.STRING)
+    private BedType bedType;
+
     /**
      * A description of the room's features and amenities.
      */
@@ -59,6 +71,16 @@ public class Room {
     private Floor floor;
 
     /**
+     * Calculates the total price by adding the quality level price to the base room price.
+     */
+    public BigDecimal calculateTotalPrice() {
+        if (qualityLevel != null && roomPrice != null) {
+            return qualityLevel.calculateFinalPrice(roomPrice);
+        }
+        throw new IllegalStateException("Room price or quality level is not set.");
+    }
+
+    /**
      * Converts the room details into a string representation.
      *
      * @return A string containing the room's details.
@@ -67,10 +89,14 @@ public class Room {
     public String toString() {
         return "Room{" +
                 "id=" + id +
+                ", roomNumber=" + roomNumber +
                 ", roomType='" + roomType + '\'' +
+                ", qualityLevel=" + qualityLevel +
+                ", bedType=" + bedType +
+                ", bedCount=" + bedType.getAmount() +
+                ", smokingStatus=" + smokingStatus +
                 ", roomPrice=" + roomPrice +
-                ", roomDescription='" + roomDescription + '\'' +
-                ", reservations=" + reservations +
+                ", floor=" + (floor != null ? floor.getId() : "No Floor") +
                 '}';
     }
 }
