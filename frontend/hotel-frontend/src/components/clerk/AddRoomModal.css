@@ -1,0 +1,101 @@
+/* Modal container */
+.add-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal content */
+.add-modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Form groups */
+.add-form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.add-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.add-form-group input,
+.add-form-group textarea {
+    width: 100%; /* Ensure inputs take the full width of the modal */
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+    box-sizing: border-box; /* Include padding and border in the total width */
+}
+
+/* Buttons */
+.add-submit-button,
+.add-close-button {
+    width: 45%; /* Ensure buttons are consistent in width */
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.add-submit-button {
+    background: #007bff;
+    color: #ffffff;
+}
+
+.add-submit-button:hover {
+    background: #0056b3;
+}
+
+.add-close-button {
+    background: #ccc;
+    color: #333;
+}
+
+.add-close-button:hover {
+    background: #aaa;
+}
+
+/* Align buttons horizontally */
+.add-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Animation for modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

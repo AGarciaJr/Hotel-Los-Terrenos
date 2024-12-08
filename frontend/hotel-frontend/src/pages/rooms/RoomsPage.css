@@ -1,0 +1,20 @@
+.rooms-page {
+    padding: 20px;
+    text-align: center;
+}
+
+.rooms-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.rooms-container .room-card {
+    margin: 10px;
+    width: 200px;
+    text-align: left;
+}
+
+.error-message {
+    color: red;
+}
