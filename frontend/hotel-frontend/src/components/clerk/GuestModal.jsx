@@ -7,7 +7,7 @@ const GuestsModal = ({ guests, onClose, onViewReservations, onMakeReservation}) 
         <div className="guests-modal">
             <div className="guests-modal-content">
                 <h2>Current Guests</h2>
-                <button className="close-button" onClick={onClose}>Close</button>
+                <button className="guests-close-button" onClick={onClose}>Close</button>
                 <div className="guests-list">
                     {guests.length > 0 ? (
                         guests.map((guest) => (
