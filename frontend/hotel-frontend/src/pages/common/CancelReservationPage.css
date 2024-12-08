@@ -1,0 +1,31 @@
+/* src/pages/common/CancelReservationPage.css */
+.cancel-reservation-page {
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
+input {
+    margin: 10px;
+    padding: 8px;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

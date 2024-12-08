@@ -11,6 +11,7 @@ import ClerkPage from "./pages/clerk/ClerkPage";
 import EditRoomPage from "./pages/clerk/EditRoomPage";
 import AdminPage from "./pages/admin/AdminPage";
 import RoomsPage from "./pages/rooms/RoomsPage";
+import CancelReservationPage from "./pages/common/CancelReservationPage"; //Victor working on cancellation
 
 const App = () => {
     return (
@@ -31,9 +32,11 @@ const App = () => {
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
                 <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
 
+
                 <Route path="/admin" element={<AdminPage />} />/
 
                 <Route path="/rooms/:floorId" element={<RoomsPage />} />
+                <Route path="/cancel-reservation/:reservationId" element={<CancelReservationPage />} />
             </Routes>
         </Router>
     );

@@ -7,6 +7,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem("token");
     const role = localStorage.getItem("role");
+    const reservationId = localStorage.getItem("id");  //assuming the reservation ID is stored in localStorage
 
     const handleLogout = () => {
         serviceAPI.logout();
@@ -33,6 +34,12 @@ const Navbar = () => {
                     )}
 
                     <button onClick={() => navigate("/profile")}>Profile</button>
+
+                    {role === "GUEST" && reservationId && (
+                        <button onClick={() => navigate(`/cancel-reservation/${reservationId}`)}>
+                            Cancel Reservation
+                        </button>
+                    )}
 
                     <button onClick={handleLogout}>Logout</button>
                 </>

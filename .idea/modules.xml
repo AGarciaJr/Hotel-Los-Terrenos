@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/backend/Hotel-Los-Terrenos.iml" filepath="$PROJECT_DIR$/backend/Hotel-Los-Terrenos.iml" />
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/.idea/full-stack.iml" filepath="$PROJECT_DIR$/.idea/full-stack.iml" />
-=======
->>>>>>> 763e1ec93099611b94a892960157b304ac64f4ac
+      <module fileurl="file://$PROJECT_DIR$/.idea/finalProject.iml" filepath="$PROJECT_DIR$/.idea/finalProject.iml" />
     </modules>
   </component>
 </project>

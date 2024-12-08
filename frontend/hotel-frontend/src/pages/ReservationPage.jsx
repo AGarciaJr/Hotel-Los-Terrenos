@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import serviceAPI from '../services/serviceAPI';
 import './ReservationPage.css';
 
-
 const ReservationPage = () => {
     const navigate = useNavigate();
     const { roomId } = useParams();
@@ -66,12 +65,7 @@ const ReservationPage = () => {
             const response = await serviceAPI.reserveRoom(roomId, userId, reservation);
             if (response.statusCode === 200) {
                 setConfirmationCode(response.reservationConfirmationCode); //
-                //setTimeout(() => navigate(`/`), 5000); // Redirect after 5 seconds
-                // This shows payment modal instead of setting confirmation directly
                 setShowPaymentModal(true);
-
-                // TODO: Store the reservation ID from response for payment processing
-                // const reservationId = response.reservationId;
             } else {
                 setErrorMessage('Reservation failed. Please try again.');
             }
@@ -85,16 +79,34 @@ const ReservationPage = () => {
 
     // Handler for proceeding to payment
     const handleProceedToPayment = () => {
-        // TODO: Stripe integration personnel will implement this
-        // This function should:
-        // 1. Call the backend to create a Stripe session
-        // 2. Redirect to Stripe checkout page
         console.log('Proceeding to payment...');
     };
 
     const handlePaymentModalClose = () => {
         setShowPaymentModal(false);
-        // TODO: Stripe integration personnel should handle any cleanup needed
+    };
+
+    // ADDITIONAL METHOD TO HANDLE CANCELLATION
+    const handleCancelReservation = async () => { // Cancel reservation logic
+        if (!confirmationCode) {
+            setErrorMessage('No reservation to cancel.');
+            return;
+        }
+
+        try {
+            const response = await serviceAPI.cancelReservation(confirmationCode); // Call the cancel API
+            if (response.statusCode === 200) {
+                setErrorMessage('');
+                setConfirmationCode(''); // Clear confirmation code
+                alert('Your reservation has been canceled successfully.');
+                navigate(`/`); // Redirect to home or any desired page
+            } else {
+                setErrorMessage('Failed to cancel reservation. Please try again.');
+            }
+        } catch (error) {
+            console.error("Cancellation error:", error);
+            setErrorMessage('Cancellation failed. Please try again.');
+        }
     };
 
     if (!roomDetails) return <p>Loading room details...</p>;
@@ -149,6 +161,14 @@ const ReservationPage = () => {
                 {isSubmitting ? 'Processing...' : 'Confirm Reservation'}
             </button>
 
+            {/* Add Cancel Reservation Button */}
+            {confirmationCode && ( // Only show the cancel button after reservation is confirmed
+                <>
+                    <p>Your reservation is confirmed! Confirmation code: {confirmationCode}</p>
+                    <button onClick={handleCancelReservation}>Cancel Reservation</button> {/* Cancel button */}
+                </>
+            )}
+
             {/* Payment Modal */}
             {showPaymentModal && (
                 <div className="modal-overlay">
@@ -167,8 +187,8 @@ const ReservationPage = () => {
                             <div className="amount-container">
                                 <span className="amount-label">Total Amount</span>
                                 <span className="amount-value">
-                        ${calculateTotalAmount(roomDetails.roomPrice, checkInDate, checkOutDate)}
-                    </span>
+                                    ${calculateTotalAmount(roomDetails.roomPrice, checkInDate, checkOutDate)}
+                                </span>
                             </div>
                             <p className="redirect-text">
                                 You will be redirected to complete your payment securely.
@@ -191,7 +211,6 @@ const ReservationPage = () => {
                     </div>
                 </div>
             )}
-            {confirmationCode && <p>Your reservation is confirmed! Confirmation code: {confirmationCode}</p>}
         </div>
     );
 };
