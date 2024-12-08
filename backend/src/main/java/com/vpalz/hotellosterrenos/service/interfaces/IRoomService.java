@@ -1,6 +1,8 @@
 package com.vpalz.hotellosterrenos.service.interfaces;
 
 import com.vpalz.hotellosterrenos.dao.Response;
+import com.vpalz.hotellosterrenos.enums.BedType;
+import com.vpalz.hotellosterrenos.enums.QualityLevel;
 /*
  * import org.springframework.web.multipart.MultipartFile;
  * We will only use this if I end up deciding to use the AWS
@@ -11,7 +13,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IRoomService {
-    Response addNewRoom(String roomType, BigDecimal roomPrice, String description);
+    Response addNewRoom(
+            int roomNumber,
+            String roomType,
+            BigDecimal roomPrice,
+            QualityLevel qualityLevel,
+            BedType bedType,
+            boolean smokingStatus,
+            String roomDescription
+    );
 
     List<String> getAllRoomTypes();
 
@@ -19,7 +29,15 @@ public interface IRoomService {
 
     Response deleteRoom(Long roomId);
 
-    Response updateRoom(Long roomId, BigDecimal roomPrice, String roomType, String description);
+    Response updateRoom(
+                        Long roomId,
+                        String roomType,
+                        BigDecimal roomPrice,
+                        QualityLevel qualityLevel,
+                        BedType bedType,
+                        boolean smokingStatus,
+                        String roomDescription
+    );
 
     Response getRoomById(Long roomId);
 

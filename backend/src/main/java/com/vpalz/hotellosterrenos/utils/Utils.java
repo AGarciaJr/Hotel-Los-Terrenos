@@ -59,7 +59,6 @@ public class Utils {
         roomDAO.setId(room.getId());
         roomDAO.setRoomType(room.getRoomType());
         roomDAO.setRoomPrice(room.getRoomPrice());
-        //roomDAO.setRoomPhotoUrl(room.getRoomPhotoUrl());
         roomDAO.setRoomDescription(room.getRoomDescription());
 
         return roomDAO;
@@ -85,9 +84,12 @@ public class Utils {
         RoomDAO roomDAO = new RoomDAO();
 
         roomDAO.setId(room.getId());
+        roomDAO.setRoomNumber(room.getRoomNumber());
         roomDAO.setRoomType(room.getRoomType());
         roomDAO.setRoomPrice(room.getRoomPrice());
-        //roomDAO.setRoomPhotoUrl(room.getRoomPhotoUrl());
+        roomDAO.setQualityLevel(room.getQualityLevel().toString());
+        roomDAO.setBedType(room.getBedType().toString());
+        roomDAO.setSmokingStatus(room.getSmokingStatus());
         roomDAO.setRoomDescription(room.getRoomDescription());
 
         if(room.getReservations() != null){
