@@ -40,3 +40,22 @@
 .checkout-button:hover {
     background-color: #0056b3;
 }
+
+.edit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    align-self: center;
+    margin-left: 10px;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}

@@ -119,6 +119,10 @@ const ProfilePage = () => {
         }
     };
 
+    const handleEditReservation = (reservationConfirmationCode) => {
+        navigate(`/edit-reservation/${reservationConfirmationCode}`);
+    };
+
     function validateForm() {
         let valid = true;
         const errorsCopy = {...errors};
@@ -206,6 +210,7 @@ const ProfilePage = () => {
                             key={reservation.id}
                             reservation={reservation}
                             onCheckOut={handleCheckOut}
+                            onEdit={handleEditReservation}
                         />
                     ))
                 )}

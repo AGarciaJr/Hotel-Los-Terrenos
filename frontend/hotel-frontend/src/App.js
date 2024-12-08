@@ -12,6 +12,7 @@ import EditRoomPage from "./pages/clerk/EditRoomPage";
 import ResetUserPage from "./pages/Admin/ResetUserPage";
 import AdminPage from "./pages/Admin/AdminPage";
 import RoomsPage from "./pages/rooms/RoomsPage";
+import EditReservationPage from "./pages/rooms/EditReservationPage";
 
 const App = () => {
     return (
@@ -24,6 +25,8 @@ const App = () => {
 
                 <Route path="/reserve-room/:roomId" element={<ReservationPage />} />
                 <Route path="/find-reservation" element={<FindReservationPage />} />
+                <Route path="/edit-reservation/:reservationCode" element={<EditReservationPage />} />
+
 
                 <Route path="/profile/:userId" element={<ProfilePage />}/>
                 <Route path="/profile" element={<ProfilePage />}/>

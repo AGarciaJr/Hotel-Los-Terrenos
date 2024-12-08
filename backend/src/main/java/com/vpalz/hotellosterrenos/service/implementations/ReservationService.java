@@ -197,4 +197,36 @@ public class ReservationService implements IReservationService {
                         )
                 );
     }
+    @Override
+    public Response updateReservationByConfirmationCode(String confirmationCode, Reservation updatedReservation) {
+        Response response = new Response();
+        try {
+            Reservation reservation = reservationRepository.findByReservationConfirmationCode(confirmationCode)
+                    .orElseThrow(() -> new MyException("Reservation Not Found."));
+
+            if (updatedReservation.getCheckInDate() != null) {
+                reservation.setCheckInDate(updatedReservation.getCheckInDate());
+            }
+            if (updatedReservation.getCheckOutDate() != null) {
+                reservation.setCheckOutDate(updatedReservation.getCheckOutDate());
+            }
+
+            reservationRepository.save(reservation);
+
+            var reservationDAO = Utils.mapReservationEntityToReservationDAOPlusReservedRooms(reservation, true);
+
+            response.setStatusCode(200);
+            response.setMessage("Reservation updated successfully.");
+            response.setReservation(reservationDAO);
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error updating reservation: " + e.getMessage());
+        }
+
+        return response;
+    }
+
 }

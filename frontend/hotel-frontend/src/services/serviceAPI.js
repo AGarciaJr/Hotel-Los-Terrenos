@@ -259,6 +259,7 @@ export default class serviceAPI {
     }
 
     static async getReservationByConfirmationCode(reservationCode) {
+        console.log(reservationCode)
         return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`));
     }
 
@@ -278,6 +279,16 @@ export default class serviceAPI {
     static async getAllReservations() {
         return this.handleRequest(
             axios.get(`${this.BASE_URL}/reservations/all`, this.getHeader())
+        );
+    }
+
+    static async updateReservation(reservationCode, reservation) {
+        return this.handleRequest(
+            axios.put(
+                `${this.BASE_URL}/reservations/update-by-confirmation-code/${reservationCode}`,
+                reservation,
+                this.getHeader()
+            )
         );
     }
 

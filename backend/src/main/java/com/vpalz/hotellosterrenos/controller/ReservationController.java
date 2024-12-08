@@ -52,4 +52,13 @@ public class ReservationController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @PutMapping("/update-by-confirmation-code/{confirmationCode}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Response> updateReservation(
+            @PathVariable String confirmationCode,
+            @RequestBody Reservation updatedReservation) {
+        Response response = reservationService.updateReservationByConfirmationCode(confirmationCode, updatedReservation);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
 }

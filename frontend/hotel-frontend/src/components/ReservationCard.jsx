@@ -1,12 +1,16 @@
 import React from "react";
 import "./ReservationCard.css";
 
-const ReservationCard = ({ reservation, onCheckOut }) => {
+const ReservationCard = ({ reservation, onCheckOut, onEdit }) => {
     const handleCheckOutClick = () => {
         const confirmCheckOut = window.confirm("Do you wish to check out?");
         if (confirmCheckOut) {
             onCheckOut(reservation.id);
         }
+    };
+
+    const handleEditClick = () => {
+        onEdit(reservation.reservationConfirmationCode);
     };
 
     return (
@@ -17,6 +21,9 @@ const ReservationCard = ({ reservation, onCheckOut }) => {
             <p>Check-out Date: {reservation.checkOutDate}</p>
             <button className="checkout-button" onClick={handleCheckOutClick}>
                 Check Out
+            </button>
+            <button className="edit-button" onClick={handleEditClick}>
+                Edit Reservation
             </button>
         </div>
     );
