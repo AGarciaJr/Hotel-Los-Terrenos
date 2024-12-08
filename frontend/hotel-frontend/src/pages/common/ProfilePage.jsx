@@ -21,6 +21,7 @@ const ProfilePage = () => {
         phoneNumber: ''
     })
     const [originalEmail, setOriginalEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -90,6 +91,7 @@ const ProfilePage = () => {
                     }
                 }
 
+                const isEmailChanged = originalEmail !== userDetails.email;
                 const targetUserId = userId || userDetails.id;
                 if (!targetUserId) {
                     setError("No user ID available");
@@ -99,17 +101,20 @@ const ProfilePage = () => {
                 const response = await serviceAPI.updateUserDetails(targetUserId, userDetails);
                 setSuccess("User details updated successfully.");
                 setError("");
-                setTimeout(() => {
-                    setSuccess("");
-                    /*
-                    if (userDetails.email !== currentEmail) {
-                        localStorage.removeItem('token');
-                        navigate('/login');
-                    } else {
+                if (isEmailChanged) {
+                    setIsLoading(true);
+                    setTimeout(() => {
+                        localStorage.clear();
+                        navigate('/login', {
+                            state: { message: "Email has been updated. Please login with your new email." }
+                        });
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        setSuccess("");
                         navigate(`/profile/${targetUserId}`);
-                    }*/
-                }, 3000);
-                navigate(`/profile`);
+                    }, 2000);
+                }
             } catch (error) {
                 if (error.response?.data?.message.includes("_admin@") ||
                     error.response?.data?.message.includes("_clerk@")) {
@@ -224,6 +229,18 @@ const ProfilePage = () => {
                 )}
 
             </div>
+            {isLoading && (
+                <div className="loading-overlay">
+                    <div className="loading-content">
+                        <img
+                            src="/hotel-images/Hotel-Loading-Animation.gif"
+                            alt="Loading..."
+                            className="loading-gif"
+                        />
+                        <p>Redirecting to login...</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

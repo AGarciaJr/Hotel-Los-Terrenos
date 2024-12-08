@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import serviceAPI from "../../services/serviceAPI"
 import "./LoginPage.css";
@@ -7,11 +7,22 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
 
     const from = location.state?.from?.pathname || '/';
 
+    useEffect(() => {
+        if (location.state?.message) {
+            setSuccessMessage(location.state.message);
+            setTimeout(() => {
+                setSuccessMessage('');
+
+                window.history.replaceState({}, document.title);
+            }, 5000);
+        }
+    }, [location]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,6 +50,7 @@ function LoginPage() {
         <div className="auth-container">
             <h2>Login</h2>
             {error && <p className="error-message">{error}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Email: </label>
