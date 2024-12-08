@@ -20,6 +20,7 @@ const ProfilePage = () => {
         email: '',
         phoneNumber: ''
     })
+    const [originalEmail, setOriginalEmail] = useState("");
 
     const navigate = useNavigate();
 
@@ -35,6 +36,7 @@ const ProfilePage = () => {
                 const userData = response.user || response;
                 console.log("User data extracted:", userData);
 
+                setOriginalEmail(userData.email);
                 setUserDetails({
                     id: userData.id,
                     name: userData.name,
@@ -99,8 +101,15 @@ const ProfilePage = () => {
                 setError("");
                 setTimeout(() => {
                     setSuccess("");
+                    /*
+                    if (userDetails.email !== currentEmail) {
+                        localStorage.removeItem('token');
+                        navigate('/login');
+                    } else {
+                        navigate(`/profile/${targetUserId}`);
+                    }*/
                 }, 3000);
-                navigate(`/profile/${targetUserId}`);
+                navigate(`/profile`);
             } catch (error) {
                 if (error.response?.data?.message.includes("_admin@") ||
                     error.response?.data?.message.includes("_clerk@")) {
