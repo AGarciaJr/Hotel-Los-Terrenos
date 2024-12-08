@@ -17,10 +17,10 @@ public class Utils {
     private static final String ALPHANUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom secureRandom = new SecureRandom();
 
-    public static String generateConfirmationCode(int length){
+    public static String generateConfirmationCode(int length) {
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < length; i++){
+        for(int i = 0; i < length; i++) {
             int randomIndex = secureRandom.nextInt(ALPHANUMERIC_STRING.length());
             char randomChar = ALPHANUMERIC_STRING.charAt(randomIndex);
             sb.append(randomChar);
@@ -28,7 +28,7 @@ public class Utils {
         return sb.toString();
     }
 
-    public static UserDAO mapUserEntityToUserDAO(User user){
+    public static UserDAO mapUserEntityToUserDAO(User user) {
         UserDAO userDAO = new UserDAO();
 
         userDAO.setId(user.getId());
@@ -41,46 +41,18 @@ public class Utils {
     }
 
     public static User mapUserDAOToUser(UserDAO userDto) {
-       User user = new User();
+        User user = new User();
 
-       user.setId(userDto.getId());
-       user.setName(userDto.getName());
-       user.setEmail(userDto.getEmail());
-       user.setPhoneNumber(userDto.getPhoneNumber());
-       user.setRole(userDto.getRole());
+        user.setId(userDto.getId());
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setRole(userDto.getRole());
 
         return user;
-
     }
 
-    public static RoomDAO mapRoomEntityToRoomDAO(Room room){
-        RoomDAO roomDAO = new RoomDAO();
-
-        roomDAO.setId(room.getId());
-        roomDAO.setRoomType(room.getRoomType());
-        roomDAO.setRoomPrice(room.getRoomPrice());
-        roomDAO.setRoomDescription(room.getRoomDescription());
-
-        return roomDAO;
-    }
-
-    public static ReservationDAO mapReservationEntityToReservationDAO(Reservation reservation){
-        ReservationDAO reservationDAO = new ReservationDAO();
-
-        reservationDAO.setId(reservation.getId());
-        reservationDAO.setCheckInDate(reservation.getCheckInDate());
-        reservationDAO.setCheckOutDate(reservation.getCheckOutDate());
-        reservationDAO.setNumberOfAdults(reservation.getNumberOfAdults());
-        reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
-        reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
-        reservationDAO.setTotalNumberOfGuests(reservation.getTotalNumberOfGuests());
-        reservationDAO.setReservationConfirmationCode(reservation.getReservationConfirmationCode());
-        reservationDAO.setStatus(reservation.getStatus().toString());
-
-        return reservationDAO;
-    }
-
-    public static RoomDAO mapRoomEntityToRoomDAOPlusReservations(Room room){
+    public static RoomDAO mapRoomEntityToRoomDAO(Room room) {
         RoomDAO roomDAO = new RoomDAO();
 
         roomDAO.setId(room.getId());
@@ -92,7 +64,40 @@ public class Utils {
         roomDAO.setSmokingStatus(room.getSmokingStatus());
         roomDAO.setRoomDescription(room.getRoomDescription());
 
-        if(room.getReservations() != null){
+        return roomDAO;
+    }
+
+    public static ReservationDAO mapReservationEntityToReservationDAO(Reservation reservation) {
+        ReservationDAO reservationDAO = new ReservationDAO();
+
+        reservationDAO.setId(reservation.getId());
+        reservationDAO.setCheckInDate(reservation.getCheckInDate());
+        reservationDAO.setCheckOutDate(reservation.getCheckOutDate());
+        reservationDAO.setNumberOfAdults(reservation.getNumberOfAdults());
+        reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
+        reservationDAO.setTotalNumberOfGuests(reservation.getTotalNumberOfGuests());
+        reservationDAO.setReservationConfirmationCode(reservation.getReservationConfirmationCode());
+        reservationDAO.setStatus(reservation.getStatus().toString());
+        reservationDAO.setReservationCreationDate(reservation.getReservationCreationDate());
+        reservationDAO.setCancellationDate(reservation.getCancellationDate());
+        reservationDAO.setCancellationFee(reservation.getCancellationFee());
+
+        return reservationDAO;
+    }
+
+    public static RoomDAO mapRoomEntityToRoomDAOPlusReservations(Room room) {
+        RoomDAO roomDAO = new RoomDAO();
+
+        roomDAO.setId(room.getId());
+        roomDAO.setRoomNumber(room.getRoomNumber());
+        roomDAO.setRoomType(room.getRoomType());
+        roomDAO.setRoomPrice(room.getRoomPrice());
+        roomDAO.setQualityLevel(room.getQualityLevel().toString());
+        roomDAO.setBedType(room.getBedType().toString());
+        roomDAO.setSmokingStatus(room.getSmokingStatus());
+        roomDAO.setRoomDescription(room.getRoomDescription());
+
+        if(room.getReservations() != null) {
             roomDAO.setReservations(room.getReservations().stream()
                     .map(Utils::mapReservationEntityToReservationDAO)
                     .collect(Collectors.toList()));
@@ -101,7 +106,7 @@ public class Utils {
         return roomDAO;
     }
 
-    public static UserDAO mapUserEntityToUserDAOPlusUserReservationsAndRoom(User user){
+    public static UserDAO mapUserEntityToUserDAOPlusUserReservationsAndRoom(User user) {
         UserDAO userDAO = new UserDAO();
 
         userDAO.setId(user.getId());
@@ -110,7 +115,7 @@ public class Utils {
         userDAO.setPhoneNumber(user.getPhoneNumber());
         userDAO.setRole(user.getRole());
 
-        if(!user.getReservations().isEmpty()){
+        if(!user.getReservations().isEmpty()) {
             userDAO.setReservations(user.getReservations().stream()
                     .map(reservation -> mapReservationEntityToReservationDAOPlusReservedRooms(reservation, false))
                     .collect(Collectors.toList()));
@@ -122,17 +127,15 @@ public class Utils {
     public static ReservationDAO mapReservationEntityToReservationDAOPlusReservedRooms(Reservation reservation, boolean mapUser) {
         ReservationDAO reservationDAO = mapReservationEntityToReservationDAO(reservation);
 
-        if(mapUser){
+        if(mapUser) {
             reservationDAO.setUser(Utils.mapUserEntityToUserDAO(reservation.getUser()));
         }
-        if(reservation.getRoom() != null){
+        if(reservation.getRoom() != null) {
             RoomDAO roomDAO = new RoomDAO();
-
             roomDAO.setId(reservation.getRoom().getId());
             roomDAO.setRoomType(reservation.getRoom().getRoomType());
             roomDAO.setRoomPrice(reservation.getRoom().getRoomPrice());
             roomDAO.setRoomDescription(reservation.getRoom().getRoomDescription());
-
             reservationDAO.setRoom(roomDAO);
         }
         return reservationDAO;
@@ -153,6 +156,9 @@ public class Utils {
                     reservationDAO.setCheckOutDate(reservation.getCheckOutDate());
                     reservationDAO.setStatus(reservation.getStatus());
                     reservationDAO.setReservationConfirmationCode(reservation.getReservationConfirmationCode());
+                    reservationDAO.setReservationCreationDate(reservation.getReservationCreationDate());
+                    reservationDAO.setCancellationDate(reservation.getCancellationDate());
+                    reservationDAO.setCancellationFee(reservation.getCancellationFee());
                     return reservationDAO;
                 })
                 .collect(Collectors.toList());
@@ -162,15 +168,15 @@ public class Utils {
         return userDAO;
     }
 
-    public static List<UserDAO> mapUserListEntityToUserDAOList(List<User> users){
+    public static List<UserDAO> mapUserListEntityToUserDAOList(List<User> users) {
         return users.stream().map(Utils::mapUserEntityToUserDAO).collect(Collectors.toList());
     }
 
-    public static List<RoomDAO> mapRoomListEntityToRoomDAOList(List<Room> rooms){
+    public static List<RoomDAO> mapRoomListEntityToRoomDAOList(List<Room> rooms) {
         return rooms.stream().map(Utils::mapRoomEntityToRoomDAO).collect(Collectors.toList());
     }
 
-    public static List<ReservationDAO> mapReservationListEntityToReservationDAOList(List<Reservation> reservations){
+    public static List<ReservationDAO> mapReservationListEntityToReservationDAOList(List<Reservation> reservations) {
         return reservations.stream().map(Utils::mapReservationEntityToReservationDAO).collect(Collectors.toList());
     }
 
@@ -179,6 +185,7 @@ public class Utils {
         floorDAO.setId(floor.getId());
         floorDAO.setName(floor.getName());
         floorDAO.setTheme(floor.getTheme());
+        floorDAO.setNumber(floor.getNumber());
         floorDAO.setRooms(mapRoomListEntityToRoomDAOList(floor.getRooms()));
         return floorDAO;
     }

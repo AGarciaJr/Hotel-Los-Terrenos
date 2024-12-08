@@ -18,6 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Data
@@ -56,6 +60,7 @@ public class ReservationService implements IReservationService {
 
             reservationRequest.setRoom(room);
             reservationRequest.setUser(user);
+            reservationRequest.setReservationCreationDate(LocalDate.now());
 
             String reservationConfirmationCode = Utils.generateConfirmationCode(10);
             reservationRequest.setReservationConfirmationCode(reservationConfirmationCode);
@@ -77,17 +82,84 @@ public class ReservationService implements IReservationService {
         return response;
     }
 
+    @Override
+    public Response cancelReservation(Long reservationId) {
+        Response response = new Response();
+
+        try {
+            Reservation reservation = reservationRepository.findById(reservationId)
+                    .orElseThrow(() -> new MyException("Reservation Not Found"));
+
+            validateCancellationEligibility(reservation);
+            BigDecimal cancellationFee = calculateCancellationFee(reservation);
+
+            reservation.setStatus(ReservationStatus.CANCELED);
+            reservation.setCancellationDate(LocalDate.now());
+            reservation.setCancellationFee(cancellationFee);
+
+            reservationRepository.save(reservation);
+
+            response.setStatusCode(200);
+            response.setMessage(buildCancellationMessage(cancellationFee));
+            response.setReservation(Utils.mapReservationEntityToReservationDAO(reservation));
+
+        } catch (MyException e) {
+            response.setStatusCode(400);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error canceling reservation: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    private void validateCancellationEligibility(Reservation reservation) {
+        if (reservation.getStatus() == ReservationStatus.CHECKED_OUT) {
+            throw new MyException("Cannot cancel a checked-out reservation");
+        }
+
+        if (reservation.getStatus() == ReservationStatus.CANCELED) {
+            throw new MyException("Reservation is already canceled");
+        }
+
+        if (LocalDate.now().isAfter(reservation.getCheckInDate())) {
+            throw new MyException("Cannot cancel a reservation after check-in date");
+        }
+    }
+
+    private BigDecimal calculateCancellationFee(Reservation reservation) {
+        if (isWithinCancellationWindow(reservation.getReservationCreationDate())) {
+            return BigDecimal.ZERO;
+        }
+
+        return reservation.getRoom().getRoomPrice()
+                .multiply(new BigDecimal("0.8"))
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private boolean isWithinCancellationWindow(LocalDate creationDate) {
+        return ChronoUnit.DAYS.between(creationDate, LocalDate.now()) <= 2;
+    }
+
+    private String buildCancellationMessage(BigDecimal cancellationFee) {
+        if (cancellationFee.compareTo(BigDecimal.ZERO) == 0) {
+            return "Reservation cancelled successfully with no fee.";
+        }
+        return String.format("Reservation cancelled successfully. Cancellation fee: $%.2f", cancellationFee);
+    }
 
     @Override
     public Response findReservationByConfirmationCode(String confirmationCode) {
         Response response = new Response();
 
         try {
-            Reservation reservation = reservationRepository.findByReservationConfirmationCode(confirmationCode).orElseThrow(() -> new MyException("Reservation Not Found."));
+            Reservation reservation = reservationRepository.findByReservationConfirmationCode(confirmationCode)
+                    .orElseThrow(() -> new MyException("Reservation Not Found."));
             ReservationDAO reservationDAO = Utils.mapReservationEntityToReservationDAOPlusReservedRooms(reservation, true);
 
             response.setStatusCode(200);
-            response.setMessage("Successfully Saved Reservation");
+            response.setMessage("Successfully Retrieved Reservation");
             response.setReservation(reservationDAO);
 
         } catch (MyException e) {
@@ -110,7 +182,7 @@ public class ReservationService implements IReservationService {
             List<ReservationDAO> reservationDAOs = Utils.mapReservationListEntityToReservationDAOList(reservations);
 
             response.setStatusCode(200);
-            response.setMessage("Successfully Saved Reservation");
+            response.setMessage("Successfully Retrieved All Reservations");
             response.setReservationList(reservationDAOs);
 
         } catch (MyException e) {
@@ -125,36 +197,13 @@ public class ReservationService implements IReservationService {
     }
 
     @Override
-    public Response cancelReservation(Long reservationId) {
-        Response response = new Response();
-
-        try{
-            reservationRepository.findById(reservationId).orElseThrow(() -> new MyException("Reservation Not Found"));
-            reservationRepository.deleteById(reservationId);
-
-            response.setStatusCode(200);
-            response.setMessage("Successfully Saved Reservation");
-        }catch (MyException e) {
-            response.setStatusCode(404);
-            response.setMessage(e.getMessage());
-        }catch (Exception e) {
-            response.setStatusCode(500);
-            response.setMessage("Error Canceling a Reservation " + e.getMessage());
-        }
-
-        return response;
-    }
-
-    @Override
     public Response checkoutReservation(Long reservationId) {
         Response response = new Response();
 
         try {
-            // Find the reservation
             Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(() -> new MyException("Reservation Not Found"));
 
-            // Update the reservation status
             reservation.setStatus(ReservationStatus.CHECKED_OUT);
             reservationRepository.save(reservation);
 
@@ -171,30 +220,24 @@ public class ReservationService implements IReservationService {
         return response;
     }
 
-
     private boolean roomIsAvailable(Reservation reservationRequest, List<Reservation> reservations) {
         return reservations.stream()
                 .noneMatch(existingReservation ->
                         (existingReservation.getStatus().equals(ReservationStatus.BOOKED)) &&
-                        (reservationRequest.getCheckInDate().equals(existingReservation.getCheckInDate())
-                                || reservationRequest.getCheckOutDate().isBefore(existingReservation.getCheckOutDate())
-                                || (reservationRequest.getCheckInDate().isAfter(existingReservation.getCheckInDate())
-                                && reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckOutDate()))
-                                || (reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckInDate())
-
-                                && reservationRequest.getCheckOutDate().equals(existingReservation.getCheckOutDate()))
-                                || (reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckInDate())
-
-                                && reservationRequest.getCheckOutDate().isAfter(existingReservation.getCheckOutDate()))
-
-                                || (reservationRequest.getCheckInDate().equals(existingReservation.getCheckOutDate())
-                                && reservationRequest.getCheckOutDate().equals(existingReservation.getCheckInDate()))
-
-                                || (reservationRequest.getCheckInDate().equals(existingReservation.getCheckOutDate())
-                                && reservationRequest.getCheckOutDate().equals(reservationRequest.getCheckInDate()))
-
-                                || (reservationRequest.getStatus().equals(existingReservation.getStatus()))
-                        )
+                                (reservationRequest.getCheckInDate().equals(existingReservation.getCheckInDate())
+                                        || reservationRequest.getCheckOutDate().isBefore(existingReservation.getCheckOutDate())
+                                        || (reservationRequest.getCheckInDate().isAfter(existingReservation.getCheckInDate())
+                                        && reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckOutDate()))
+                                        || (reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckInDate())
+                                        && reservationRequest.getCheckOutDate().equals(existingReservation.getCheckOutDate()))
+                                        || (reservationRequest.getCheckInDate().isBefore(existingReservation.getCheckInDate())
+                                        && reservationRequest.getCheckOutDate().isAfter(existingReservation.getCheckOutDate()))
+                                        || (reservationRequest.getCheckInDate().equals(existingReservation.getCheckOutDate())
+                                        && reservationRequest.getCheckOutDate().equals(existingReservation.getCheckInDate()))
+                                        || (reservationRequest.getCheckInDate().equals(existingReservation.getCheckOutDate())
+                                        && reservationRequest.getCheckOutDate().equals(reservationRequest.getCheckInDate()))
+                                        || (reservationRequest.getStatus().equals(existingReservation.getStatus()))
+                                )
                 );
     }
 }
