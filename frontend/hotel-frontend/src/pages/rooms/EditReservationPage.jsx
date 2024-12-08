@@ -13,7 +13,6 @@ const EditReservationPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // If you have a method to get reservation by ID:
                 const codeResponse = await serviceAPI.getReservationByConfirmationCode(reservationCode);
                 setReservation(codeResponse.reservation);
             } catch (error) {
@@ -23,19 +22,36 @@ const EditReservationPage = () => {
         fetchData();
     }, [reservationCode]);
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
+        let updatedValue = value;
+
+        if (name === "numberOfAdults" || name === "numberOfChildren") {
+            updatedValue = parseInt(value, 10);
+            if (isNaN(updatedValue) || updatedValue < 0) {
+                updatedValue = 0;
+            }
+        }
+
         setReservation((prev) => ({
             ...prev,
-            [name]: value,
+            [name]: updatedValue,
         }));
     };
 
     const handleSave = async () => {
         try {
+            const updateData = {
+                checkInDate: reservation.checkInDate,
+                checkOutDate: reservation.checkOutDate,
+                numberOfAdults: reservation.numberOfAdults,
+                numberOfChildren: reservation.numberOfChildren,
+            };
 
-            const updateResponse = await serviceAPI.updateReservation(reservation.reservationConfirmationCode, reservation);
+            const updateResponse = await serviceAPI.updateReservation(
+                reservation.reservationConfirmationCode,
+                updateData
+            );
             setSuccess("Reservation updated successfully!");
             setError("");
 
@@ -81,6 +97,29 @@ const EditReservationPage = () => {
                         />
                     </div>
 
+                    <div className="form-group">
+                        <label htmlFor="numberOfAdults">Number of Adults:</label>
+                        <input
+                            type="number"
+                            id="numberOfAdults"
+                            name="numberOfAdults"
+                            min="0"
+                            value={reservation.numberOfAdults || 0}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="numberOfChildren">Number of Children:</label>
+                        <input
+                            type="number"
+                            id="numberOfChildren"
+                            name="numberOfChildren"
+                            min="0"
+                            value={reservation.numberOfChildren || 0}
+                            onChange={handleChange}
+                        />
+                    </div>
 
                     <button className="save-button" onClick={handleSave}>Save Changes</button>
                 </div>

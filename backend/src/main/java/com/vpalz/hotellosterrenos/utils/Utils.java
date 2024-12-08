@@ -72,7 +72,6 @@ public class Utils {
         reservationDAO.setCheckOutDate(reservation.getCheckOutDate());
         reservationDAO.setNumberOfAdults(reservation.getNumberOfAdults());
         reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
-        reservationDAO.setNumberOfChildren(reservation.getNumberOfChildren());
         reservationDAO.setTotalNumberOfGuests(reservation.getTotalNumberOfGuests());
         reservationDAO.setReservationConfirmationCode(reservation.getReservationConfirmationCode());
         reservationDAO.setStatus(reservation.getStatus().toString());

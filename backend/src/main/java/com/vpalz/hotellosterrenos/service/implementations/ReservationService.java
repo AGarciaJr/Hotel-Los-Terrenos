@@ -210,6 +210,8 @@ public class ReservationService implements IReservationService {
             if (updatedReservation.getCheckOutDate() != null) {
                 reservation.setCheckOutDate(updatedReservation.getCheckOutDate());
             }
+            reservation.setNumberOfAdults(updatedReservation.getNumberOfAdults());
+            reservation.setNumberOfChildren(updatedReservation.getNumberOfChildren());
 
             reservationRepository.save(reservation);
 
