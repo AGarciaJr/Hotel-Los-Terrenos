@@ -25,4 +25,15 @@ public class Response {
     private List<RoomDAO> roomList;
     private List<ReservationDAO> reservationList;
     private List<FloorDAO> floorList;
+
+    // Default constructor
+    public Response() {
+    }
+
+    // Constructor with parameters
+    public Response(String message, int statusCode) {
+        this.message = message;
+        this.statusCode = statusCode;
+    }
+
 }
