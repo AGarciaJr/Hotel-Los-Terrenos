@@ -62,7 +62,7 @@ public class UserController {
     }
 
     /**
-     * 
+     *
      * @param userId
      * @param updatedUser
      * @return
