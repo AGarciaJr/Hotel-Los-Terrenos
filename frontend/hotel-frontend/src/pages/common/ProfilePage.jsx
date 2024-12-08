@@ -97,6 +97,10 @@ const ProfilePage = () => {
                 const response = await serviceAPI.updateUserDetails(targetUserId, userDetails);
                 setSuccess("User details updated successfully.");
                 setError("");
+                setTimeout(() => {
+                    setSuccess("");
+                }, 3000);
+                navigate(`/profile/${targetUserId}`);
             } catch (error) {
                 if (error.response?.data?.message.includes("_admin@") ||
                     error.response?.data?.message.includes("_clerk@")) {
@@ -177,10 +181,10 @@ const ProfilePage = () => {
                     />
                     {errors.email && <span className="error-message">{errors.email}</span>}
                     {userDetails.email.includes('_admin@') && (
-                        <small className="email-warning">Email must include '_admin@' to preserve admin role</small>
+                        <small className="email-warning">Email must include '_admin@' </small>
                     )}
                     {userDetails.email.includes('_clerk@') && (
-                        <small className="email-warning">Email must include '_clerk@' to preserve clerk role</small>
+                        <small className="email-warning">Email must include '_clerk@' </small>
                     )}
                 </div>
                 <div className="profile-form-group">
