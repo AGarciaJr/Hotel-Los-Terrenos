@@ -14,5 +14,6 @@ public class UserDAO {
     private String email;
     private String phoneNumber;
     private String role;
+    private String password;
     private List<ReservationDAO> reservations = new ArrayList<>();
 }

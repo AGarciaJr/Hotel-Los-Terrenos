@@ -36,7 +36,7 @@ public class Utils {
         userDAO.setEmail(user.getEmail());
         userDAO.setPhoneNumber(user.getPhoneNumber());
         userDAO.setRole(user.getRole());
-
+        userDAO.setPassword(user.getPassword());
         return userDAO;
     }
 

@@ -290,5 +290,63 @@ public class UserService implements IUserService {
         return response;
     }
 
+    @Override
+    public Response getUserByPhone(String phoneNumber) {
+        Response response = new Response();
+        try {
+            User user = userRepository.findByPhoneNumber(phoneNumber)
+                    .orElseThrow(() -> new MyException("User Not Found with phone number: " + phoneNumber));
+
+            UserDAO userDAO = Utils.mapUserEntityToUserDAO(user);
+            response.setStatusCode(200);
+            response.setMessage("User found by phone number.");
+            response.setUser(userDAO);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while fetching user by phone number: " + e.getMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public Response updateUserById(String userId, UserDAO updatedUser) {
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new MyException("User Not Found"));
+
+            // Update email if provided
+            if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+                user.setEmail(updatedUser.getEmail());
+            }
+
+            // Update password if provided
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+
+            User savedUser = userRepository.save(user);
+            UserDAO userDAO = Utils.mapUserEntityToUserDAO(savedUser);
+
+            response.setStatusCode(200);
+            response.setMessage("User updated successfully.");
+            response.setUser(userDAO);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while updating user: " + e.getMessage());
+        }
+
+        return response;
+    }
+
 
 }

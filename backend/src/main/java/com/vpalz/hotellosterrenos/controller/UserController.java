@@ -66,4 +66,19 @@ public class UserController {
         Response response = userService.updateUserInfo(userId, updatedUser);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @GetMapping("/get-by-phone/{phoneNumber}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> getUserByPhone(@PathVariable("phoneNumber") String phoneNumber) {
+        Response response = userService.getUserByPhone(phoneNumber);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @PutMapping("/update/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> updateUserById(@PathVariable("userId") String userId, @RequestBody UserDAO updatedUserDetails) {
+        Response response = userService.updateUserById(userId, updatedUserDetails);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
 }

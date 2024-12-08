@@ -35,6 +35,7 @@ const App = () => {
                 <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
 
                 <Route path="/admin" element={<AdminPage />} />/
+                <Route path="/admin/resetuser" element={<ResetUserPage />} />/
 
                 <Route path="/rooms/:floorId" element={<RoomsPage />} />
             </Routes>

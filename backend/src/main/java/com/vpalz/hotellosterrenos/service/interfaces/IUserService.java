@@ -23,4 +23,8 @@ public interface IUserService {
     Response updatePassword(String userId, String newPassword);
 
     Response updateUserInfo(String userId, UserDAO userDao);
+
+    Response getUserByPhone(String phoneNumber);
+
+    Response updateUserById(String userId, UserDAO updatedUser);
 }

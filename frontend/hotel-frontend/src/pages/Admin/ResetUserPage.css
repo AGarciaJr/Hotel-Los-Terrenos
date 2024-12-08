@@ -1,40 +1,50 @@
-/* ClerkPage.css */
-
-.clerk-page {
+/* ResetUserPage.css */
+.admin-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-    padding: 20px;
+    min-height: 100vh; /* Ensure full-page height */
+    background-color: #f4f4f4; /* Optional background color */
     text-align: center;
 }
 
-.welcome-message {
-    font-size: 2rem;
+.dashboard-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
     margin-bottom: 20px;
+    color: #333;
 }
 
-.clerk-actions {
+.welcome-message {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.admin-actions {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    gap: 15px; /* Add space between buttons */
 }
 
-.clerk-button {
+.admin-button {
     background-color: #007bff;
     color: white;
-    font-size: 16px;
-    padding: 12px 24px;
-    margin: 10px 0;
     border: none;
     border-radius: 5px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    width: 200px;
+    transition: background-color 0.3s ease;
+    width: 250px; /* Ensure consistent button width */
 }
 
-.clerk-button:hover {
+.admin-button:hover {
     background-color: #0056b3;
+}
+
+.admin-button:active {
+    background-color: #00408a;
 }

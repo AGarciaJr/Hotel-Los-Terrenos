@@ -92,6 +92,20 @@ export default class serviceAPI {
         );
     }
 
+    static async getUserByPhoneNumber(phoneNumber) {
+        console.log(this.getHeader());
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/users/get-by-phone/${phoneNumber}`, this.getHeader())
+        );
+    }
+
+    static async updateUserById(userId, userDetails) {
+        return this.handleRequest(
+            axios.put(`${this.BASE_URL}/users/update/${userId}`, userDetails, this.getHeader())
+        );
+    }
+
+
     static async getAllGuests() {
         return this.handleRequest(
             axios.get(`${this.BASE_URL}/users/all`, this.getHeader())
@@ -112,6 +126,8 @@ export default class serviceAPI {
             )
         );
     }
+
+
     /**
      * Rooms
      */

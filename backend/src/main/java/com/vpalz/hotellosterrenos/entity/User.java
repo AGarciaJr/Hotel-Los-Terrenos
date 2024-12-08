@@ -96,6 +96,10 @@ public class User implements UserDetails {
      *
      * @return {@code true} if the user's account is not expired.
      */
+
+    @Override
+    public String getPassword() { return password; }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
