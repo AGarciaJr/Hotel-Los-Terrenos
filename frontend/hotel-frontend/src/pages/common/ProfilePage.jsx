@@ -109,6 +109,16 @@ const ProfilePage = () => {
         }
     };
 
+    const handleCheckIn = async (reservationId) => {
+        try {
+            const response = await serviceAPI.checkInReservation(reservationId);
+            alert(response.message || "Checked in successfully.");
+            setReservations((prev) => prev.filter((res) => res.id !== reservationId));
+        } catch (error) {
+            alert(error.message || "Failed to check in.");
+        }
+    };
+
     const handleCheckOut = async (reservationId) => {
         try {
             const response = await serviceAPI.checkOutReservation(reservationId);
@@ -210,6 +220,7 @@ const ProfilePage = () => {
                             key={reservation.id}
                             reservation={reservation}
                             onCheckOut={handleCheckOut}
+                            onCheckIn={handleCheckIn}
                             onEdit={handleEditReservation}
                         />
                     ))

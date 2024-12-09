@@ -15,4 +15,6 @@ public interface IReservationService {
     Response checkoutReservation(Long reservationId);
 
     Response updateReservationByConfirmationCode(String confirmationCode, Reservation updatedReservation);
+
+    Response checkInReservation(Long reservationId);
 }

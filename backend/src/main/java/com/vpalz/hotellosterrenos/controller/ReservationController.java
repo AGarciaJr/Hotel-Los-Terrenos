@@ -45,6 +45,13 @@ public class ReservationController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @PostMapping("/checkin/{reservationId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Response> checkInReservation(@PathVariable Long reservationId){
+        Response response = reservationService.checkInReservation(reservationId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
     @PostMapping("/checkout/{reservationId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Response> checkoutReservation(@PathVariable Long reservationId) {

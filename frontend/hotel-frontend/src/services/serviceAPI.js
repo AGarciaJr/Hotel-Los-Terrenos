@@ -263,6 +263,12 @@ export default class serviceAPI {
         return this.handleRequest(axios.get(`${this.BASE_URL}/reservations/get-by-confirmation-code/${reservationCode}`));
     }
 
+    static async checkInReservation(reservationId) {
+        return this.handleRequest(
+            axios.post(`${this.BASE_URL}/reservations/checkin/${reservationId}`, null, this.getHeader())
+        );
+    }
+
     static async checkOutReservation(reservationId) {
         return this.handleRequest(
             axios.post(`${this.BASE_URL}/reservations/checkout/${reservationId}`, null, this.getHeader())

@@ -13,7 +13,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByReservationConfirmationCode(String confirmationCode);
 
-    @Query("SELECT res FROM Reservation res WHERE res.user.id = :userId AND res.status = 'BOOKED'")
+    @Query("SELECT res FROM Reservation res WHERE res.user.id = :userId AND (res.status = 'BOOKED' OR res.status = 'CHECKED_IN')")
     List<Reservation> findActiveReservationsByUserId(Long userId);
 
 }

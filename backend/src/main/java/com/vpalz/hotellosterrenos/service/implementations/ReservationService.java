@@ -146,6 +146,30 @@ public class ReservationService implements IReservationService {
     }
 
     @Override
+    public Response checkInReservation(Long reservationId) {
+        Response response = new Response();
+
+        try {
+            Reservation reservation = reservationRepository.findById(reservationId)
+                    .orElseThrow(() -> new MyException("Reservation Not Found"));
+
+            reservation.setStatus(ReservationStatus.CHECKED_IN);
+            reservationRepository.save(reservation);
+
+            response.setStatusCode(200);
+            response.setMessage("Guest successfully checked in.");
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error checking in guest: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @Override
     public Response checkoutReservation(Long reservationId) {
         Response response = new Response();
 
