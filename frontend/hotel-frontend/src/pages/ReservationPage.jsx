@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import serviceAPI from '../services/serviceAPI';
 import './ReservationPage.css';
 
+
 const ReservationPage = () => {
     const navigate = useNavigate();
     const { roomId } = useParams();
@@ -15,6 +16,7 @@ const ReservationPage = () => {
     const [confirmationCode, setConfirmationCode] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     useEffect(() => {
         const fetchRoomDetails = async () => {
@@ -30,6 +32,13 @@ const ReservationPage = () => {
         };
         fetchRoomDetails();
     }, [roomId]);
+
+    const calculateTotalAmount = (pricePerNight, checkIn, checkOut) => {
+        const start = new Date(checkIn);
+        const end = new Date(checkOut);
+        const numberOfNights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        return pricePerNight * numberOfNights;
+    };
 
     const handleConfirmReservation = async () => {
         if (numAdults < 1 || numAdults > 4 || numChildren < 0) {
@@ -56,8 +65,13 @@ const ReservationPage = () => {
         try {
             const response = await serviceAPI.reserveRoom(roomId, userId, reservation);
             if (response.statusCode === 200) {
-                setConfirmationCode(response.reservationConfirmationCode);
-                setTimeout(() => navigate(`/`), 5000); // Redirect after 5 seconds
+                setConfirmationCode(response.reservationConfirmationCode); //
+                //setTimeout(() => navigate(`/`), 5000); // Redirect after 5 seconds
+                // This shows payment modal instead of setting confirmation directly
+                setShowPaymentModal(true);
+
+                // TODO: Store the reservation ID from response for payment processing
+                // const reservationId = response.reservationId;
             } else {
                 setErrorMessage('Reservation failed. Please try again.');
             }
@@ -67,6 +81,20 @@ const ReservationPage = () => {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    // Handler for proceeding to payment
+    const handleProceedToPayment = () => {
+        // TODO: Stripe integration personnel will implement this
+        // This function should:
+        // 1. Call the backend to create a Stripe session
+        // 2. Redirect to Stripe checkout page
+        console.log('Proceeding to payment...');
+    };
+
+    const handlePaymentModalClose = () => {
+        setShowPaymentModal(false);
+        // TODO: Stripe integration personnel should handle any cleanup needed
     };
 
     if (!roomDetails) return <p>Loading room details...</p>;
@@ -121,6 +149,48 @@ const ReservationPage = () => {
                 {isSubmitting ? 'Processing...' : 'Confirm Reservation'}
             </button>
 
+            {/* Payment Modal */}
+            {showPaymentModal && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <div className="modal-header">
+                            <h2>Complete Your Payment</h2>
+                            <button
+                                className="close-button"
+                                onClick={handlePaymentModalClose}
+                                aria-label="Close"
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className="modal-content">
+                            <div className="amount-container">
+                                <span className="amount-label">Total Amount</span>
+                                <span className="amount-value">
+                        ${calculateTotalAmount(roomDetails.roomPrice, checkInDate, checkOutDate)}
+                    </span>
+                            </div>
+                            <p className="redirect-text">
+                                You will be redirected to complete your payment securely.
+                            </p>
+                        </div>
+                        <div className="modal-buttons">
+                            <button
+                                className="cancel-button"
+                                onClick={handlePaymentModalClose}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="proceed-button"
+                                onClick={handleProceedToPayment}
+                            >
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {confirmationCode && <p>Your reservation is confirmed! Confirmation code: {confirmationCode}</p>}
         </div>
     );

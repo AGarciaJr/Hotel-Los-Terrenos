@@ -61,7 +61,13 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @PutMapping("/update-user-info/{userId}")// Only allow users to update their own info or admins
+    /**
+     *
+     * @param userId
+     * @param updatedUser
+     * @return
+     */
+    @PutMapping("/update-user-info/{userId}")
     public ResponseEntity<Response> updateUserInfo(@PathVariable("userId") String userId, @RequestBody UserDAO updatedUser) {
         Response response = userService.updateUserInfo(userId, updatedUser);
         return ResponseEntity.status(response.getStatusCode()).body(response);

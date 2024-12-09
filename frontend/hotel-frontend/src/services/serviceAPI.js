@@ -112,6 +112,12 @@ export default class serviceAPI {
         );
     }
 
+    /**
+     *
+     * @param userId
+     * @param userDetails
+     * @returns {Promise<*|undefined>}
+     */
     static async updateUserDetails(userId, userDetails) {
         if (!userId) throw new Error("User ID is required for updating user details.");
 
