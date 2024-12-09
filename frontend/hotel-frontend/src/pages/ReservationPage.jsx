@@ -161,12 +161,8 @@ const ReservationPage = () => {
                 {isSubmitting ? 'Processing...' : 'Confirm Reservation'}
             </button>
 
-            {/* Add Cancel Reservation Button */}
-            {confirmationCode && ( // Only show the cancel button after reservation is confirmed
-                <>
-                    <p>Your reservation is confirmed! Confirmation code: {confirmationCode}</p>
-                    <button onClick={handleCancelReservation}>Cancel Reservation</button> {/* Cancel button */}
-                </>
+            {confirmationCode && (
+                <p>Your reservation is confirmed! Confirmation code: {confirmationCode}</p>
             )}
 
             {/* Payment Modal */}
