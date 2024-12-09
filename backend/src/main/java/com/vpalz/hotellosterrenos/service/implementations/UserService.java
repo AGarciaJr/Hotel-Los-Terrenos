@@ -9,6 +9,7 @@ import com.vpalz.hotellosterrenos.entity.User;
 import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.UserRepository;
+import com.vpalz.hotellosterrenos.service.interfaces.IEmailService;
 import com.vpalz.hotellosterrenos.service.interfaces.IUserService;
 import com.vpalz.hotellosterrenos.utils.JWTUtils;
 import com.vpalz.hotellosterrenos.utils.Utils;
@@ -39,6 +40,9 @@ public class UserService implements IUserService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private IEmailService emailService;
+
     @Override
     public Response register(User user) {
         Response response = new Response();
@@ -53,6 +57,9 @@ public class UserService implements IUserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
             UserDAO userDAO = Utils.mapUserEntityToUserDAO(savedUser);
+
+            emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+
             response.setStatusCode(200);
             response.setUser(userDAO);
             response.setMessage("User registered successfully.");
@@ -151,8 +158,13 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+            String userEmail = user.getEmail();
+            String userName = user.getName();
             userRepository.deleteById(Long.valueOf(userId));
+
+            emailService.sendAccountDeletionEmail(userEmail, userName);
+
             response.setStatusCode(200);
             response.setMessage("Successfully deleted user.");
 
@@ -232,6 +244,8 @@ public class UserService implements IUserService {
 
             // Save the updated user
             userRepository.save(user);
+
+            emailService.sendPasswordChangeEmail(user.getEmail(), user.getName());
 
             // Set success message
             response.setStatusCode(200);
