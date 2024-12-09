@@ -97,4 +97,27 @@ public class EmailService implements IEmailService {
                 variables
         );
     }
+
+    @Override
+    public void sendEmailChangeNotification(String oldEmail, String newEmail, String userName) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", userName);
+        variables.put("oldEmail", oldEmail);
+        variables.put("newEmail", newEmail);
+
+        // Send to both old and new email addresses
+        sendHtmlEmail(
+                oldEmail,
+                "Email Address Change Notification - Hotel Los Terrenos",
+                "emails/email-change",
+                variables
+        );
+
+        sendHtmlEmail(
+                newEmail,
+                "Email Address Change Confirmation - Hotel Los Terrenos",
+                "emails/email-change",
+                variables
+        );
+    }
 }

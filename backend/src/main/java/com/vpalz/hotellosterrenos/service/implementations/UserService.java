@@ -272,17 +272,21 @@ public class UserService implements IUserService {
             String currentEmail = user.getEmail();
             String newEmail = updatedUser.getEmail();
 
-            if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
-                response.setStatusCode(400);
-                response.setMessage("Cannot remove _admin@ from email to maintain admin role");
-                return response;
+            if (!currentEmail.equals(newEmail)) {
+                if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
+                    response.setStatusCode(400);
+                    response.setMessage("Cannot remove _admin@ from email to maintain admin role");
+                    return response;
+                }
+
+                if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
+                    response.setStatusCode(400);
+                    response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
+                    return response;
+                }
+                emailService.sendEmailChangeNotification(currentEmail, newEmail, user.getName());
             }
 
-            if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
-                response.setStatusCode(400);
-                response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
-                return response;
-            }
 
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());

@@ -98,24 +98,25 @@ const ProfilePage = () => {
                     return;
                 }
 
+                setIsLoading(true);
                 const response = await serviceAPI.updateUserDetails(targetUserId, userDetails);
-                setSuccess("User details updated successfully.");
+                setSuccess(response.message);
                 setError("");
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
                 if (isEmailChanged) {
-                    setIsLoading(true);
-                    setTimeout(() => {
-                        localStorage.clear();
-                        navigate('/login', {
-                            state: { message: "Email has been updated. Please login with your new email." }
-                        });
-                    }, 2000);
+                    localStorage.clear();
+                    navigate('/login', {
+                        state: { message: "Email has been updated. Please login with your new email." }
+                    });
                 } else {
-                    setTimeout(() => {
-                        setSuccess("");
-                        navigate(`/profile/${targetUserId}`);
-                    }, 2000);
+                    setIsLoading(false);
+                    setSuccess("");
+                    navigate(`/profile/${targetUserId}`);
                 }
             } catch (error) {
+                setIsLoading(false);
                 if (error.response?.data?.message.includes("_admin@") ||
                     error.response?.data?.message.includes("_clerk@")) {
                     setError(error.response.data.message);

@@ -9,6 +9,7 @@ function RegisterPage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isClerk, setIsClerk] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function checkAuth() {
@@ -64,14 +65,13 @@ function RegisterPage() {
             return;
         }
 
-        
+        setIsLoading(true);
         const role = getRoleFromEmail(formData.email);
 
         try {
             const response = await serviceAPI.registerUser({ ...formData, role });
-            
+
             if (response.statusCode === 200) {
-                
                 setFormData({
                     name: '',
                     email: '',
@@ -87,11 +87,27 @@ function RegisterPage() {
         } catch (error) {
             setErrorMessage(error.response?.data?.message || error.message);
             setTimeout(() => setErrorMessage(''), 5000);
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    const LoadingOverlay = () => (
+        <div className="loading-overlay">
+            <div className="loading-content">
+                <img
+                    src="/hotel-images/Hotel-Loading-Animation.gif"
+                    alt="Loading..."
+                    className="loading-gif"
+                />
+                <p>Processing your request...</p>
+            </div>
+        </div>
+    );
+
     return (
         <div className="auth-container">
+            {isLoading && <LoadingOverlay />}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             {successMessage && <p className="success-message">{successMessage}</p>}
             { !isAuthenticated && <h2>Sign Up</h2>}

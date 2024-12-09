@@ -40,4 +40,12 @@ public interface IEmailService {
      * @param userName user's name
      */
     void sendAccountDeletionEmail(String userEmail, String userName);
+
+    /**
+     *
+     * @param oldEmail
+     * @param newEmail
+     * @param userName
+     */
+    void sendEmailChangeNotification(String oldEmail, String newEmail, String userName);
 }
