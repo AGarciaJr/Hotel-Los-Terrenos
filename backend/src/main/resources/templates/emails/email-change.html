@@ -1,6 +1,6 @@
-<!-- email-change.html in src/main/resources/templates/emails/ -->
+<!-- email-change.html -->
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
         .container {
@@ -39,11 +39,11 @@
         <h1>Email Address Updated</h1>
     </div>
     <div class="content">
-        <p>Dear ${name},</p>
+        <p>Dear <span th:text="${name}">User</span>,</p>
         <p>Your email address has been successfully updated.</p>
         <div class="alert">
-            <p><strong>Previous email:</strong> ${oldEmail}</p>
-            <p><strong>New email:</strong> ${newEmail}</p>
+            <p><strong>Previous email:</strong> <span th:text="${oldEmail}">old@email.com</span></p>
+            <p><strong>New email:</strong> <span th:text="${newEmail}">new@email.com</span></p>
         </div>
         <p>If you did not make this change, please contact us immediately.</p>
         <p>Best regards,<br/>Hotel Los Terrenos Team</p>

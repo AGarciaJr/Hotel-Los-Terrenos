@@ -1,6 +1,5 @@
-<!-- welcome-email.html -->
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
         .container {
@@ -31,7 +30,7 @@
         <h1>Welcome to Hotel Los Terrenos</h1>
     </div>
     <div class="content">
-        <p>Dear ${name},</p>
+        <p>Dear <span th:text="${name}">User</span>,</p>
         <p>Welcome to Hotel Los Terrenos! Your account has been successfully created.</p>
         <p>You can now:</p>
         <ul>

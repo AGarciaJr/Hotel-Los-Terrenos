@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
         .container {
@@ -30,7 +30,7 @@
         <h1>Account Deleted</h1>
     </div>
     <div class="content">
-        <p>Dear ${name},</p>
+        <p>Dear <span th:text="${name}">User</span>,</p>
         <p>Your account has been successfully deleted from our system.</p>
         <p>We're sorry to see you go. If you wish to use our services again in the future, you'll need to create a new account.</p>
         <p>Best regards,<br/>Hotel Los Terrenos Team</p>

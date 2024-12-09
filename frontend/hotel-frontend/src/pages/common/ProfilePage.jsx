@@ -102,7 +102,7 @@ const ProfilePage = () => {
                 const response = await serviceAPI.updateUserDetails(targetUserId, userDetails);
                 setSuccess(response.message);
                 setError("");
-                
+
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
                 if (isEmailChanged) {
