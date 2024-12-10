@@ -22,21 +22,31 @@ const ReservationCard = ({ reservation, onCheckIn, onCheckOut, onEdit }) => {
         onEdit(reservation.reservationConfirmationCode);
     };
 
+    const checkInDate = new Date(reservation.checkInDate);
+    const checkOutDate = new Date(reservation.checkOutDate);
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+    checkInDate.setHours(0, 0, 0, 0);
+    checkOutDate.setHours(0, 0, 0, 0);
+
+    const isTodayBetween = today >= checkInDate && today <= checkOutDate;
+
     return (
         <div className="reservation-card">
             <h3>Reservation Details</h3>
-            <p>Confirmation Code: {reservation.reservationConfirmationCode}</p>
-            <p>Check-in Date: {reservation.checkInDate}</p>
-            <p>Check-out Date: {reservation.checkOutDate}</p>
-            <p>Status: {reservation.status}</p>
+            <p><strong>Confirmation Code:</strong> {reservation.reservationConfirmationCode}</p>
+            <p><strong>Check-in Date:</strong> {new Date(reservation.checkInDate).toLocaleDateString()}</p>
+            <p><strong>Check-out Date:</strong> {new Date(reservation.checkOutDate).toLocaleDateString()}</p>
+            <p><strong>Status:</strong> {reservation.status}</p>
 
-            {reservation.status === 'BOOKED' && (
+            {isTodayBetween && reservation.status === 'BOOKED' && (
                 <button className="checkin-button" onClick={handleCheckInClick}>
                     Check In
                 </button>
             )}
 
-            {reservation.status === 'CHECKED_IN' && (
+            {isTodayBetween && reservation.status === 'CHECKED_IN' && (
                 <button className="checkout-button" onClick={handleCheckOutClick}>
                     Check Out
                 </button>
