@@ -1,13 +1,7 @@
 package com.vpalz.hotellosterrenos.utils;
 
-import com.vpalz.hotellosterrenos.dao.FloorDAO;
-import com.vpalz.hotellosterrenos.dao.ReservationDAO;
-import com.vpalz.hotellosterrenos.dao.RoomDAO;
-import com.vpalz.hotellosterrenos.dao.UserDAO;
-import com.vpalz.hotellosterrenos.entity.Floor;
-import com.vpalz.hotellosterrenos.entity.Reservation;
-import com.vpalz.hotellosterrenos.entity.Room;
-import com.vpalz.hotellosterrenos.entity.User;
+import com.vpalz.hotellosterrenos.dao.*;
+import com.vpalz.hotellosterrenos.entity.*;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -36,6 +30,10 @@ public class Utils {
         userDAO.setEmail(user.getEmail());
         userDAO.setPhoneNumber(user.getPhoneNumber());
         userDAO.setRole(user.getRole());
+
+        if (user.getCorporation() != null) {
+            userDAO.setCorporation(mapCorporationEntityToCorporationDAO(user.getCorporation()));
+        }
 
         return userDAO;
     }
@@ -186,6 +184,19 @@ public class Utils {
     public static List<FloorDAO> mapFloorListEntityToFloorDAOList(List<Floor> floors) {
         return floors.stream()
                 .map(Utils::mapFloorEntityToFloorDAO)
+                .collect(Collectors.toList());
+    }
+
+    public static CorporationDAO mapCorporationEntityToCorporationDAO(Corporation corporation) {
+        CorporationDAO corporationDAO = new CorporationDAO();
+        corporationDAO.setId(corporation.getId());
+        corporationDAO.setName(corporation.getName());
+        return corporationDAO;
+    }
+
+    public static List<CorporationDAO> mapCorporationListEntityToCorporationDAOList(List<Corporation> corporations) {
+        return corporations.stream()
+                .map(Utils::mapCorporationEntityToCorporationDAO)
                 .collect(Collectors.toList());
     }
 }

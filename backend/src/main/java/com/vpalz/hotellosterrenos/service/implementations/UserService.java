@@ -4,9 +4,11 @@ import com.vpalz.hotellosterrenos.dao.LoginRequest;
 import com.vpalz.hotellosterrenos.dao.ReservationDAO;
 import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.UserDAO;
+import com.vpalz.hotellosterrenos.entity.Corporation;
 import com.vpalz.hotellosterrenos.entity.Reservation;
 import com.vpalz.hotellosterrenos.entity.User;
 import com.vpalz.hotellosterrenos.exception.MyException;
+import com.vpalz.hotellosterrenos.repo.CorporationRepository;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.UserRepository;
 import com.vpalz.hotellosterrenos.service.interfaces.IEmailService;
@@ -43,37 +45,55 @@ public class UserService implements IUserService {
     @Autowired
     private IEmailService emailService;
 
+    @Autowired
+    private CorporationRepository corporationRepository;
+
     @Override
     public Response register(User user) {
         Response response = new Response();
-        try{
-            if(user.getRole() == null || user.getRole().isEmpty()){
+        try {
+            if(user.getRole() == null || user.getRole().isEmpty()) {
                 user.setRole("USER");
             }
-            if(userRepository.existsByEmail(user.getEmail())){
+            if(userRepository.existsByEmail(user.getEmail())) {
                 throw new MyException("This email has been registered previously.");
             }
 
+            if(user.getCorporation() != null && user.getCorporation().getId() != null) {
+                Corporation corporation = corporationRepository.findById(user.getCorporation().getId())
+                        .orElseThrow(() -> new MyException("Corporation not found"));
+                user.setCorporation(corporation);
+            }
+
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+
             User savedUser = userRepository.save(user);
+
             UserDAO userDAO = Utils.mapUserEntityToUserDAO(savedUser);
 
-            emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+            if(savedUser.getCorporation() != null) {
+                emailService.sendCorporateWelcomeEmail(
+                        savedUser.getEmail(),
+                        savedUser.getName(),
+                        savedUser.getCorporation().getId()
+                );
+            } else {
+                emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getName());
+            }
 
+            // 7. Set response
             response.setStatusCode(200);
             response.setUser(userDAO);
             response.setMessage("User registered successfully.");
-        }catch (MyException e){
+        } catch (MyException e) {
             response.setStatusCode(400);
             response.setMessage(e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error Occurred During User Registration" + e.getMessage());
         }
         return response;
     }
-
     @Override
     public Response login(LoginRequest loginRequest) {
         Response response = new Response();
@@ -310,6 +330,62 @@ public class UserService implements IUserService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("Error occurred while updating user information: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @Override
+    public Response setCorporateId(String userId, String corporationId) {
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new MyException("User Not Found"));
+
+            Corporation corporation = corporationRepository.findById(corporationId)
+                    .orElseThrow(() -> new MyException("Corporation Not Found"));
+
+            user.setCorporation(corporation);
+            User updatedUser = userRepository.save(user);
+            UserDAO userDAO = Utils.mapUserEntityToUserDAO(updatedUser);
+
+            response.setStatusCode(200);
+            response.setMessage("Corporation set successfully");
+            response.setUser(userDAO);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while setting corporation: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @Override
+    public Response getUsersByCorporateId(String corporationId) {
+        Response response = new Response();
+
+        try {
+            Corporation corporation = corporationRepository.findById(corporationId)
+                    .orElseThrow(() -> new MyException("Corporation Not Found"));
+
+            List<User> users = userRepository.findByCorporation(corporation);
+            List<UserDAO> userDAOs = Utils.mapUserListEntityToUserDAOList(users);
+
+            response.setStatusCode(200);
+            response.setMessage("Successfully retrieved users for corporation: " + corporation.getName());
+            response.setUserList(userDAOs);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while retrieving corporate users: " + e.getMessage());
         }
 
         return response;

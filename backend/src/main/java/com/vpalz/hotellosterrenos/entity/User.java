@@ -71,6 +71,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "corporation_id")
+    private Corporation corporation;
+
     /**
      * Returns the authorities granted to the user based on their role.
      *

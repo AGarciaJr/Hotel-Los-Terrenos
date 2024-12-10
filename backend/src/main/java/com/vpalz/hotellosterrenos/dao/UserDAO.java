@@ -15,4 +15,5 @@ public class UserDAO {
     private String phoneNumber;
     private String role;
     private List<ReservationDAO> reservations = new ArrayList<>();
+    private CorporationDAO corporation;
 }
