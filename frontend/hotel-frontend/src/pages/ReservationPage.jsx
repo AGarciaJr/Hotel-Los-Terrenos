@@ -17,6 +17,9 @@ const ReservationPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userId, setUserId] = useState(null);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [isCorporateUser, setIsCorporateUser] = useState(false);
+    const [corporationName, setCorporationName] = useState('');
+    const [showCorporateModal, setShowCorporateModal] = useState(false);
 
     useEffect(() => {
         const fetchRoomDetails = async () => {
@@ -26,6 +29,11 @@ const ReservationPage = () => {
 
                 const userProfile = await serviceAPI.getUserProfile();
                 setUserId(userProfile.user.id);
+                const isCorporateUser = userProfile.user.corporation != null;
+                setIsCorporateUser(isCorporateUser);
+                if (isCorporateUser) {
+                    setCorporationName(userProfile.user.corporation.name);
+                }
             } catch (error) {
                 setErrorMessage('Error fetching room details or user profile');
             }
@@ -68,7 +76,13 @@ const ReservationPage = () => {
                 setConfirmationCode(response.reservationConfirmationCode); //
                 //setTimeout(() => navigate(`/`), 5000); // Redirect after 5 seconds
                 // This shows payment modal instead of setting confirmation directly
-                setShowPaymentModal(true);
+                if (isCorporateUser) {
+                    // Show corporate confirmation modal instead of payment modal
+                    setShowCorporateModal(true);
+                    setConfirmationCode(response.reservationConfirmationCode);
+                } else {
+                    setShowPaymentModal(true);
+                }
 
                 // TODO: Store the reservation ID from response for payment processing
                 // const reservationId = response.reservationId;
@@ -149,11 +163,44 @@ const ReservationPage = () => {
                 {isSubmitting ? 'Processing...' : 'Confirm Reservation'}
             </button>
 
+            {showCorporateModal && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <div className="modal-header">
+                            <h2>Reservation Confirmed</h2>
+                        </div>
+                        <div className="modal-content">
+                            <div className="confirmation-container">
+                                <p className="success-message">Your reservation has been confirmed!</p>
+                                <p className="corporate-message">
+                                    Payment has been processed through your corporate account:
+                                    <br/>
+                                    <strong>{corporationName}</strong>
+                                </p>
+                                <p className="confirmation-code">
+                                    Confirmation Code: <strong>{confirmationCode}</strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div className="modal-buttons">
+                            <button
+                                className="proceed-button"
+                                onClick={() => {
+                                    setShowCorporateModal(false);
+                                    navigate('/');
+                                }}
+                            >
+                                Done
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Payment Modal */}
             {showPaymentModal && (
                 <div className="modal-overlay">
                     <div className="modal">
-                        <div className="modal-header">
+                    <div className="modal-header">
                             <h2>Complete Your Payment</h2>
                             <button
                                 className="close-button"

@@ -271,5 +271,9 @@ export default class serviceAPI {
         );
     }
 
-
+    static async getCorporationById(corporationId) {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/corporations/${corporationId}`, this.getHeader())
+        );
+    }
 }
