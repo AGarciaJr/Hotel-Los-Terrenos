@@ -359,7 +359,6 @@ public class UserService implements IUserService {
 
     @Override
     public Response updateUserById(String userId, UserDAO updatedUser) {
-    public Response setCorporateId(String userId, String corporationId) {
         Response response = new Response();
 
         try {
@@ -381,15 +380,6 @@ public class UserService implements IUserService {
 
             response.setStatusCode(200);
             response.setMessage("User updated successfully.");
-            Corporation corporation = corporationRepository.findById(corporationId)
-                    .orElseThrow(() -> new MyException("Corporation Not Found"));
-
-            user.setCorporation(corporation);
-            User updatedUser = userRepository.save(user);
-            UserDAO userDAO = Utils.mapUserEntityToUserDAO(updatedUser);
-
-            response.setStatusCode(200);
-            response.setMessage("Corporation set successfully");
             response.setUser(userDAO);
 
         } catch (MyException e) {
@@ -397,7 +387,7 @@ public class UserService implements IUserService {
             response.setMessage(e.getMessage());
         } catch (Exception e) {
             response.setStatusCode(500);
-            response.setMessage("Error occurred while setting corporation: " + e.getMessage());
+            response.setMessage("Error occurred while updating user: " + e.getMessage());
         }
 
         return response;
@@ -429,5 +419,34 @@ public class UserService implements IUserService {
         return response;
     }
 
+    @Override
+    public Response setCorporateId(String userId, String corporationId) {
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new MyException("User Not Found"));
+
+            Corporation corporation = corporationRepository.findById(corporationId)
+                    .orElseThrow(() -> new MyException("Corporation Not Found"));
+
+            user.setCorporation(corporation);
+            User updatedUser = userRepository.save(user);
+            UserDAO userDAO = Utils.mapUserEntityToUserDAO(updatedUser);
+
+            response.setStatusCode(200);
+            response.setMessage("Corporation set successfully");
+            response.setUser(userDAO);
+
+        } catch (MyException e) {
+            response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("Error occurred while setting corporation: " + e.getMessage());
+        }
+
+        return response;
+    }
 
 }
