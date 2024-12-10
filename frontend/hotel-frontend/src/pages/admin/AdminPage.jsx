@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import serviceAPI from "../../services/serviceAPI";
 import "./AdminPage.css";
+import AddCorporationModal from "./AddCorporationModal";
 
 const AdminPage = () => {
     const [adminName, setAdminName] = useState('');
     const [loading, setLoading] = useState(true); // Loading state for fetching admin info
+    const [showAddCorporationModal, setShowAddCorporationModal] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +33,7 @@ const AdminPage = () => {
         <div className="admin-page">
             <h1 className="dashboard-heading">Admin Dashboard</h1>
             <h2 className="welcome-message">
-                {loading ? 'Loading...' : `Welcome, ${adminName}`} {/* Conditional rendering */}
+                {loading ? 'Loading...' : `Welcome, ${adminName}`}
             </h2>
             <div className="admin-actions">
                 <button className="admin-button" onClick={() => navigate('/register')}>
@@ -40,7 +42,16 @@ const AdminPage = () => {
                 <button className="admin-button" onClick={() => navigate('/admin/update-password')}>
                     Update User Password
                 </button>
+                <button className="admin-button" onClick={() => setShowAddCorporationModal(true)}>
+                    Add Corporation
+                </button>
             </div>
+
+            {showAddCorporationModal && (
+                <AddCorporationModal
+                    onClose={() => setShowAddCorporationModal(false)}
+                />
+            )}
         </div>
     );
 };

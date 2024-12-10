@@ -170,7 +170,7 @@ function RegisterPage() {
                     <input type="password" name="password" value={formData.password} onChange={handleInputChange} required />
                 </div>
 
-                {showCorporateInput && (
+                {!isAdmin && showCorporateInput && (
                     <div className="form-group">
                         <label>Corporate ID:</label>
                         <input
@@ -193,12 +193,12 @@ function RegisterPage() {
                 Already have an account? <a href="/login">Login</a>
             </p>
             <p className="corporate-link">
-                <button
+                {!isAdmin && <button
                     className="corporate-toggle"
                     onClick={() => setShowCorporateInput(!showCorporateInput)}
                 >
                     {showCorporateInput ? 'Hide Corporate Options' : 'Click here if Corporate User'}
-                </button>
+                </button>}
             </p>
         </div>
     );
