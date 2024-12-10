@@ -14,6 +14,20 @@ import AdminPage from "./pages/Admin/AdminPage";
 import RoomsPage from "./pages/rooms/RoomsPage";
 import EditReservationPage from "./pages/rooms/EditReservationPage";
 import ClerkReservationPage from "./pages/clerk/ClerkReservationPage";
+import VacationPage from "./VacationReservation/VacationPage";
+import ZhanGolfReservationPage from "./VacationReservation/ZhanGolfReservationPage";
+import RanchPage from "./VacationReservation/RanchPage";
+import HorsebackRidingPage from "./VacationReservation/HorsebackRidingPage";
+import CheckoutForm from "./stripe/CheckoutForm";
+import RefundPage from "./stripe/RefundPage";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import GunshopPage from "./VacationReservation/GunshopPage";
+import MedicineShopPage from "./VacationReservation/MedicineShopPage";
+import ChineseRestaurantPage from "./VacationReservation/ChineseRestaurantPage";
+import ClubPage from "./VacationReservation/ClubPage";
+import CasinoPage from "./VacationReservation/CasinoPage";
+
 
 const App = () => {
     return (
@@ -42,6 +56,31 @@ const App = () => {
                 <Route path="/admin/resetuser" element={<ResetUserPage />} />/
 
                 <Route path="/rooms/:floorId" element={<RoomsPage />} />
+
+                {/* Vacation Pages */}
+                <Route path="/vacations" element={<VacationPage />} />
+                <Route path="/vacations/zhan-golf" element={<ZhanGolfReservationPage />} />
+                <Route path="/vacations/alejandro-ranch" element={<RanchPage />} />
+                <Route path="/vacations/ranch/horseback-riding" element={<HorsebackRidingPage />} />
+                <Route path="/vacations/ranch/gunshop" element={<GunshopPage />} />
+                <Route path="/vacations/ranch/medicine-shop" element={<MedicineShopPage />} />
+                <Route
+                    path="/vacations/chinese-restaurant"
+                    element={<ChineseRestaurantPage />}
+                />
+                <Route path="/vacations/casino" element={<CasinoPage />} />
+                <Route path="/vacations/club" element={<ClubPage />} />
+                {/* Payment and Refund Pages */}
+                <Route
+                    path="/checkout"
+                    element={
+                        <Elements stripe={stripePromise}>
+                            <CheckoutForm />
+                        </Elements>
+                    }
+                />
+                <Route path="/refund" element={<RefundPage />} />
+
             </Routes>
         </Router>
     );
