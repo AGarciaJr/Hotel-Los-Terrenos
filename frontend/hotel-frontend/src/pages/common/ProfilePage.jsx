@@ -132,8 +132,11 @@ const ProfilePage = () => {
         try {
             const response = await serviceAPI.checkInReservation(reservationId);
             alert(response.message || "Checked in successfully.");
-            setReservations((prev) => prev.filter((res) => res.id !== reservationId));
-        } catch (error) {
+            setReservations((prev) =>
+                prev.map((res) =>
+                    res.id === reservationId ? { ...res, status: 'CHECKED_IN' } : res
+                )
+            );        } catch (error) {
             alert(error.message || "Failed to check in.");
         }
     };
