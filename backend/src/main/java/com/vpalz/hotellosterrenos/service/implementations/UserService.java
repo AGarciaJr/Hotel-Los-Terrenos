@@ -9,6 +9,7 @@ import com.vpalz.hotellosterrenos.entity.User;
 import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.UserRepository;
+import com.vpalz.hotellosterrenos.service.interfaces.IEmailService;
 import com.vpalz.hotellosterrenos.service.interfaces.IUserService;
 import com.vpalz.hotellosterrenos.utils.JWTUtils;
 import com.vpalz.hotellosterrenos.utils.Utils;
@@ -39,6 +40,9 @@ public class UserService implements IUserService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private IEmailService emailService;
+
     @Override
     public Response register(User user) {
         Response response = new Response();
@@ -53,6 +57,9 @@ public class UserService implements IUserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
             UserDAO userDAO = Utils.mapUserEntityToUserDAO(savedUser);
+
+            emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+
             response.setStatusCode(200);
             response.setUser(userDAO);
             response.setMessage("User registered successfully.");
@@ -151,8 +158,16 @@ public class UserService implements IUserService {
         Response response = new Response();
 
         try {
-            userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
+            String userEmail = user.getEmail();
+            String userName = user.getName();
             userRepository.deleteById(Long.valueOf(userId));
+
+
+            // line of code for sending emails, feel free to implement if this is your usecase
+            // all that is left after uncommenting this is front end loading screen if no other bugs
+            //emailService.sendAccountDeletionEmail(userEmail, userName);
+
             response.setStatusCode(200);
             response.setMessage("Successfully deleted user.");
 
@@ -221,19 +236,23 @@ public class UserService implements IUserService {
     public Response updatePassword(String userId, String newPassword) {
         Response response = new Response();
         try {
-            // Retrieve the user by userId
+
             User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
 
-            // Encrypt the new password
+
             String encodedPassword = passwordEncoder.encode(newPassword);
 
-            // Update the user's password
+
             user.setPassword(encodedPassword);
 
-            // Save the updated user
+
             userRepository.save(user);
 
-            // Set success message
+            // line of code for sending emails, feel free to implement if this is your usecase
+            // all that is left after uncommenting this is front end loading screen if no other bugs
+            //emailService.sendPasswordChangeEmail(user.getEmail(), user.getName());
+
+
             response.setStatusCode(200);
             response.setMessage("Password updated successfully.");
 
@@ -258,17 +277,21 @@ public class UserService implements IUserService {
             String currentEmail = user.getEmail();
             String newEmail = updatedUser.getEmail();
 
-            if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
-                response.setStatusCode(400);
-                response.setMessage("Cannot remove _admin@ from email to maintain admin role");
-                return response;
+            if (!currentEmail.equals(newEmail)) {
+                if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
+                    response.setStatusCode(400);
+                    response.setMessage("Cannot remove _admin@ from email to maintain admin role");
+                    return response;
+                }
+
+                if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
+                    response.setStatusCode(400);
+                    response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
+                    return response;
+                }
+                emailService.sendEmailChangeNotification(currentEmail, newEmail, user.getName());
             }
 
-            if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
-                response.setStatusCode(400);
-                response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
-                return response;
-            }
 
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
