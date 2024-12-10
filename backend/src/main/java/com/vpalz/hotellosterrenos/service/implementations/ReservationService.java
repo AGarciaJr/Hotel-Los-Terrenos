@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Service
@@ -225,27 +226,49 @@ public class ReservationService implements IReservationService {
     public Response updateReservationByConfirmationCode(String confirmationCode, Reservation updatedReservation) {
         Response response = new Response();
         try {
-            Reservation reservation = reservationRepository.findByReservationConfirmationCode(confirmationCode)
+            Reservation existingReservation = reservationRepository.findByReservationConfirmationCode(confirmationCode)
                     .orElseThrow(() -> new MyException("Reservation Not Found."));
 
+            Room room = existingReservation.getRoom();
+            List<Reservation> allReservations = room.getReservations();
+
+            List<Reservation> otherReservations = allReservations.stream()
+                    .filter(reservation -> !reservation.getReservationConfirmationCode().equals(confirmationCode))
+                    .collect(Collectors.toList());
+
+            Reservation tempReservation = new Reservation();
+            tempReservation.setCheckInDate(updatedReservation.getCheckInDate());
+            tempReservation.setCheckOutDate(updatedReservation.getCheckOutDate());
+
+            if (!tempReservation.getCheckOutDate().isAfter(tempReservation.getCheckInDate())) {
+                throw new IllegalArgumentException("Invalid check in/out dates.");
+            }
+
+            if (!roomIsAvailable(tempReservation, otherReservations)) {
+                throw new MyException("Room not available for the selected date range.");
+            }
+
             if (updatedReservation.getCheckInDate() != null) {
-                reservation.setCheckInDate(updatedReservation.getCheckInDate());
+                existingReservation.setCheckInDate(updatedReservation.getCheckInDate());
             }
             if (updatedReservation.getCheckOutDate() != null) {
-                reservation.setCheckOutDate(updatedReservation.getCheckOutDate());
+                existingReservation.setCheckOutDate(updatedReservation.getCheckOutDate());
             }
-            reservation.setNumberOfAdults(updatedReservation.getNumberOfAdults());
-            reservation.setNumberOfChildren(updatedReservation.getNumberOfChildren());
+            existingReservation.setNumberOfAdults(updatedReservation.getNumberOfAdults());
+            existingReservation.setNumberOfChildren(updatedReservation.getNumberOfChildren());
 
-            reservationRepository.save(reservation);
+            reservationRepository.save(existingReservation);
 
-            var reservationDAO = Utils.mapReservationEntityToReservationDAOPlusReservedRooms(reservation, true);
+            var reservationDAO = Utils.mapReservationEntityToReservationDAOPlusReservedRooms(existingReservation, true);
 
             response.setStatusCode(200);
             response.setMessage("Reservation updated successfully.");
             response.setReservation(reservationDAO);
         } catch (MyException e) {
             response.setStatusCode(404);
+            response.setMessage(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            response.setStatusCode(400);
             response.setMessage(e.getMessage());
         } catch (Exception e) {
             response.setStatusCode(500);
@@ -254,5 +277,6 @@ public class ReservationService implements IReservationService {
 
         return response;
     }
+
 
 }
