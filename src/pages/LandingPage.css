@@ -1,0 +1,17 @@
+/* LandingPage.css */
+.landing-page {
+    padding: 20px;
+    text-align: center;
+}
+
+.landing-page h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #007bff;
+}
+
+.rooms-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
