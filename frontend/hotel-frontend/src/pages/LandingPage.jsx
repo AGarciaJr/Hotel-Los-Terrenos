@@ -65,7 +65,7 @@ const LandingPage = () => {
 
             </div>
             <div className="landing-page">
-                <h1>Welcome to Los Terrenos, your oasis in Waco.</h1>
+                <h1>Welcome to Los Terrenos, Your Oasis in Waco.</h1>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : error ? (
