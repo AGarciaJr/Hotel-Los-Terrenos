@@ -87,4 +87,18 @@ public class UserController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @PutMapping("/set-corporate-id/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response> setCorporateId(@PathVariable("userId") String userId,
+                                                   @RequestParam("corporateId") String corporateId) { // Changed to String
+        Response response = userService.setCorporateId(userId, corporateId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @GetMapping("/corporate/{corporateId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLERK')")
+    public ResponseEntity<Response> getUsersByCorporateId(@PathVariable("corporateId") String corporateId) { // Changed to String
+        Response response = userService.getUsersByCorporateId(corporateId);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
 }

@@ -27,4 +27,7 @@ public interface IUserService {
     Response getUserByPhone(String phoneNumber);
 
     Response updateUserById(String userId, UserDAO updatedUser);
+    Response setCorporateId(String userId, String corporateId);
+
+    Response getUsersByCorporateId(String corporateId);
 }

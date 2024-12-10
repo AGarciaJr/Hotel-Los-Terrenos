@@ -48,4 +48,6 @@ public interface IEmailService {
      * @param userName
      */
     void sendEmailChangeNotification(String oldEmail, String newEmail, String userName);
+
+    void sendCorporateWelcomeEmail(String email, String name, String corporateId);
 }

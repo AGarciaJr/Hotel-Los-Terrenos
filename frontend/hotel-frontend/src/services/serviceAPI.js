@@ -304,5 +304,23 @@ export default class serviceAPI {
         );
     }
 
+    /**
+     * Corporations
+     */
 
+    static async getCorporationById(corporationId) {
+        return this.handleRequest(
+            axios.get(`${this.BASE_URL}/corporations/${corporationId}`, this.getHeader())
+        );
+    }
+
+    static async createCorporation(corporationData) {
+        return this.handleRequest(
+            axios.post(
+                `${this.BASE_URL}/corporations/create`,
+                corporationData,
+                this.getHeader()
+            )
+        );
+    }
 }

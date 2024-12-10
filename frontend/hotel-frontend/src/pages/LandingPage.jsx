@@ -57,8 +57,15 @@ const LandingPage = () => {
 
     return (
         <div>
+            <div className="video-banner">
+                <video autoPlay muted loop className="background-video">
+                    <source src="/hotel-images/Landing-Page-Video.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video>
+
+            </div>
             <div className="landing-page">
-                <h1>Welcome to Hotel Los Terrenos</h1>
+                <h1>Welcome to Los Terrenos, your oasis in Waco.</h1>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : error ? (

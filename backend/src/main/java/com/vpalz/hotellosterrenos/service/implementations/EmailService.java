@@ -127,4 +127,20 @@ public class EmailService implements IEmailService {
                 variables
         );
     }
+
+    @Override
+    public void sendCorporateWelcomeEmail(String email, String name, String corporateId) { // Change Long to String
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", name);
+        variables.put("corporateId", corporateId);
+
+        sendHtmlEmail(
+                email,
+                "Welcome to Hotel Los Terrenos - Corporate Account",
+                "emails/corporate-welcome-email",
+                variables
+        );
+    }
+
+
 }

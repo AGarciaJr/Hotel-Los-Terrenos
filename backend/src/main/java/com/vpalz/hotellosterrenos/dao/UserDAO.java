@@ -16,4 +16,5 @@ public class UserDAO {
     private String role;
     private String password;
     private List<ReservationDAO> reservations = new ArrayList<>();
+    private CorporationDAO corporation;
 }

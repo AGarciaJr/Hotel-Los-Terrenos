@@ -10,6 +10,8 @@ function RegisterPage() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isClerk, setIsClerk] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [showCorporateInput, setShowCorporateInput] = useState(false);
+    const [corporationName, setCorporationName] = useState('');
 
     useEffect(() => {
         async function checkAuth() {
@@ -28,7 +30,10 @@ function RegisterPage() {
         name: '',
         email: '',
         password: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        corporation: {
+            id: ''
+        }
     });
 
     const [errorMessage, setErrorMessage] = useState('');
@@ -53,7 +58,32 @@ function RegisterPage() {
         } else if (email.includes('_clerk@')) {
             return 'CLERK';
         } else {
-            return 'USER'; // Default role
+            return 'USER';
+        }
+    };
+
+    const handleCorporateIdChange = async (e) => {
+        const corporateId = e.target.value;
+        setFormData(prev => ({
+            ...prev,
+            corporation: {
+                id: corporateId
+            }
+        }));
+
+        if (corporateId) {
+            try {
+                const response = await serviceAPI.getCorporationById(corporateId);
+                if (response.corporation) {
+                    setCorporationName(response.corporation.name);
+                } else {
+                    setCorporationName('Corporation not found');
+                }
+            } catch (error) {
+                setCorporationName('Invalid corporation ID');
+            }
+        } else {
+            setCorporationName('');
         }
     };
 
@@ -69,14 +99,21 @@ function RegisterPage() {
         const role = getRoleFromEmail(formData.email);
 
         try {
-            const response = await serviceAPI.registerUser({ ...formData, role });
+            const submitData = {
+                ...formData,
+                role,
+                corporation: showCorporateInput ? formData.corporation : null
+            };
+
+            const response = await serviceAPI.registerUser(submitData);
 
             if (response.statusCode === 200) {
                 setFormData({
                     name: '',
                     email: '',
                     password: '',
-                    phoneNumber: ''
+                    phoneNumber: '',
+                    corporation: { id: '' }
                 });
                 setSuccessMessage('User registered successfully');
                 setTimeout(() => {
@@ -91,6 +128,8 @@ function RegisterPage() {
             setIsLoading(false);
         }
     };
+
+
 
     const LoadingOverlay = () => (
         <div className="loading-overlay">
@@ -130,10 +169,36 @@ function RegisterPage() {
                     <label>Password:</label>
                     <input type="password" name="password" value={formData.password} onChange={handleInputChange} required />
                 </div>
+
+                {!isAdmin && showCorporateInput && (
+                    <div className="form-group">
+                        <label>Corporate ID:</label>
+                        <input
+                            type="text"
+                            value={formData.corporation.id}
+                            onChange={handleCorporateIdChange}
+                            placeholder="Enter corporate ID (e.g., corp001)"
+                        />
+                        {corporationName && (
+                            <p className="corporation-name">
+                                Corporation: {corporationName}
+                            </p>
+                        )}
+                    </div>
+                )}
+
                 <button type="submit">Register</button>
             </form>
             <p className="register-link">
                 Already have an account? <a href="/login">Login</a>
+            </p>
+            <p className="corporate-link">
+                {!isAdmin && <button
+                    className="corporate-toggle"
+                    onClick={() => setShowCorporateInput(!showCorporateInput)}
+                >
+                    {showCorporateInput ? 'Hide Corporate Options' : 'Click here if Corporate User'}
+                </button>}
             </p>
         </div>
     );
