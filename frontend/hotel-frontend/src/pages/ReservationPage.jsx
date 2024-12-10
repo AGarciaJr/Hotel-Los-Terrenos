@@ -133,6 +133,7 @@ const ReservationPage = () => {
                     value={checkInDate}
                     onChange={(e) => setCheckInDate(e.target.value)}
                     min={new Date().toISOString().split("T")[0]} // Disallow past dates
+                    max={checkOutDate || undefined}
                 />
             </div>
             <div>
@@ -141,7 +142,7 @@ const ReservationPage = () => {
                     type="date"
                     value={checkOutDate}
                     onChange={(e) => setCheckOutDate(e.target.value)}
-                    min={checkInDate} // Disallow check-out before check-in
+                    min={checkInDate || new Date().toISOString().split("T")[0]}
                 />
             </div>
 

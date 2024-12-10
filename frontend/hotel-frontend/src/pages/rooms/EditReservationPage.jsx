@@ -83,6 +83,8 @@ const EditReservationPage = () => {
                             name="checkInDate"
                             value={reservation.checkInDate || ""}
                             onChange={handleChange}
+                            min={new Date().toISOString().split("T")[0]}
+                            max={reservation.checkOutDate || undefined}
                         />
                     </div>
 
@@ -94,6 +96,7 @@ const EditReservationPage = () => {
                             name="checkOutDate"
                             value={reservation.checkOutDate || ""}
                             onChange={handleChange}
+                            min={reservation.checkInDate || new Date().toISOString().split("T")[0]}
                         />
                     </div>
 
