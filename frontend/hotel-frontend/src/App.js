@@ -13,6 +13,7 @@ import ResetUserPage from "./pages/Admin/ResetUserPage";
 import AdminPage from "./pages/Admin/AdminPage";
 import RoomsPage from "./pages/rooms/RoomsPage";
 import EditReservationPage from "./pages/rooms/EditReservationPage";
+import ClerkReservationPage from "./pages/clerk/ClerkReservationPage";
 
 const App = () => {
     return (
@@ -35,7 +36,7 @@ const App = () => {
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
 
                 <Route path={"/reset"} element={<ResetUserPage />} />
-                <Route path="/clerk/reserve-room/:roomId/:userId" element={<ReservationPage />} />
+                <Route path="/clerk/reserve-room/:roomId/:userId" element={<ClerkReservationPage />} />
 
                 <Route path="/admin" element={<AdminPage />} />/
                 <Route path="/admin/resetuser" element={<ResetUserPage />} />/
