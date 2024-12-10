@@ -10,6 +10,7 @@ import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.ReservationRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
 import com.vpalz.hotellosterrenos.repo.UserRepository;
+import com.vpalz.hotellosterrenos.service.interfaces.IEmailService;
 import com.vpalz.hotellosterrenos.service.interfaces.IReservationService;
 import com.vpalz.hotellosterrenos.service.interfaces.IRoomService;
 import com.vpalz.hotellosterrenos.utils.Utils;
@@ -36,6 +37,9 @@ public class ReservationService implements IReservationService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private IEmailService emailService;
+
     @Override
     public Response saveReservation(Long roomId, Long userId, Reservation reservationRequest) {
         Response response = new Response();
@@ -61,6 +65,14 @@ public class ReservationService implements IReservationService {
             reservationRequest.setReservationConfirmationCode(reservationConfirmationCode);
 
             reservationRepository.save(reservationRequest);
+
+            emailService.sendReservationConfirmationEmail(
+                    user.getEmail(),
+                    user.getName(),
+                    reservationConfirmationCode,
+                    reservationRequest.getCheckInDate(),
+                    reservationRequest.getCheckOutDate()
+            );
 
             response.setStatusCode(200);
             response.setMessage("Successfully Saved Reservation");

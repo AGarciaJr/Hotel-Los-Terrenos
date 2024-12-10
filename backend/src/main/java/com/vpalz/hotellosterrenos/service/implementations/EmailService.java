@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,5 +144,19 @@ public class EmailService implements IEmailService {
         );
     }
 
+    @Override
+    public void sendReservationConfirmationEmail(String userEmail, String userName, String confirmationCode, LocalDate checkIn, LocalDate checkOut) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", userName);
+        variables.put("confirmationCode", confirmationCode);
+        variables.put("checkInDate", checkIn.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
+        variables.put("checkOutDate", checkOut.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
 
+        sendHtmlEmail(
+                userEmail,
+                "Reservation Confirmation - Hotel Los Terrenos",
+                "emails/reservation-confirmation",
+                variables
+        );
+    }
 }

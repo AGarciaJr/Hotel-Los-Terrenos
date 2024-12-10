@@ -1,5 +1,6 @@
 package com.vpalz.hotellosterrenos.service.interfaces;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public interface IEmailService {
@@ -50,4 +51,7 @@ public interface IEmailService {
     void sendEmailChangeNotification(String oldEmail, String newEmail, String userName);
 
     void sendCorporateWelcomeEmail(String email, String name, String corporateId);
+
+    void sendReservationConfirmationEmail(String userEmail, String userName, String confirmationCode, LocalDate checkIn, LocalDate checkOut);
+
 }

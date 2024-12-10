@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+<div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h1 style="color: #007bff;">Hotel Los Terrenos</h1>
+
+    <h2>Reservation Confirmation</h2>
+
+    <p>Dear <span th:text="${name}">Guest</span>,</p>
+
+    <p>Thank you for choosing Hotel Los Terrenos. Your reservation has been confirmed!</p>
+
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p><strong>Confirmation Code:</strong> <span th:text="${confirmationCode}">CODE</span></p>
+        <p><strong>Check-in Date:</strong> <span th:text="${checkInDate}">Date</span></p>
+        <p><strong>Check-out Date:</strong> <span th:text="${checkOutDate}">Date</span></p>
+    </div>
+
+    <p>Important Information:</p>
+    <ul>
+        <li>Check-in time is after 3:00 PM</li>
+        <li>Check-out time is before 11:00 AM</li>
+        <li>Please have this confirmation code and a valid ID ready at check-in</li>
+    </ul>
+
+    <p>If you need to modify or cancel your reservation, please visit our website or contact us directly.</p>
+
+    <p>We look forward to welcoming you!</p>
+
+    <p>Best regards,<br>
+        Hotel Los Terrenos Team</p>
+</div>
+</body>
+</html>
