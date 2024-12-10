@@ -1,5 +1,6 @@
 package com.vpalz.hotellosterrenos.service.interfaces;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ public interface IEmailService {
 
     void sendCorporateWelcomeEmail(String email, String name, String corporateId);
 
-    void sendReservationConfirmationEmail(String userEmail, String userName, String confirmationCode, LocalDate checkIn, LocalDate checkOut);
+    void sendReservationConfirmationEmail(String userEmail, String userName, String confirmationCode,
+                                          LocalDate checkIn, LocalDate checkOut, BigDecimal totalAmount, boolean isCorporate, String corporationName);
 
 }

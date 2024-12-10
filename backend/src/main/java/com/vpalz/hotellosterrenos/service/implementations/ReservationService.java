@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Data
@@ -52,6 +54,9 @@ public class ReservationService implements IReservationService {
             Room room = roomRepository.findById(roomId).orElseThrow(() -> new MyException("Room Not Found."));
             User user = userRepository.findById(userId).orElseThrow(() -> new MyException("User Not Found."));
 
+            long nights = ChronoUnit.DAYS.between(reservationRequest.getCheckInDate(), reservationRequest.getCheckOutDate());
+            BigDecimal totalAmount = room.getRoomPrice().multiply(BigDecimal.valueOf(nights));
+
             List<Reservation> reservations = room.getReservations();
 
             if(!roomIsAvailable(reservationRequest, reservations)) {
@@ -66,12 +71,18 @@ public class ReservationService implements IReservationService {
 
             reservationRepository.save(reservationRequest);
 
+            boolean isCorporate = user.getCorporation() != null;
+            String corporationName = isCorporate ? user.getCorporation().getName() : null;
+
             emailService.sendReservationConfirmationEmail(
                     user.getEmail(),
                     user.getName(),
                     reservationConfirmationCode,
                     reservationRequest.getCheckInDate(),
-                    reservationRequest.getCheckOutDate()
+                    reservationRequest.getCheckOutDate(),
+                    totalAmount,
+                    isCorporate,
+                    corporationName
             );
 
             response.setStatusCode(200);

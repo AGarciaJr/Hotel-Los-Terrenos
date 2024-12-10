@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -145,12 +146,17 @@ public class EmailService implements IEmailService {
     }
 
     @Override
-    public void sendReservationConfirmationEmail(String userEmail, String userName, String confirmationCode, LocalDate checkIn, LocalDate checkOut) {
+    public void sendReservationConfirmationEmail(String userEmail, String userName, String confirmationCode,
+                                                 LocalDate checkIn, LocalDate checkOut, BigDecimal totalAmount, boolean isCorporate, String corporationName) {
+
         Map<String, Object> variables = new HashMap<>();
         variables.put("name", userName);
         variables.put("confirmationCode", confirmationCode);
         variables.put("checkInDate", checkIn.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
         variables.put("checkOutDate", checkOut.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
+        variables.put("totalAmount", totalAmount);
+        variables.put("isCorporate", isCorporate);
+        variables.put("corporationName", corporationName);
 
         sendHtmlEmail(
                 userEmail,

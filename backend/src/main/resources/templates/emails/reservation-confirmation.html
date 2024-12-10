@@ -18,6 +18,16 @@
         <p><strong>Confirmation Code:</strong> <span th:text="${confirmationCode}">CODE</span></p>
         <p><strong>Check-in Date:</strong> <span th:text="${checkInDate}">Date</span></p>
         <p><strong>Check-out Date:</strong> <span th:text="${checkOutDate}">Date</span></p>
+        <p><strong>Total Amount:</strong> $<span th:text="${#numbers.formatDecimal(totalAmount, 1, 2)}">0.00</span></p>
+
+        <div th:if="${isCorporate}" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #dee2e6;">
+            <p><strong>Payment Method:</strong> Corporate Account</p>
+            <p><strong>Billed to:</strong> <span th:text="${corporationName}">Corporation</span></p>
+        </div>
+        <div th:unless="${isCorporate}" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #dee2e6;">
+            <p><strong>Payment Method:</strong> Credit Card</p>
+            <p><strong>Payment Status:</strong> Paid in Full</p>
+        </div>
     </div>
 
     <p>Important Information:</p>
