@@ -163,7 +163,10 @@ public class UserService implements IUserService {
             String userName = user.getName();
             userRepository.deleteById(Long.valueOf(userId));
 
-            emailService.sendAccountDeletionEmail(userEmail, userName);
+
+            // line of code for sending emails, feel free to implement if this is your usecase
+            // all that is left after uncommenting this is front end loading screen if no other bugs
+            //emailService.sendAccountDeletionEmail(userEmail, userName);
 
             response.setStatusCode(200);
             response.setMessage("Successfully deleted user.");
@@ -233,21 +236,23 @@ public class UserService implements IUserService {
     public Response updatePassword(String userId, String newPassword) {
         Response response = new Response();
         try {
-            // Retrieve the user by userId
+
             User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new MyException("User Not Found"));
 
-            // Encrypt the new password
+
             String encodedPassword = passwordEncoder.encode(newPassword);
 
-            // Update the user's password
+
             user.setPassword(encodedPassword);
 
-            // Save the updated user
+
             userRepository.save(user);
 
-            emailService.sendPasswordChangeEmail(user.getEmail(), user.getName());
+            // line of code for sending emails, feel free to implement if this is your usecase
+            // all that is left after uncommenting this is front end loading screen if no other bugs
+            //emailService.sendPasswordChangeEmail(user.getEmail(), user.getName());
 
-            // Set success message
+
             response.setStatusCode(200);
             response.setMessage("Password updated successfully.");
 
@@ -272,17 +277,21 @@ public class UserService implements IUserService {
             String currentEmail = user.getEmail();
             String newEmail = updatedUser.getEmail();
 
-            if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
-                response.setStatusCode(400);
-                response.setMessage("Cannot remove _admin@ from email to maintain admin role");
-                return response;
+            if (!currentEmail.equals(newEmail)) {
+                if (currentEmail.contains("_admin@") && !newEmail.contains("_admin@")) {
+                    response.setStatusCode(400);
+                    response.setMessage("Cannot remove _admin@ from email to maintain admin role");
+                    return response;
+                }
+
+                if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
+                    response.setStatusCode(400);
+                    response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
+                    return response;
+                }
+                emailService.sendEmailChangeNotification(currentEmail, newEmail, user.getName());
             }
 
-            if (currentEmail.contains("_clerk@") && !newEmail.contains("_clerk@")) {
-                response.setStatusCode(400);
-                response.setMessage("Cannot remove _clerk@ from email to maintain clerk role");
-                return response;
-            }
 
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());

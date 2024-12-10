@@ -26,13 +26,19 @@ public class EmailService implements IEmailService {
     @Override
     public void sendHtmlEmail(String to, String subject, String templateName, Map<String, Object> variables) {
         try {
+            // Debug prints
+            System.out.println("Template Name: " + templateName);
+            System.out.println("Variables: " + variables);
+
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             Context context = new Context();
             context.setVariables(variables);
 
+            // Debug print the processed HTML
             String htmlContent = templateEngine.process(templateName, context);
+            System.out.println("Processed HTML Content: " + htmlContent);
 
             helper.setFrom("hotelvpalz@gmail.com");
             helper.setTo(to);
@@ -42,6 +48,7 @@ public class EmailService implements IEmailService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             System.err.println("Failed to send HTML email: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -94,6 +101,29 @@ public class EmailService implements IEmailService {
                 userEmail,
                 "Account Deleted - Hotel Los Terrenos",
                 "emails/account-deletion-email",
+                variables
+        );
+    }
+
+    @Override
+    public void sendEmailChangeNotification(String oldEmail, String newEmail, String userName) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", userName);
+        variables.put("oldEmail", oldEmail);
+        variables.put("newEmail", newEmail);
+
+        // Send to both old and new email addresses
+        sendHtmlEmail(
+                oldEmail,
+                "Email Address Change Notification - Hotel Los Terrenos",
+                "emails/email-change",
+                variables
+        );
+
+        sendHtmlEmail(
+                newEmail,
+                "Email Address Change Confirmation - Hotel Los Terrenos",
+                "emails/email-change",
                 variables
         );
     }

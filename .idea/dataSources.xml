@@ -4,8 +4,6 @@
     <data-source source="LOCAL" name="hotelDB@localhost" uuid="2a2777b4-1162-4db4-b3ef-b132fb91f8c9">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>$PROJECT_DIR$/backend/src/main/resources/application.properties</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/hotelDB</jdbc-url>
       <jdbc-additional-properties>
