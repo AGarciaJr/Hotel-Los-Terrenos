@@ -231,7 +231,7 @@ const ReservationPage = () => {
                             </button>
                             <button
                                 className="proceed-button"
-                                onClick={handleProceedToPayment}
+                                onClick={() => navigate('/checkout')}>
                             >
                                 Proceed to Payment
                             </button>

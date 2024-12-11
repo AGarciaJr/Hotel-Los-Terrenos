@@ -43,6 +43,7 @@ const Navbar = () => {
                             <button onClick={() => navigate("/admin")}>Admin Dashboard</button>
                         )}
                         <button onClick={() => navigate("/profile")}>Profile</button>
+                        <button onClick={() => navigate("/vacations")}>Vacations</button>
                         <button className="logout-button" onClick={handleLogout}>Logout</button>
                     </>
                 )}
