@@ -12,8 +12,6 @@ import EditRoomPage from "./pages/clerk/EditRoomPage";
 import ResetUserPage from "./pages/Admin/ResetUserPage";
 import AdminPage from "./pages/Admin/AdminPage";
 import RoomsPage from "./pages/rooms/RoomsPage";
-import EditReservationPage from "./pages/rooms/EditReservationPage";
-import ClerkReservationPage from "./pages/clerk/ClerkReservationPage";
 import VacationPage from "./VacationReservation/VacationPage";
 import ZhanGolfReservationPage from "./VacationReservation/ZhanGolfReservationPage";
 import RanchPage from "./VacationReservation/RanchPage";
@@ -40,7 +38,6 @@ const App = () => {
 
                 <Route path="/reserve-room/:roomId" element={<ReservationPage />} />
                 <Route path="/find-reservation" element={<FindReservationPage />} />
-                <Route path="/edit-reservation/:reservationCode" element={<EditReservationPage />} />
 
 
                 <Route path="/profile/:userId" element={<ProfilePage />}/>
@@ -50,7 +47,6 @@ const App = () => {
                 <Route path="/clerk/edit-room/:roomId" element={<EditRoomPage />} />
 
                 <Route path={"/reset"} element={<ResetUserPage />} />
-                <Route path="/clerk/reserve-room/:roomId/:userId" element={<ClerkReservationPage />} />
 
                 <Route path="/admin" element={<AdminPage />} />/
                 <Route path="/admin/resetuser" element={<ResetUserPage />} />/
@@ -74,7 +70,7 @@ const App = () => {
                 <Route
                     path="/checkout"
                     element={
-                        <Elements stripe={stripePromise}>
+                        <Elements stripe={loadStripe}>
                             <CheckoutForm />
                         </Elements>
                     }
