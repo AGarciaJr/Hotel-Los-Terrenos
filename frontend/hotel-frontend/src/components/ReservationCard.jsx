@@ -3,6 +3,7 @@ import serviceAPI from "../services/serviceAPI";
 import "./ReservationCard.css";
 
 const ReservationCard = ({ reservation, onCheckOut, onUpdate }) => {
+
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [cancellationFee, setCancellationFee] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);

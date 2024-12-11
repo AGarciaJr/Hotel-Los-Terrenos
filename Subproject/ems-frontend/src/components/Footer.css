@@ -1,0 +1,19 @@
+/* Footer.css */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000000;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    z-index: 1000;
+}
+
+body {
+    margin: 0;
+    padding-bottom: 60px;
+    min-height: 100vh;
+}

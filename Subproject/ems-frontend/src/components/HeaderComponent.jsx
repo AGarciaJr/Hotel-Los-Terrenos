@@ -1,19 +1,18 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const HeaderComponent = () => {
     return (
         <div>
             <header>
-
-                <nav className='navbar navrbar-dark bg-dark'>
-
-                    <a className="navbar-brand" href="http://localhost:3000/">Room Management System</a>
-
+                <nav className='navbar navbar-dark bg-dark'>
+                    <Link to="/" className="navbar-brand">
+                        Clerk's User Management System
+                    </Link>
                 </nav>
-
             </header>
-
         </div>
-    )
+    );
 }
-export default HeaderComponent
+
+export default HeaderComponent;
