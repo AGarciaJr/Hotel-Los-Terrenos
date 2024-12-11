@@ -26,6 +26,8 @@ import ChineseRestaurantPage from "./VacationReservation/ChineseRestaurantPage";
 import ClubPage from "./VacationReservation/ClubPage";
 import CasinoPage from "./VacationReservation/CasinoPage";
 
+const PUBLIC_KEY = 'pk_test_51QTVpLBe3gWPFy5sOMYdWqktgczbyXfzS5u9zDAHTSYiWtBF0rqLstSTvob5JmCWmqmGRt5ZloHWZRQzkWRgnMe800LK84IdcO';
+const stripePromise = loadStripe(PUBLIC_KEY);
 
 const App = () => {
     return (
@@ -70,7 +72,7 @@ const App = () => {
                 <Route
                     path="/checkout"
                     element={
-                        <Elements stripe={loadStripe}>
+                        <Elements stripe={stripePromise}>
                             <CheckoutForm />
                         </Elements>
                     }
