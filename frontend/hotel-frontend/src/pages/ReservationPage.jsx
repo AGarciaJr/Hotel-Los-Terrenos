@@ -232,7 +232,6 @@ const ReservationPage = () => {
                             <button
                                 className="proceed-button"
                                 onClick={() => navigate('/checkout')}>
-                            >
                                 Proceed to Payment
                             </button>
                         </div>
