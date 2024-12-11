@@ -1,0 +1,295 @@
+/* ReservationPage.css */
+.reservation-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+.reservation-page h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #007bff;
+}
+
+.reservation-page div {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reservation-page input {
+    width: 60%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.reservation-page button {
+    width: 60%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.reservation-page button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #ff4d4f;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.reservation-page p {
+    margin-top: 10px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 360px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.close-button {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+
+
+.close-button:hover {
+    background: #0056b3;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    padding: 8px 0;
+}
+
+.amount-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.amount-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.amount-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+}
+
+.redirect-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+    margin: 0;
+    max-width: 280px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.cancel-button {
+    background: transparent;
+    color: #007bff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+    background: rgba(0, 123, 255, 0.1);
+}
+
+.proceed-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.proceed-button:hover {
+    background: #0056b3;
+}
+
+/* Focus styles for accessibility */
+.cancel-button:focus,
+.proceed-button:focus,
+.close-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #007bff;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.modal-content {
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.confirmation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.success-message {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.corporate-message, .confirmation-code {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.corporate-message strong,
+.confirmation-code strong {
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.proceed-button {
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    min-width: 100px;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.proceed-button:hover {
+    background-color: #0056b3;
+}

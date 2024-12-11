@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Hotel Los Terrenos</title>
+</head>
+<body>
+<h2>Welcome to Hotel Los Terrenos!</h2>
+
+<p>Dear <span th:text="${name}">User</span>,</p>
+
+<p>Welcome to Hotel Los Terrenos! Your corporate account has been successfully created.</p>
+
+<p>Corporate ID: <strong th:text="${corporateId}">000000</strong></p>
+
+<p>Thank you for choosing our services.</p>
+
+<p>Best regards,<br/>
+    Hotel Los Terrenos Team</p>
+</body>
+</html>

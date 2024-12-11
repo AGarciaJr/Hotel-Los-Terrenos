@@ -1,0 +1,11 @@
+com.vpalz.hotellosterrenos
+com.vpalz.hotellosterrenos.controller
+com.vpalz.hotellosterrenos.dao
+com.vpalz.hotellosterrenos.entity
+com.vpalz.hotellosterrenos.exception
+com.vpalz.hotellosterrenos.repo
+com.vpalz.hotellosterrenos.security
+com.vpalz.hotellosterrenos.service
+com.vpalz.hotellosterrenos.service.implementations
+com.vpalz.hotellosterrenos.service.interfaces
+com.vpalz.hotellosterrenos.utils

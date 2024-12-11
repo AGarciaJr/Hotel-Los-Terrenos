@@ -1,0 +1,50 @@
+/* ResetUserPage.css */
+.admin-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ensure full-page height */
+    background-color: #f4f4f4; /* Optional background color */
+    text-align: center;
+}
+
+.dashboard-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.welcome-message {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Add space between buttons */
+}
+
+.admin-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 250px; /* Ensure consistent button width */
+}
+
+.admin-button:hover {
+    background-color: #0056b3;
+}
+
+.admin-button:active {
+    background-color: #00408a;
+}
