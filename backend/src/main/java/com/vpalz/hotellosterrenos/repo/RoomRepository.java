@@ -21,8 +21,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
 
 
-    @Query("SELECT r FROM Room r WHERE r.id NOT IN (SELECT res.room.id FROM Reservation res WHERE res.status = :bookedStatus)")
+    @Query("SELECT r FROM Room r WHERE r.id NOT IN " +
+            "(SELECT res.room.id FROM Reservation res WHERE res.status = :bookedStatus OR res.status = com.vpalz.hotellosterrenos.enums.ReservationStatus.CHECKED_IN)")
     List<Room> getAllAvailableRooms(@Param("bookedStatus") ReservationStatus bookedStatus);
+
 
     @Query("SELECT r FROM Room r WHERE r.roomType IN :roomTypes")
     List<Room> findRoomsByType(@Param("roomTypes") List<String> roomTypes);

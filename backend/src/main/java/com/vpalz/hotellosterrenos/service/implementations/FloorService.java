@@ -5,6 +5,7 @@ import com.vpalz.hotellosterrenos.dao.Response;
 import com.vpalz.hotellosterrenos.dao.RoomDAO;
 import com.vpalz.hotellosterrenos.entity.Floor;
 import com.vpalz.hotellosterrenos.entity.Room;
+import com.vpalz.hotellosterrenos.enums.ReservationStatus;
 import com.vpalz.hotellosterrenos.exception.MyException;
 import com.vpalz.hotellosterrenos.repo.FloorRepository;
 import com.vpalz.hotellosterrenos.repo.RoomRepository;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Service
@@ -153,19 +155,26 @@ public class FloorService implements IFloorService {
         try {
             Floor floor = floorRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Floor not found."));
+            List<Room> allRooms = floor.getRooms().stream().collect(Collectors.toList());
 
-            List<Room> roomsForFloor = floor.getRooms();
-            List<RoomDAO> roomDAOs = Utils.mapRoomListEntityToRoomDAOList(roomsForFloor);
+            List<Room> availableRooms = allRooms.stream()
+                    .filter(room -> room.getReservations().stream()
+                            .noneMatch(reservation ->
+                                    reservation.getStatus() == ReservationStatus.BOOKED ||
+                                            reservation.getStatus() == ReservationStatus.CHECKED_IN))
+                    .collect(Collectors.toList());
+
+            List<RoomDAO> roomDAOs = Utils.mapRoomListEntityToRoomDAOList(availableRooms);
 
             response.setStatusCode(200);
-            response.setMessage("Successfully retrieved all rooms for floor.");
+            response.setMessage("Successfully retrieved available rooms for floor.");
             response.setRoomList(roomDAOs);
         } catch (MyException e) {
             response.setStatusCode(404);
             response.setMessage(e.getMessage());
         } catch (Exception e) {
             response.setStatusCode(500);
-            response.setMessage("Error retrieving all rooms for floor: " + e.getMessage());
+            response.setMessage("Error retrieving available rooms for floor: " + e.getMessage());
         }
 
         return response;
